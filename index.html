@@ -8,40 +8,28 @@
         :root { --primary: #4f46e5; --bg: #f8fafc; --card: #ffffff; --text: #1f2937; --text-light: #6b7280; --border: #e2e8f0; --success: #10b981; --danger: #ef4444; }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
         body { background: var(--bg); padding: 20px; display: flex; flex-direction: column; align-items: center; color: var(--text); min-height: 100vh; position: relative; }
-        
-        /* Navbar */
         .navbar { width: 100%; max-width: 480px; background: var(--card); padding: 16px 24px; border-radius: 14px; border: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.01); }
         .brand { display: flex; align-items: center; gap: 12px; }
         .logo { width: 42px; height: 42px; background: var(--primary); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; overflow: hidden; font-size: 1.3rem;}
         .logo img { width: 100%; height: 100%; object-fit: cover; }
         .clinic-title { font-size: 1.1rem; font-weight: 700; color: #111827; }
         .btn-sair { color: var(--danger); border: none; background: none; font-weight: bold; cursor: pointer; font-size: 0.9rem; display: none; }
-        
-        /* Container do App */
         .container { width: 100%; max-width: 480px; background: var(--card); border-radius: 20px; border: 1px solid var(--border); padding: 30px 20px; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.03); margin-bottom: 80px; }
         .screen { display: none; animation: slideUp 0.3s ease-out; } 
         .screen.active { display: block; }
         @keyframes slideUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
-        
-        /* Tipografia */
         h1 { font-size: 1.6rem; font-weight: 800; color: #111827; margin-bottom: 8px; text-align: center; }
         .welcome-user { text-align: left; font-size: 1.4rem; font-weight: 800; color: #111827; margin-bottom: 5px; }
         .subtitle { text-align: center; color: var(--text-light); font-size: 0.95rem; margin-bottom: 25px; }
-        
-        /* Formulários */
         label { display: block; font-weight: 600; margin-top: 18px; margin-bottom: 8px; font-size: 0.9rem; color: #374151; }
         input, select, textarea { width: 100%; padding: 14px; border-radius: 10px; border: 1px solid var(--border); outline: none; background: #f9fafb; font-size: 1rem; transition: 0.2s;}
         input:focus, select:focus, textarea:focus { border-color: var(--primary); background: #fff; box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.08); }
-        
-        /* Botões */
         .btn { background: var(--primary); color: #fff; border: none; padding: 16px; border-radius: 12px; width: 100%; font-weight: bold; cursor: pointer; margin-top: 25px; font-size: 1rem; transition: 0.2s; display: inline-flex; justify-content: center; align-items: center; gap: 8px; box-shadow: 0 4px 12px rgba(79, 70, 229, 0.15);}
         .btn:hover { opacity: 0.9; transform: translateY(-1px); }
         .btn.success { background: var(--success); box-shadow: 0 4px 12px rgba(16, 185, 129, 0.15); }
         .btn.danger { background: var(--danger); box-shadow: 0 4px 12px rgba(239, 68, 68, 0.15); }
         .btn.outline { background: transparent; color: var(--text); border: 1px solid var(--border); box-shadow: none; margin-top: 15px;}
         .btn-link { background: none; border: none; color: var(--primary); font-weight: 600; cursor: pointer; margin-top: 20px; width: 100%; font-size: 0.95rem; text-align: center; display: block;}
-        
-        /* Lista de Agendamentos do Cliente (Cards) */
         .client-appointments-list { display: flex; flex-direction: column; gap: 12px; margin-top: 25px; }
         .client-appt-card { border: 1px solid var(--border); border-left: 5px solid var(--primary); padding: 16px; border-radius: 12px; background: #f8fafc; display: flex; justify-content: space-between; align-items: center; }
         .client-appt-time { font-weight: 800; color: var(--primary); font-size: 0.95rem; background: #e0e7ff; padding: 4px 8px; border-radius: 6px; display: inline-block; margin-bottom: 8px; }
@@ -50,21 +38,14 @@
         .btn-cancelar-appt { background: none; border: 1px solid var(--border); color: var(--danger); padding: 8px 12px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 0.85rem; transition: 0.2s;}
         .btn-cancelar-appt:hover { background: #fef2f2; border-color: var(--danger); }
         .empty-dashboard { text-align: center; padding: 30px 10px; color: var(--text-light); font-style: italic; font-size: 0.95rem; }
-
-        /* Grade de Horários Clicáveis */
         .grid-horarios { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 12px; }
         .btn-hora { padding: 14px 10px; border: 1px solid var(--border); border-radius: 10px; background: #fff; cursor: pointer; font-weight: bold; color: var(--text); transition: 0.2s; text-align: center; font-size: 0.95rem; }
         .btn-hora:hover { border-color: var(--primary); background: #f5f3ff; }
         .btn-hora.selected { background: var(--primary); color: #fff; border-color: var(--primary); box-shadow: 0 4px 10px rgba(79, 70, 229, 0.25); }
-        
         .erro { color: var(--danger); font-size: 0.9rem; text-align: center; margin-top: 15px; font-weight: 600; }
-
-        /* Modais */
         .modal-overlay { position: fixed; inset: 0; background: rgba(17, 24, 39, 0.8); display: none; align-items: center; justify-content: center; z-index: 99999; padding: 20px; }
         .modal-overlay.active { display: flex; }
         .modal-box { background: white; padding: 30px 24px; border-radius: 16px; width: 100%; max-width: 400px; text-align: center; }
-
-        /* BOTÃO FLUTUANTE DO WHATSAPP PREMIUM */
         .wpp-floating-btn { position: fixed; width: 60px; height: 60px; bottom: 30px; right: 30px; background-color: #25d366; color: white; border-radius: 50px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.15); z-index: 9999; display: flex; align-items: center; justify-content: center; text-decoration: none; transition: 0.3s; }
         .wpp-floating-btn:hover { transform: scale(1.08); box-shadow: 0 6px 20px rgba(37, 211, 102, 0.3); }
         .wpp-floating-btn svg { width: 32px; height: 32px; fill: white; }
@@ -72,19 +53,15 @@
 </head>
 <body>
 
-    <!-- BOTÃO FLUTUANTE DA YOD -->
     <a href="https://wa.me/559186009455?text=Olá!%20Gostaria%20de%20tirar%20uma%20dúvida%20sobre%20meu%20agendamento%20na%20Yod." class="wpp-floating-btn" target="_blank" title="Falar com a Yod no WhatsApp">
-        <svg viewBox="0 0 32 32">
-            <path d="M16 2a13 13 0 0 0-11.27 19.51L3 29l7.71-2A13 13 0 1 0 16 2zm6.79 17.61c-.3.84-1.52 1.54-2.5 1.66-.74.09-1.7.12-2.73-.21a12.87 12.87 0 0 1-5.34-3.53 11 11 0 0 1-2.22-3.83c-.47-1.32-.1-.23-1.07-1.52A4.27 4.27 0 0 1 9.21 10c.32-.66.86-.77 1.17-.77h.78c.24 0 .47 0 .67.43l1.15 2.78c.1.25.17.5.01.81l-.54 1.1c-.16.3-.33.61-.06 1.07a8.77 8.77 0 0 0 2 2.44 7.55 7.55 0 0 0 3 1.54c.46.2.73.17.94-.07l.86-1c.21-.24.47-.2.72-.1l2.84 1.42c.26.13.43.2.5.33.1.2.1.92-.21 1.76z"/>
-        </svg>
+        <svg viewBox="0 0 32 32"><path d="M16 2a13 13 0 0 0-11.27 19.51L3 29l7.71-2A13 13 0 1 0 16 2zm6.79 17.61c-.3.84-1.52 1.54-2.5 1.66-.74.09-1.7.12-2.73-.21a12.87 12.87 0 0 1-5.34-3.53 11 11 0 0 1-2.22-3.83c-.47-1.32-.1-.23-1.07-1.52A4.27 4.27 0 0 1 9.21 10c.32-.66.86-.77 1.17-.77h.78c.24 0 .47 0 .67.43l1.15 2.78c.1.25.17.5.01.81l-.54 1.1c-.16.3-.33.61-.06 1.07a8.77 8.77 0 0 0 2 2.44 7.55 7.55 0 0 0 3 1.54c.46.2.73.17.94-.07l.86-1c.21-.24.47-.2.72-.1l2.84 1.42c.26.13.43.2.5.33.1.2.1.92-.21 1.76z"/></svg>
     </a>
 
-    <!-- MODAL DE CONFIRMAÇÃO DE CANCELAMENTO COM MOTIVO -->
     <div id="modal-cancelar" class="modal-overlay">
         <div class="modal-box">
             <h3 style="font-size: 1.3rem; color: #111827; margin-bottom: 8px;">Cancelar Agendamento?</h3>
-            <p style="color: var(--text-light); font-size: 0.9rem; margin-bottom: 15px;">Por favor, informe-nos brevemente o motivo do cancelamento:</p>
-            <textarea id="txt-motivo-cancelamento" rows="3" placeholder="Ex: Tive um imprevisto no trabalho..." style="resize: none;"></textarea>
+            <p style="color: var(--text-light); font-size: 0.9rem; margin-bottom: 15px;">Por favor, informe-nos o motivo do cancelamento:</p>
+            <textarea id="txt-motivo-cancelamento" rows="3" placeholder="Ex: Tive um imprevisto..." style="resize: none;"></textarea>
             <div class="grid-2" style="margin-top: 20px;">
                 <button class="btn outline" style="margin:0; padding:12px;" id="btn-fechar-modal-cancelar">Voltar</button>
                 <button class="btn danger" style="margin:0; padding:12px;" id="btn-confirmar-cancelar-nuvem">Confirmar</button>
@@ -92,188 +69,112 @@
         </div>
     </div>
 
-    <!-- BARRA SUPERIOR -->
     <nav class="navbar">
-        <div class="brand">
-            <div class="logo" id="ui-logo">Y</div>
-            <h2 id="ui-nome" class="clinic-title">Yod Micropigmentação e Estética</h2>
-        </div>
+        <div class="brand"><div class="logo" id="ui-logo">Y</div><h2 id="ui-nome" class="clinic-title">Yod Micropigmentação e Estética</h2></div>
         <button id="btn-sair" class="btn-sair">Sair</button>
     </nav>
 
     <div class="container">
-        
-        <!-- TELA 1: LOGIN -->
         <div id="t-login" class="screen active">
             <h1>Acesso ao Portal</h1>
             <p class="subtitle">Faça login para gerenciar seus horários.</p>
-            <input type="email" id="l-email" placeholder="Seu E-mail">
-            <input type="password" id="l-senha" placeholder="Sua Senha" style="margin-top: 12px;">
-            <button class="btn" id="btn-entrar-action">Entrar</button>
-            <button class="btn-link" id="btn-ir-cadastro">Quero criar uma conta gratuita</button>
+            <input type="email" id="l-email" placeholder="Seu E-mail"><input type="password" id="l-senha" placeholder="Sua Senha" style="margin-top: 12px;">
+            <button class="btn" id="btn-entrar-action">Entrar</button><button class="btn-link" id="btn-ir-cadastro">Quero criar uma conta gratuita</button>
             <div id="erro-l" class="erro"></div>
         </div>
 
-        <!-- TELA 2: CADASTRO -->
         <div id="t-cad" class="screen">
             <h1>Criar Perfil de Paciente</h1>
             <p class="subtitle">Cadastre-se rapidamente na plataforma.</p>
-            <input type="text" id="c-nome" placeholder="Nome Completo">
-            <input type="tel" id="c-wpp" placeholder="WhatsApp (com DDD)" style="margin-top: 12px;">
-            <input type="email" id="c-email" placeholder="E-mail" style="margin-top: 12px;">
-            <input type="password" id="c-senha" placeholder="Crie uma Senha (mín. 6 dígitos)" style="margin-top: 12px;">
-            <button class="btn" id="btn-cadastrar-action">Concluir Cadastro</button>
-            <button class="btn-link" id="btn-ir-login">Já possuo uma conta</button>
+            <input type="text" id="c-nome" placeholder="Nome Completo"><input type="tel" id="c-wpp" placeholder="WhatsApp (com DDD)" style="margin-top: 12px;"><input type="email" id="c-email" placeholder="E-mail" style="margin-top: 12px;"><input type="password" id="c-senha" placeholder="Crie uma Senha (mín. 6 dígitos)" style="margin-top: 12px;">
+            <button class="btn" id="btn-cadastrar-action">Concluir Cadastro</button><button class="btn-link" id="btn-ir-login">Já possuo uma conta</button>
             <div id="erro-c" class="erro"></div>
         </div>
 
-        <!-- TELA 3: DASHBOARD PRINCIPAL -->
         <div id="t-dashboard" class="screen">
             <div class="welcome-user" id="user-greeting">Olá! 👋</div>
-            <p style="color: var(--text-light); font-size: 0.95rem; margin-bottom: 20px;">Estes são os seus procedimentos agendados na Yod:</p>
-            
-            <div class="client-appointments-list" id="meus-cards-agendados">
-                <p style="color: gray; text-align: center;">Carregando seus agendamentos...</p>
-            </div>
-
+            <p style="color: var(--text-light); font-size: 0.95rem; margin-bottom: 20px;">Seus procedimentos agendados na Yod:</p>
+            <div class="client-appointments-list" id="meus-cards-agendados"><p style="color: gray; text-align: center;">Carregando...</p></div>
             <button class="btn success" id="btn-ir-marcar">+ Marcar Nova Consulta</button>
         </div>
 
-        <!-- TELA 4: FORMULÁRIO DE NOVO AGENDAMENTO -->
         <div id="t-agenda" class="screen">
             <h1 style="text-align: left; font-size: 1.4rem; margin-bottom: 5px;">Nova Marcação</h1>
             <p style="color: var(--text-light); font-size: 0.9rem; margin-bottom: 20px;">Escolha as opções para o seu procedimento.</p>
-            
-            <label>1. Escolha o Procedimento Estético</label>
-            <select id="servico"><option value="">Carregando procedimentos...</option></select>
-            
-            <label>2. Escolha o Dia de Atendimento</label>
-            <input type="date" id="data">
-            <div id="aviso-data" class="erro" style="text-align: left; margin-top: 6px; font-size: 0.85rem;"></div>
-            
+            <label>1. Escolha o Procedimento Estético</label><select id="servico"><option value="">Carregando...</option></select>
+            <label>2. Escolha o Dia de Atendimento</label><input type="date" id="data"><div id="aviso-data" class="erro" style="text-align: left; margin-top: 6px; font-size: 0.85rem;"></div>
             <div id="area-horarios" style="display:none; margin-top: 10px;">
-                <label>3. Escolha o Horário Disponível</label>
-                <div class="grid-horarios" id="grid-h"></div>
+                <label>3. Escolha o Horário Disponível</label><div class="grid-horarios" id="grid-h"></div>
                 <button class="btn" id="btn-finalizar-marca">Confirmar e Reservar Vaga</button>
             </div>
-
             <button class="btn outline" id="btn-voltar-dash">← Voltar pro Painel</button>
         </div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, getDoc, doc, setDoc, onSnapshot, query, orderBy, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, getDoc, doc, setDoc, onSnapshot, query, orderBy, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
         import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
 
         const firebaseConfig = { apiKey: "AIzaSyD4SElQHlfQjbN2NsHC0Z9_1Gobb6WHd8o", authDomain: "clinicabase-a85a7.firebaseapp.com", projectId: "clinicabase-a85a7", storageBucket: "clinicabase-a85a7.firebasestorage.app", messagingSenderId: "324071825277", appId: "1:324071825277:web:6a0d3c4413f7a7569fb614" };
         const app = initializeApp(firebaseConfig); const db = getFirestore(app); const auth = getAuth(app);
 
-        let pacienteLogado = null;
-        let gradeParametros = null;
-        let bloqueiosPorDatas = {};
-        let agendamentosExistentes = [];
-        let horaSelecionada = null;
-        let idAgendamentoParaCancelar = null; // Variável de controle para o cancelamento
+        let pacienteLogado = null, gradeParametros = null, bloqueiosPorDatas = {}, agendamentosExistentes = [], horaSelecionada = null, idAgendamentoParaCancelar = null;
 
         onAuthStateChanged(auth, (user) => { 
-            if(user) { 
-                pacienteLogado = user; 
-                document.getElementById('btn-sair').style.display = 'block';
-                document.getElementById('user-greeting').innerText = `Olá, ${user.displayName || 'Paciente'}! 👋`;
-                mudarTela('t-dashboard'); 
-                conectarBancoDados(); 
-            } else { 
-                pacienteLogado = null; 
-                document.getElementById('btn-sair').style.display = 'none';
-                mudarTela('t-login'); 
-            }
+            if(user) { pacienteLogado = user; document.getElementById('btn-sair').style.display = 'block'; document.getElementById('user-greeting').innerText = `Olá, ${user.displayName || 'Paciente'}! 👋`; mudarTela('t-dashboard'); conectarBancoDados(); } 
+            else { pacienteLogado = null; document.getElementById('btn-sair').style.display = 'none'; mudarTela('t-login'); }
         });
 
         document.getElementById('btn-entrar-action').addEventListener('click', () => {
-            const e = document.getElementById('l-email').value, s = document.getElementById('l-senha').value;
-            signInWithEmailAndPassword(auth, e, s).catch(() => document.getElementById('erro-l').innerText = "E-mail ou senha incorretos.");
+            signInWithEmailAndPassword(auth, document.getElementById('l-email').value, document.getElementById('l-senha').value).catch(() => document.getElementById('erro-l').innerText = "E-mail ou senha incorretos.");
         });
 
         document.getElementById('btn-cadastrar-action').addEventListener('click', async () => {
-            const n = document.getElementById('c-nome').value, w = document.getElementById('c-wpp').value;
-            const e = document.getElementById('c-email').value, s = document.getElementById('c-senha').value;
+            const n = document.getElementById('c-nome').value, w = document.getElementById('c-wpp').value, e = document.getElementById('c-email').value, s = document.getElementById('c-senha').value;
             if(!n || !w) return document.getElementById('erro-c').innerText = "Preencha nome completo e WhatsApp.";
-            try { 
-                const cr = await createUserWithEmailAndPassword(auth, e, s); 
-                await updateProfile(cr.user, { displayName: n }); 
-                await setDoc(doc(db, "usuarios", cr.user.uid), { nome: n, whatsapp: w }); 
-            } catch(err) { 
-                document.getElementById('erro-c').innerText = "Erro ao cadastrar. A senha exige 6 caracteres."; 
-            }
+            try { const cr = await createUserWithEmailAndPassword(auth, e, s); await updateProfile(cr.user, { displayName: n }); await setDoc(doc(db, "usuarios", cr.user.uid), { nome: n, whatsapp: w }); } catch(err) { document.getElementById('erro-c').innerText = "Erro ao cadastrar."; }
         });
 
         document.getElementById('btn-sair').addEventListener('click', () => signOut(auth));
         document.getElementById('btn-ir-cadastro').addEventListener('click', () => mudarTela('t-cad'));
         document.getElementById('btn-ir-login').addEventListener('click', () => mudarTela('t-login'));
-        document.getElementById('btn-ir-marcar').addEventListener('click', () => {
-            document.getElementById('servico').value = ''; document.getElementById('data').value = '';
-            document.getElementById('area-horarios').style.display = 'none';
-            mudarTela('t-agenda');
-        });
+        document.getElementById('btn-ir-marcar').addEventListener('click', () => { document.getElementById('servico').value = ''; document.getElementById('data').value = ''; document.getElementById('area-horarios').style.display = 'none'; mudarTela('t-agenda'); });
         document.getElementById('btn-voltar-dash').addEventListener('click', () => mudarTela('t-dashboard'));
         document.getElementById('btn-finalizar-marca').addEventListener('click', () => submeterAgendamento());
         document.getElementById('data').addEventListener('change', () => escutarMudancaDataCalendario());
-        
-        // Eventos do modal de cancelamento
-        document.getElementById('btn-fechar-modal-cancelar').addEventListener('click', () => {
-            document.getElementById('modal-cancelar').classList.remove('active');
-        });
+        document.getElementById('btn-fechar-modal-cancelar').addEventListener('click', () => document.getElementById('modal-cancelar').classList.remove('active'));
         document.getElementById('btn-confirmar-cancelar-nuvem').addEventListener('click', () => efetuarCancelamentoComMotivo());
 
-        function mudarTela(id) { 
-            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active')); 
-            document.getElementById(id).classList.add('active'); 
-        }
+        function mudarTela(id) { document.querySelectorAll('.screen').forEach(s => s.classList.remove('active')); document.getElementById(id).classList.add('active'); }
 
         async function conectarBancoDados() {
             const geralSnap = await getDoc(doc(db, "configuracoes", "geral"));
-            if(geralSnap.exists()) {
-                const c = geralSnap.data();
-                document.documentElement.style.setProperty('--primary', c.cor);
-                document.getElementById('ui-nome').innerText = c.nome;
-                if(c.logo) document.getElementById('ui-logo').innerHTML = `<img src="${c.logo}">`;
-            }
+            if(geralSnap.exists()) { const c = geralSnap.data(); document.documentElement.style.setProperty('--primary', c.cor); document.getElementById('ui-nome').innerText = c.nome; if(c.logo) document.getElementById('ui-logo').innerHTML = `<img src="${c.logo}">`; }
 
             const gradeSnap = await getDoc(doc(db, "configuracoes", "parametros_grade"));
             if(gradeSnap.exists()) gradeParametros = gradeSnap.data();
 
-            onSnapshot(doc(db, "configuracoes", "bloqueios_datas"), (snap) => {
-                if(snap.exists()) bloqueiosPorDatas = snap.data();
-                escutarMudancaDataCalendario(); 
-            });
+            onSnapshot(doc(db, "configuracoes", "bloqueios_datas"), (snap) => { if(snap.exists()) bloqueiosPorDatas = snap.data(); escutarMudancaDataCalendario(); });
 
             onSnapshot(collection(db, "procedimentos"), (snap) => {
-                const select = document.getElementById('servico');
-                select.innerHTML = "<option value=''>Clique para escolher o procedimento...</option>";
-                snap.forEach(d => {
-                    const p = d.data();
-                    select.innerHTML += `<option value="${p.nome}|${p.valor}">${p.nome} - R$ ${p.valor.toFixed(2)}</option>`;
-                });
+                const select = document.getElementById('servico'); select.innerHTML = "<option value=''>Clique para escolher...</option>";
+                snap.forEach(d => select.innerHTML += `<option value="${d.data().nome}|${d.data().valor}">${d.data().nome} - R$ ${d.data().valor.toFixed(2)}</option>`);
             });
 
             onSnapshot(collection(db, "agendamentos"), (snap) => {
                 agendamentosExistentes = [];
-                const boxDashboard = document.getElementById('meus-cards-agendados');
-                boxDashboard.innerHTML = "";
+                const boxDashboard = document.getElementById('meus-cards-agendados'); boxDashboard.innerHTML = "";
                 let meusAtendimentosContador = 0;
 
                 snap.forEach(d => {
-                    const a = d.data();
-                    let obj = a;
-                    obj.id = d.id; // Guarda a ID estrutural do documento
-                    agendamentosExistentes.push(obj);
-
-                    if(a.pacienteEmail === pacienteLogado.email) {
+                    const a = d.data(); let obj = a; obj.id = d.id; agendamentosExistentes.push(obj);
+                    // IMPORTANTE: Só mostra no celular se o status NÃO for 'cancelado'
+                    if(a.pacienteEmail === pacienteLogado.email && a.status !== "cancelado") {
                         boxDashboard.innerHTML += `
                             <div class="client-appt-card">
                                 <div>
-                                    <div class="client-appt-time">Mancado: ${a.data} às ${a.hora}</div>
+                                    <div class="client-appt-time">🗓️ ${a.data} às ${a.hora}</div>
                                     <div class="client-appt-name">${a.servico}</div>
                                     <div class="client-appt-price">R$ ${a.valor.toFixed(2)}</div>
                                 </div>
@@ -283,126 +184,70 @@
                     }
                 });
 
-                // Cria os gatilhos pros botões de cancelar gerados dinamicamente
                 snap.forEach(d => {
                     const btn = document.getElementById(`btn-gatilho-cancel-${d.id}`);
-                    if(btn) {
-                        btn.addEventListener('click', () => {
-                            idAgendamentoParaCancelar = d.id;
-                            document.getElementById('txt-motivo-cancelamento').value = "";
-                            document.getElementById('modal-cancelar').classList.add('active');
-                        });
-                    }
+                    if(btn) btn.addEventListener('click', () => { idAgendamentoParaCancelar = d.id; document.getElementById('txt-motivo-cancelamento').value = ""; document.getElementById('modal-cancelar').classList.add('active'); });
                 });
 
-                if(meusAtendimentosContador === 0) {
-                    boxDashboard.innerHTML = "<div class='empty-dashboard'>Você ainda não possui nenhum procedimento agendado na Yod.</div>";
-                }
-
+                if(meusAtendimentosContador === 0) boxDashboard.innerHTML = "<div class='empty-dashboard'>Você ainda não possui nenhum procedimento agendado na Yod.</div>";
                 escutarMudancaDataCalendario();
             });
         }
 
-        // Lógica de Cancelamento com Envio do Motivo
         async function efetuarCancelamentoComMotivo() {
             if(!idAgendamentoParaCancelar) return;
-            const motivoText = document.getElementById('txt-motivo-cancelamento').value || "Não informado pelo cliente";
-
-            const apptCancelado = agendamentosExistentes.find(x => x.id === idAgendamentoParaCancelar);
-
-            if(apptCancelado) {
-                // Deleta da coleção ativa de agendamentos para liberar o horário
-                await deleteDoc(doc(db, "agendamentos", idAgendamentoParaCancelar));
-
-                // Opcional: Registra nas notificações ou logs de cancelamentos para auditoria da recepção
-                await addDoc(collection(db, "historico_cancelamentos"), {
-                    pacienteNome: apptCancelado.pacienteNome,
-                    pacienteEmail: apptCancelado.pacienteEmail,
-                    servico: apptCancelado.servico,
-                    data: apptCancelado.data,
-                    hora: apptCancelado.hora,
-                    motivo: motivoText,
-                    ts: Date.now()
-                });
-            }
+            const motivoText = document.getElementById('txt-motivo-cancelamento').value || "Não informado";
+            
+            // ATUALIZAÇÃO CRUCIAL: Em vez de deletar, altera o status para 'cancelado' e insere o motivo
+            await updateDoc(doc(db, "agendamentos", idAgendamentoParaCancelar), {
+                status: "cancelado",
+                motivoCancelamento: motivoText
+            });
 
             document.getElementById('modal-cancelar').classList.remove('active');
-            alert("Agendamento cancelado com sucesso. O horário foi liberado!");
+            alert("Solicitação de cancelamento enviada. Aguarde a liberação do horário pela clínica!");
         }
 
         function escutarMudancaDataCalendario() {
             const dataInput = document.getElementById('data').value;
-            const grid = document.getElementById('grid-h');
-            const box = document.getElementById('area-horarios');
-            const aviso = document.getElementById('aviso-data');
-            
+            const grid = document.getElementById('grid-h'); const box = document.getElementById('area-horarios'); const aviso = document.getElementById('aviso-data');
             box.style.display = 'none'; grid.innerHTML = ''; aviso.innerText = ''; horaSelecionada = null;
             if(!dataInput || !gradeParametros) return;
 
-            const dataBr = dataInput.split('-').reverse().join('/');
-            box.style.display = 'block';
-            
-            let startM = parseInt(gradeParametros.start.split(':')[0])*60;
-            let endM = parseInt(gradeParametros.end.split(':')[0])*60;
-            let interv = parseInt(gradeParametros.int);
-            
-            let bloqueadosDoDia = bloqueiosPorDatas[dataBr] || [];
-            let criados = 0;
+            const dataBr = dataInput.split('-').reverse().join('/'); box.style.display = 'block';
+            let startM = parseInt(gradeParametros.start.split(':')[0])*60, endM = parseInt(gradeParametros.end.split(':')[0])*60, interv = parseInt(gradeParametros.int);
+            let bloqueadosDoDia = bloqueiosPorDatas[dataBr] || [], criados = 0;
 
             for(let m = startM; m < endM; m += interv) {
                 let h = Math.floor(m/60).toString().padStart(2,'0')+":"+(m%60).toString().padStart(2,'0');
                 if(!bloqueadosDoDia.includes(h)) {
-                    let ocupado = agendamentosExistentes.some(a => a.data === dataBr && a.hora === h);
-                    if(!ocupado) {
-                        grid.innerHTML += `<div class="btn-hora" id="hr-slot-${h.replace(':','')}">${h}</div>`;
-                        criados++;
-                    }
+                    // ATUALIZAÇÃO CRUCIAL: O horário é considerado ocupado se o agendamento existir E o status NÃO for cancelado
+                    let ocupado = agendamentosExistentes.some(a => a.data === dataBr && a.hora === h && a.status !== "cancelado");
+                    if(!ocupado) { grid.innerHTML += `<div class="btn-hora" id="hr-slot-${h.replace(':','')}">${h}</div>`; criados++; }
                 }
             }
 
             for(let m = startM; m < endM; m += interv) {
                 let h = Math.floor(m/60).toString().padStart(2,'0')+":"+(m%60).toString().padStart(2,'0');
                 const btn = document.getElementById(`hr-slot-${h.replace(':','')}`);
-                if(btn) {
-                    btn.addEventListener('click', function() {
-                        document.querySelectorAll('.btn-hora').forEach(b => b.classList.remove('selected'));
-                        this.classList.add('selected');
-                        horaSelecionada = h;
-                    });
-                }
+                if(btn) btn.addEventListener('click', function() { document.querySelectorAll('.btn-hora').forEach(b => b.classList.remove('selected')); this.classList.add('selected'); horaSelecionada = h; });
             }
-
-            if(criados === 0) {
-                box.style.display = 'none';
-                aviso.innerText = "Não há horários de atendimento livres para esta data. Selecione outro dia.";
-            }
+            if(criados === 0) { box.style.display = 'none'; aviso.innerText = "Não há horários livres. Selecione outro dia."; }
         }
 
         async function submeterAgendamento() {
-            const pVal = document.getElementById('servico').value;
-            const dVal = document.getElementById('data').value;
-            if(!pVal || !dVal || !horaSelecionada) return alert("Por favor, preencha todas as etapas do formulário.");
-
+            const pVal = document.getElementById('servico').value, dVal = document.getElementById('data').value;
+            if(!pVal || !dVal || !horaSelecionada) return alert("Preencha todas as etapas.");
             const uSnap = await getDoc(doc(db, "usuarios", pacienteLogado.uid));
-            let wpp = ""; if(uSnap.exists()) wpp = uSnap.data().whatsapp;
-
-            const servNome = pVal.split('|')[0];
-            const servValor = parseFloat(pVal.split('|')[1]);
-            const dataBr = dVal.split('-').reverse().join('/');
+            let wpp = uSnap.exists() ? uSnap.data().whatsapp : "";
 
             await addDoc(collection(db, "agendamentos"), {
-                pacienteNome: pacienteLogado.displayName || "Paciente Web",
-                pacienteEmail: pacienteLogado.email, 
-                pacienteWhatsapp: wpp,
-                servico: servNome,
-                valor: servValor,
-                data: dataBr,
-                hora: horaSelecionada,
+                pacienteNome: pacienteLogado.displayName || "Paciente Web", pacienteEmail: pacienteLogado.email, pacienteWhatsapp: wpp,
+                servico: pVal.split('|')[0], valor: parseFloat(pVal.split('|')[1]), data: dVal.split('-').reverse().join('/'), hora: horaSelecionada,
+                status: "ativo", // Novo campo identificador de estado
                 ts: Date.now()
             });
-
-            alert("✨ Perfeito! Seu agendamento foi computado com sucesso.");
-            mudarTela('t-dashboard');
+            alert("Agendamento computado com sucesso!"); mudarTela('t-dashboard');
         }
     </script>
 </body>
