@@ -18,7 +18,7 @@
         .nav-item:hover { background: rgba(255,255,255,0.05); color: #fff; }
         .nav-item.active { background: rgba(255,255,255,0.1); color: #fff; border-left-color: var(--primary); font-weight: 600; }
         
-        /* Layout */
+        /* Layout Principal */
         .main { flex: 1; padding: 40px; overflow-y: auto; }
         .view { display: none; max-width: 1100px; margin: 0 auto; animation: fadeIn 0.3s; }
         .view.active { display: block; }
@@ -46,12 +46,22 @@
         th, td { padding: 15px; border-bottom: 1px solid var(--border); text-align: left; }
         th { background: #f9fafb; color: var(--text-light); font-weight: 600; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 0.5px; }
         
-        /* Grid de Horários para Bloqueio */
-        .slot-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 10px; margin-top: 20px; padding: 20px; background: #f9fafb; border-radius: 12px; border: 1px dashed var(--border);}
-        .slot-btn { padding: 12px; border-radius: 8px; border: 1px solid var(--success); background: #ecfdf5; color: #065f46; font-weight: bold; cursor: pointer; text-align: center; transition: 0.2s; font-size: 0.95rem;}
+        /* Seletores de Dias (Checkbox) */
+        .days-box { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 10px; }
+        .day-cb { display: none; }
+        .day-lbl { padding: 10px 15px; border: 1px solid var(--border); border-radius: 8px; cursor: pointer; font-weight: 600; background: #fff; transition: 0.2s; }
+        .day-cb:checked + .day-lbl { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+        /* Aba Bloqueios - Colunas da Semana */
+        .week-grid { display: flex; gap: 15px; overflow-x: auto; padding-bottom: 15px; }
+        .day-col { min-width: 140px; background: #f9fafb; border: 1px solid var(--border); border-radius: 12px; display: flex; flex-direction: column;}
+        .day-col-header { padding: 12px; text-align: center; font-weight: bold; border-bottom: 1px solid var(--border); background: #fff; border-radius: 12px 12px 0 0; color: var(--text);}
+        .day-col-body { padding: 10px; display: flex; flex-direction: column; gap: 8px; max-height: 400px; overflow-y: auto;}
+        
+        .slot-btn { padding: 8px; border-radius: 6px; border: 1px solid var(--success); background: #ecfdf5; color: #065f46; font-weight: bold; cursor: pointer; text-align: center; transition: 0.2s; font-size: 0.9rem;}
         .slot-btn.blocked { border-color: var(--danger); background: #fef2f2; color: #991b1b; text-decoration: line-through; }
 
-        /* Agenda Cards */
+        /* Agenda Principal Visual */
         .agenda-list { display: flex; flex-direction: column; gap: 15px; }
         .appt-card { display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--border); border-left: 5px solid var(--primary); padding: 20px; border-radius: 12px; background: #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.02);}
         .appt-info h3 { margin-bottom: 5px; font-size: 1.2rem;}
@@ -78,11 +88,11 @@
         </div>
     </div>
 
-    <!-- MODAL DE NOVO AGENDAMENTO -->
+    <!-- MODAL DE NOVO AGENDAMENTO (MANUAL) -->
     <div id="modal-agendar" class="modal-overlay">
         <div class="modal-box">
             <h2 style="margin-bottom: 5px;">Adicionar Paciente</h2>
-            <p style="color: gray; font-size: 0.9rem; margin-bottom: 20px;">Crie um agendamento manual na grade da clínica.</p>
+            <p style="color: gray; font-size: 0.9rem; margin-bottom: 20px;">Crie um agendamento manual na grade.</p>
             
             <div class="grid-2">
                 <div><label>Nome do Paciente</label><input type="text" id="man-nome" placeholder="Nome Completo"></div>
@@ -94,7 +104,7 @@
 
             <div class="grid-2">
                 <div>
-                    <label>Selecione a Data</label>
+                    <label>Data</label>
                     <input type="date" id="man-data">
                 </div>
                 <div>
@@ -120,7 +130,7 @@
             <span id="ui-nome">Yod Clínica</span>
         </div>
         <div class="nav-item active" id="menu-agenda">📅 Agenda Principal</div>
-        <div class="nav-item" id="menu-criar">🕒 Configurar Grade</div>
+        <div class="nav-item" id="menu-criar">🕒 Criar Horários</div>
         <div class="nav-item" id="menu-bloqueio">🚫 Gerar Bloqueios</div>
         <div class="nav-item" id="menu-proced">💉 Procedimentos</div>
         <div class="nav-item" id="menu-finan">💰 Financeiro</div>
@@ -134,71 +144,96 @@
             <div class="header-flex">
                 <div>
                     <h1>Agenda Principal</h1>
-                    <p class="sub">Visualização dos horários e pacientes marcados.</p>
+                    <p class="sub">Visualização dos pacientes cadastrados.</p>
                 </div>
                 <button class="btn" id="btn-abrir-modal">+ Novo Agendamento</button>
             </div>
             
             <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 25px; background: var(--card); padding: 15px 20px; border-radius: 12px; border: 1px solid var(--border);">
-                <label style="margin: 0; font-size: 1rem;">Filtrar por Data:</label>
+                <label style="margin: 0; font-size: 1rem;">Selecione a Data:</label>
                 <input type="date" id="filtro-data-agenda" style="width: 250px; margin: 0; padding: 10px;">
             </div>
             
             <div class="agenda-list" id="lista-agenda">
-                <!-- Injetado via JS -->
+                <!-- Lista de Cards Injetada via JS -->
             </div>
         </section>
 
-        <!-- 2. CONFIGURAR GRADE -->
+        <!-- 2. CRIAR HORÁRIOS -->
         <section id="v-criar" class="view">
-            <h1>Configuração do Horário de Atendimento</h1>
-            <p class="sub">Defina os parâmetros padrão de funcionamento da Yod Micropigmentação.</p>
+            <h1>Criar Horários de Atendimento</h1>
+            <p class="sub">Configure a regra padrão da semana ou adicione uma data personalizada.</p>
             
+            <!-- REGRA SEMANAL -->
             <div class="card">
-                <h3 style="color: var(--primary); margin-bottom: 15px;">Parâmetros da Agenda</h3>
-                <div class="grid-3">
-                    <div><label>Horário de Abertura</label><input type="time" id="g-start" value="08:00"></div>
-                    <div><label>Horário de Fechamento</label><input type="time" id="g-end" value="18:00"></div>
-                    <div><label>Minutos por Paciente</label>
+                <h3 style="color: var(--primary); margin-bottom: 15px;">A) Regra Padrão Semanal</h3>
+                <label>Dias da Semana Abertos</label>
+                <div class="days-box">
+                    <input type="checkbox" id="d1" class="day-cb" value="1"><label for="d1" class="day-lbl">Seg</label>
+                    <input type="checkbox" id="d2" class="day-cb" value="2"><label for="d2" class="day-lbl">Ter</label>
+                    <input type="checkbox" id="d3" class="day-cb" value="3"><label for="d3" class="day-lbl">Qua</label>
+                    <input type="checkbox" id="d4" class="day-cb" value="4"><label for="d4" class="day-lbl">Qui</label>
+                    <input type="checkbox" id="d5" class="day-cb" value="5"><label for="d5" class="day-lbl">Sex</label>
+                    <input type="checkbox" id="d6" class="day-cb" value="6"><label for="d6" class="day-lbl">Sáb</label>
+                    <input type="checkbox" id="d0" class="day-cb" value="0"><label for="d0" class="day-lbl">Dom</label>
+                </div>
+
+                <div class="grid-3" style="margin-top: 15px;">
+                    <div><label>Hora de Abertura</label><input type="time" id="g-start" value="08:00"></div>
+                    <div><label>Hora de Fechamento</label><input type="time" id="g-end" value="18:00"></div>
+                    <div><label>Minutos por Atendimento</label>
                         <select id="g-int">
                             <option value="15">15 minutos</option>
                             <option value="30">30 minutos</option>
-                            <option value="60" selected>60 minutos (1h)</option>
+                            <option value="60" selected>60 minutos</option>
                         </select>
                     </div>
                 </div>
-                <button class="btn success" style="margin-top: 25px; width: 100%;" id="btn-salvar-grade">💾 Salvar e Publicar Grade de Horários</button>
+                <button class="btn success" style="margin-top: 20px; width:100%;" id="btn-salvar-grade">💾 Salvar Regra Semanal</button>
+            </div>
+
+            <!-- REGRA PERSONALIZADA -->
+            <div class="card">
+                <h3 style="color: var(--primary); margin-bottom: 15px;">B) Adicionar Dia Personalizado (Exceção)</h3>
+                <p style="font-size: 0.85rem; color: gray; margin-bottom: 15px;">Útil para feriados, dias extras ou expedientes reduzidos.</p>
+                <div class="grid-2">
+                    <div><label>Data Específica</label><input type="date" id="c-data"></div>
+                    <div><label>Minutos por Atendimento</label>
+                        <select id="c-int"><option value="15">15 min</option><option value="30">30 min</option><option value="60">60 min</option></select>
+                    </div>
+                    <div><label>Abertura</label><input type="time" id="c-start" value="08:00"></div>
+                    <div><label>Fechamento</label><input type="time" id="c-end" value="12:00"></div>
+                </div>
+                <button class="btn outline" style="margin-top: 20px; width:100%;" id="btn-salvar-excecao">+ Adicionar Exceção para esta Data</button>
+                <div id="lista-excecoes" style="margin-top: 15px; font-size: 0.9rem; color: var(--text);"></div>
             </div>
         </section>
 
-        <!-- 3. GERAR BLOQUEIOS POR DATA -->
+        <!-- 3. BLOQUEIOS DE HORÁRIO -->
         <section id="v-bloqueio" class="view">
-            <h1>Gerar Bloqueios na Agenda</h1>
-            <p class="sub">Escolha uma data específica no calendário para bloquear horários indesejados (ex: Almoço, Intervalos).</p>
-            
-            <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 25px; background: var(--card); padding: 15px 20px; border-radius: 12px; border: 1px solid var(--border);">
-                <label style="margin: 0; font-size: 1rem;">Selecione o Dia:</label>
-                <input type="date" id="data-bloqueio-filtro" style="width: 250px; margin: 0; padding: 10px;">
+            <div class="header-flex">
+                <div>
+                    <h1>Gerar Bloqueios Semanais</h1>
+                    <p class="sub">Selecione os horários padrão de pausa que se repetem durante os dias abertos.</p>
+                </div>
+                <button class="btn success" id="btn-salvar-bloqueios">💾 Salvar Bloqueios</button>
             </div>
-
-            <div class="card" id="box-bloqueios-slots" style="display: none;">
-                <h3>Horários da Data Selecionada</h3>
-                <p style="font-size: 0.9rem; color: gray; margin-top: 5px; margin-bottom: 15px;">Clique nos cards para <b>Bloquear (Vermelho)</b> ou <b>Liberar (Verde)</b>. Lembre-se de salvar no final.</p>
-                
-                <div class="slot-grid" id="grid-bloqueios-render"></div>
-
-                <button class="btn success" style="width: 100%; margin-top: 25px; padding: 15px;" id="btn-salvar-bloqueios">💾 Salvar Bloqueios desta Data</button>
+            
+            <div class="card" style="background: transparent; border: none; padding: 0; box-shadow: none;">
+                <div class="week-grid" id="container-bloqueios">
+                    <p style="color: gray;">Configure e salve a aba "Criar Horários" para exibir os blocos.</p>
+                </div>
             </div>
         </section>
 
         <!-- 4. PROCEDIMENTOS -->
         <section id="v-proced" class="view">
-            <h1>Procedimentos Oferecidos</h1>
-            <p class="sub">Cadastre ou remova os serviços oferecidos pela clínica.</p>
+            <h1>Gerenciamento de Procedimentos</h1>
+            <p class="sub">Cadastre os serviços e seus respectivos valores.</p>
             
             <div class="card grid-3" style="align-items: end;">
-                <div style="grid-column: span 2;"><label>Nome do Procedimento</label><input type="text" id="p-nome" placeholder="Ex: Micropigmentação Labial"></div>
-                <div><label>Valor (R$)</label><input type="number" id="p-valor" placeholder="400"></div>
+                <div style="grid-column: span 2;"><label>Nome do Procedimento</label><input type="text" id="p-nome" placeholder="Ex: Micropigmentação Fio a Fio"></div>
+                <div><label>Valor (R$)</label><input type="number" id="p-valor" placeholder="450"></div>
                 <div style="grid-column: 1 / -1;"><button class="btn" style="width: auto;" id="btn-add-proced">+ Adicionar Procedimento</button></div>
             </div>
 
@@ -213,7 +248,7 @@
         <!-- 5. FINANCEIRO -->
         <section id="v-finan" class="view">
             <h1>Controle Financeiro</h1>
-            <p class="sub">Histórico de faturamento de quaisquer consultas finalizadas.</p>
+            <p class="sub">Ganhos registrados de consultas concluídas.</p>
             <div class="card" style="padding: 0; overflow: hidden;">
                 <table><thead><tr><th>Data</th><th>Descrição do Serviço</th><th style="width: 150px;">Entrada</th></tr></thead><tbody id="lista-finan"></tbody></table>
             </div>
@@ -228,29 +263,24 @@
         const firebaseConfig = { apiKey: "AIzaSyD4SElQHlfQjbN2NsHC0Z9_1Gobb6WHd8o", authDomain: "clinicabase-a85a7.firebaseapp.com", projectId: "clinicabase-a85a7", storageBucket: "clinicabase-a85a7.firebasestorage.app", messagingSenderId: "324071825277", appId: "1:324071825277:web:6a0d3c4413f7a7569fb614" };
         const app = initializeApp(firebaseConfig); const db = getFirestore(app); const auth = getAuth(app);
 
-        // Estado do App
-        let gradeConfig = { start: "08:00", end: "18:00", int: "60" };
-        let listaBloqueiosAtuais = {}; 
+        // Estado Estruturado Inicial
+        let gradeConfig = { dias: [], start: "08:00", end: "18:00", int: "60", excecoes: {}, bloqueios: [] };
         let agendamentosDB = [];
 
-        // Filtros Iniciais
-        const hojeIso = new Date().toISOString().split('T')[0];
-        document.getElementById('filtro-data-agenda').value = hojeIso;
-        document.getElementById('data-bloqueio-filtro').value = hojeIso;
+        document.getElementById('filtro-data-agenda').value = new Date().toISOString().split('T')[0];
 
-        // Monitor de Login
         onAuthStateChanged(auth, (user) => { 
             if(user) { 
                 document.getElementById('login-overlay').style.display = 'none'; 
-                iniciarPainel(); 
+                iniciarSistema(); 
             } else { 
                 document.getElementById('login-overlay').style.display = 'flex'; 
             }
         });
 
-        // Eventos Globais Fixados
+        // Associação Confiável de Eventos (Prevenindo erros de escopo de Módulo)
         document.getElementById('btn-login-action').addEventListener('click', () => {
-            signInWithEmailAndPassword(auth, document.getElementById('log-email').value, document.getElementById('log-senha').value).catch(e => alert("Acesso negado."));
+            signInWithEmailAndPassword(auth, document.getElementById('log-email').value, document.getElementById('log-senha').value).catch(e => alert("Dados Incorretos."));
         });
         document.getElementById('menu-sair').addEventListener('click', () => signOut(auth));
         
@@ -261,14 +291,15 @@
         document.getElementById('menu-finan').addEventListener('click', function() { MudarAba('v-finan', this); });
 
         document.getElementById('filtro-data-agenda').addEventListener('change', () => renderizarAgendaPrincipal());
-        document.getElementById('data-bloqueio-filtro').addEventListener('change', () => renderizerSlotsBloqueio());
-        document.getElementById('man-data').addEventListener('change', () => escutarMudancaDataModal());
+        document.getElementById('man-data').addEventListener('change', () => gerarListaDeHorariosModal());
 
-        document.getElementById('btn-abrir-modal').addEventListener('click', () => abrirModalAgendamento());
+        document.getElementById('btn-abrir-modal').addEventListener('click', () => abrirModalAgendar());
         document.getElementById('btn-fechar-modal').addEventListener('click', () => fecharModais());
         document.getElementById('btn-salvar-manual').addEventListener('click', () => salvarAgendamentoManual());
-        document.getElementById('btn-salvar-grade').addEventListener('click', () => salvarGradeConfigurada());
-        document.getElementById('btn-salvar-bloqueios').addEventListener('click', () => salvarBloqueiosNoFirebase());
+        
+        document.getElementById('btn-salvar-grade').addEventListener('click', () => salvarGradeSemanal());
+        document.getElementById('btn-salvar-excecao').addEventListener('click', () => salvarDiaPersonalizado());
+        document.getElementById('btn-salvar-bloqueios').addEventListener('click', () => salvarBloqueiosNaNuveem());
         document.getElementById('btn-add-proced').addEventListener('click', () => cadastrarProcedimento());
 
         function MudarAba(viewId, menuEl) {
@@ -279,17 +310,16 @@
         }
         function fecharModais() { document.getElementById('modal-agendar').classList.remove('active'); }
 
-        async function iniciarPainel() {
+        async function iniciarSistema() {
             const gSnap = await getDoc(doc(db, "configuracoes", "geral"));
             if(gSnap.exists()){ 
                 document.documentElement.style.setProperty('--primary', gSnap.data().cor); 
                 document.getElementById('ui-nome').innerText = gSnap.data().nome; 
                 if(gSnap.data().logo) document.getElementById('ui-logo').innerHTML = `<img src="${gSnap.data().logo}">`;
             }
-            carregarGradeParametros();
-            carregarBloqueiosGlobais();
-            lerProcedimentos();
-            escutarAgendamentosNuvem();
+            await lerGradeDoBanco(); 
+            lerProcedimentos(); 
+            escutarAgenda(); 
             lerFinanceiro();
         }
 
@@ -313,195 +343,308 @@
                 document.getElementById('man-servico').innerHTML = selMan; 
                 
                 snap.forEach(d => {
-                    document.getElementById(`btn-del-${d.id}`).addEventListener('click', async () => {
-                        if(confirm("Deseja remover este procedimento?")) await deleteDoc(doc(db, "procedimentos", d.id));
-                    });
+                    const btn = document.getElementById(`btn-del-${d.id}`);
+                    if(btn) {
+                        btn.addEventListener('click', async () => {
+                            if(confirm("Apagar procedimento?")) await deleteDoc(doc(db, "procedimentos", d.id));
+                        });
+                    }
                 });
             });
         }
 
-        /* ================= GRADE PARAMETROS ================= */
-        async function carregarGradeParametros() {
-            const snap = await getDoc(doc(db, "configuracoes", "parametros_grade"));
+        /* ================= CRIAR HORÁRIOS & GRADE ================= */
+        async function lerGradeDoBanco() {
+            const snap = await getDoc(doc(db, "configuracoes", "grade"));
             if(snap.exists()) {
                 gradeConfig = snap.data();
-                document.getElementById('g-start').value = gradeConfig.start;
-                document.getElementById('g-end').value = gradeConfig.end;
+                if(!gradeConfig.excecoes) gradeConfig.excecoes = {};
+                if(!gradeConfig.bloqueios) gradeConfig.bloqueios = [];
+                
+                document.getElementById('g-start').value = gradeConfig.start; 
+                document.getElementById('g-end').value = gradeConfig.end; 
                 document.getElementById('g-int').value = gradeConfig.int;
+                
+                // Desmarca todos antes e marca os corretos
+                document.querySelectorAll('.day-cb').forEach(cb => cb.checked = false);
+                gradeConfig.dias.forEach(d => {
+                    const el = document.getElementById('d'+d);
+                    if(el) el.checked = true;
+                });
+                
+                renderizarListaExcecoes();
+                renderizarAbaBloqueios();
             }
-            renderizerSlotsBloqueio();
         }
-        async function salvarGradeConfigurada() {
+
+        window.salvarGradeSemanal = async () => {
+            let d = []; 
+            document.querySelectorAll('.day-cb:checked').forEach(c => d.push(parseInt(c.value)));
+            
+            if(d.length === 0) return alert("Selecione pelo menos um dia da semana para salvar a regra padrão.");
+            
+            gradeConfig.dias = d;
             gradeConfig.start = document.getElementById('g-start').value;
             gradeConfig.end = document.getElementById('g-end').value;
             gradeConfig.int = document.getElementById('g-int').value;
+
+            await setDoc(doc(db, "configuracoes", "grade"), gradeConfig);
+            alert("Regra semanal salva com sucesso!");
+            renderizarAbaBloqueios();
+        }
+
+        window.salvarDiaPersonalizado = async () => {
+            const dataInput = document.getElementById('c-data').value;
+            if(!dataInput) return alert("Escolha uma data no calendário de exceções.");
             
-            // REMOVIDA VALIDAÇÃO ANTIGA QUE CAUSAVA O ERRO!
-            await setDoc(doc(db, "configuracoes", "parametros_grade"), gradeConfig);
-            alert("Grade publicada com sucesso!");
-            renderizerSlotsBloqueio();
-        }
-
-        /* ================= GERAR BLOQUEIOS ================= */
-        async function carregarBloqueiosGlobais() {
-            const snap = await getDoc(doc(db, "configuracoes", "bloqueios_datas"));
-            if(snap.exists()) { listaBloqueiosAtuais = snap.data(); }
-            renderizerSlotsBloqueio();
-        }
-        function renderizerSlotsBloqueio() {
-            const dataInput = document.getElementById('data-bloqueio-filtro').value;
-            const grid = document.getElementById('grid-bloqueios-render');
-            if(!dataInput) return;
-
-            document.getElementById('box-bloqueios-slots').style.display = 'block';
-            grid.innerHTML = "";
-
             const dataBr = dataInput.split('-').reverse().join('/');
-            let bloqueadosDoDia = listaBloqueiosAtuais[dataBr] || [];
+            
+            gradeConfig.excecoes[dataBr] = {
+                start: document.getElementById('c-start').value,
+                end: document.getElementById('c-end').value,
+                int: document.getElementById('c-int').value
+            };
 
-            let startM = parseInt(gradeConfig.start.split(':')[0])*60;
-            let endM = parseInt(gradeConfig.end.split(':')[0])*60;
-            let interv = parseInt(gradeConfig.int);
+            await setDoc(doc(db, "configuracoes", "grade"), gradeConfig);
+            alert("Dia excepcional adicionado para " + dataBr);
+            renderizarListaExcecoes();
+        }
 
-            for(let m = startM; m < endM; m += interv) {
-                let h = Math.floor(m/60).toString().padStart(2,'0')+":"+(m%60).toString().padStart(2,'0');
-                let isBlocked = bloqueadosDoDia.includes(h);
-                let cls = isBlocked ? "slot-btn blocked" : "slot-btn";
-                grid.innerHTML += `<div class="${cls}" id="lock-slot-${h.replace(':','')}">${h}</div>`;
+        function renderizarListaExcecoes() {
+            let html = "<b>Exceções / Datas Específicas Ativas:</b><br>";
+            if(Object.keys(gradeConfig.excecoes).length === 0) html += "<i style='color:gray'>Nenhuma data criada.</i>";
+            for (const [data, config] of Object.entries(gradeConfig.excecoes)) {
+                html += `<div style="background:#fef3c7; padding:10px; border-radius:6px; margin-top:8px; border:1px solid #fde68a;" id="exc-container-${data.replace(/\//g,'')}">
+                            <b>${data}</b>: ${config.start} às ${config.end} (${config.int}m)
+                            <button id="btn-del-exc-${data.replace(/\//g,'')}" style="float:right; color:red; border:none; background:none; cursor:pointer; font-weight:bold;">X</button>
+                         </div>`;
+            }
+            document.getElementById('lista-excecoes').innerHTML = html;
+
+            // Vincula ações de exclusão
+            for (const data of Object.keys(gradeConfig.excecoes)) {
+                const idLimpa = data.replace(/\//g,'');
+                const btn = document.getElementById(`btn-del-exc-${idLimpa}`);
+                if(btn){
+                    btn.addEventListener('click', async () => {
+                        delete gradeConfig.excecoes[data];
+                        await setDoc(doc(db, "configuracoes", "grade"), gradeConfig);
+                        renderizarListaExcecoes();
+                    });
+                }
+            }
+        }
+
+        /* ================= GERAR BLOQUEIOS SEMANAIS ================= */
+        function renderizarAbaBloqueios() {
+            const cont = document.getElementById('container-bloqueios');
+            cont.innerHTML = "";
+            if(!gradeConfig.dias || gradeConfig.dias.length === 0) {
+                cont.innerHTML = "<p style='color:gray;'>Adicione dias de trabalho na aba de Regra Semanal para habilitar os bloqueios.</p>";
+                return;
             }
 
-            for(let m = startM; m < endM; m += interv) {
-                let h = Math.floor(m/60).toString().padStart(2,'0')+":"+(m%60).toString().padStart(2,'0');
-                document.getElementById(`lock-slot-${h.replace(':','')}`).addEventListener('click', function() {
-                    if(!listaBloqueiosAtuais[dataBr]) listaBloqueiosAtuais[dataBr] = [];
-                    if(listaBloqueiosAtuais[dataBr].includes(h)) {
-                        listaBloqueiosAtuais[dataBr] = listaBloqueiosAtuais[dataBr].filter(x => x !== h);
-                        this.className = "slot-btn";
-                    } else {
-                        listaBloqueiosAtuais[dataBr].push(h);
-                        this.className = "slot-btn blocked";
+            const nomesDias = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
+            
+            gradeConfig.dias.forEach(diaNum => {
+                let startM = parseInt(gradeConfig.start.split(':')[0])*60;
+                let endM = parseInt(gradeConfig.end.split(':')[0])*60;
+                let interv = parseInt(gradeConfig.int);
+
+                let slotsHTML = "";
+                for(let m = startM; m < endM; m += interv){
+                    let h = Math.floor(m/60).toString().padStart(2,'0')+":"+(m%60).toString().padStart(2,'0');
+                    let keyUnica = `${diaNum}-${h}`;
+                    let bloqueado = gradeConfig.bloqueios.includes(keyUnica);
+                    
+                    let cls = bloqueado ? "slot-btn blocked" : "slot-btn";
+                    slotsHTML += `<div class="${cls}" id="bl-slot-${diaNum}-${h.replace(':','')}">${h}</div>`;
+                }
+
+                cont.innerHTML += `
+                    <div class="day-col">
+                        <div class="day-col-header">${nomesDias[diaNum]}</div>
+                        <div class="day-col-body" id="body-col-${diaNum}">${slotsHTML}</div>
+                    </div>
+                `;
+            });
+
+            // Vincula cliques aos botões criados
+            gradeConfig.dias.forEach(diaNum => {
+                let startM = parseInt(gradeConfig.start.split(':')[0])*60;
+                let endM = parseInt(gradeConfig.end.split(':')[0])*60;
+                let interv = parseInt(gradeConfig.int);
+
+                for(let m = startM; m < endM; m += interv){
+                    let h = Math.floor(m/60).toString().padStart(2,'0')+":"+(m%60).toString().padStart(2,'0');
+                    let keyUnica = `${diaNum}-${h}`;
+                    const targetBtn = document.getElementById(`bl-slot-${diaNum}-${h.replace(':','')}`);
+                    
+                    if(targetBtn) {
+                        targetBtn.addEventListener('click', function() {
+                            if(gradeConfig.bloqueios.includes(keyUnica)) {
+                                gradeConfig.bloqueios = gradeConfig.bloqueios.filter(i => i !== keyUnica);
+                                this.className = "slot-btn";
+                            } else {
+                                gradeConfig.bloqueios.push(keyUnica);
+                                this.className = "slot-btn blocked";
+                            }
+                        });
                     }
-                });
-            }
-        }
-        async function salvarBloqueiosNoFirebase() {
-            await setDoc(doc(db, "configuracoes", "bloqueios_datas"), listaBloqueiosAtuais);
-            alert("Bloqueios salvos com sucesso!");
+                }
+            });
         }
 
-        /* ================= LEITURA DA AGENDA ================= */
-        function escutarAgendamentosNuvem() {
+        window.salvarBloqueiosNaNuveem = async () => {
+            await setDoc(doc(db, "configuracoes", "grade"), gradeConfig);
+            alert("Bloqueios padrão salvos com sucesso na nuvem!");
+        }
+
+        /* ================= LEITURA DA AGENDA PRINCIPAL ================= */
+        function escutarAgenda() {
             onSnapshot(query(collection(db, "agendamentos"), orderBy("ts", "asc")), (snap) => {
-                agendamentosDB = [];
-                snap.forEach(d => { let o = d.data(); o.id = d.id; agendamentosDB.push(o); });
+                agendamentosDB = []; 
+                snap.forEach(d => { let obj = d.data(); obj.id = d.id; agendamentosDB.push(obj); });
                 renderizarAgendaPrincipal();
             });
         }
+
         function renderizarAgendaPrincipal() {
             const dataInput = document.getElementById('filtro-data-agenda').value;
             const box = document.getElementById('lista-agenda');
             box.innerHTML = "";
+            
             if(!dataInput) return box.innerHTML = "<div class='empty-agenda'>Selecione uma data acima.</div>";
-
             const dataBr = dataInput.split('-').reverse().join('/');
+            
             let filtrados = agendamentosDB.filter(a => a.data === dataBr);
+            filtrados.sort((a, b) => a.hora.localeCompare(b.hora));
 
             if(filtrados.length === 0) {
-                return box.innerHTML = `<div class='empty-agenda'>Nenhum procedimento agendado para o dia ${dataBr}.</div>`;
+                return box.innerHTML = `<div class='empty-agenda'>Nenhum paciente agendado para o dia ${dataBr}. A agenda está livre!</div>`;
             }
 
             filtrados.forEach(a => {
                 const num = a.pacienteWhatsapp ? a.pacienteWhatsapp.replace(/\D/g,'') : '';
                 let wppBtn = num ? `<a href="https://wa.me/55${num}" target="_blank" style="color:var(--success); font-weight:bold; text-decoration:none; margin-left:10px;">📲 Chamar</a>` : '';
+                
                 box.innerHTML += `
                     <div class="appt-card">
                         <div class="appt-info">
                             <div class="appt-time">🕒 ${a.hora}</div>
                             <h3>${a.pacienteNome}</h3>
-                            <p style="margin-bottom: 5px;">Procedimento: <b>${a.servico}</b></p>
+                            <p style="margin-bottom: 5px;">Procedimento: <b style="color:var(--text);">${a.servico}</b></p>
                             <p>WhatsApp: ${a.pacienteWhatsapp || 'Não informado'} ${wppBtn}</p>
                         </div>
                         <div style="display:flex; flex-direction:column; gap:10px;">
-                            <button class="btn success" id="btn-concluir-${a.id}">✅ Finalizar</button>
-                            <button class="btn outline" style="border-color:var(--danger); color:var(--danger);" id="btn-cancel-${a.id}">❌ Remover</button>
+                            <button class="btn success" id="btn-done-${a.id}">✅ Finalizar</button>
+                            <button class="btn outline" style="border-color: var(--danger); color: var(--danger);" id="btn-del-appt-${a.id}">❌ Cancelar</button>
                         </div>
                     </div>`;
             });
 
+            // Vincula ações
             filtrados.forEach(a => {
-                document.getElementById(`btn-concluir-${a.id}`).addEventListener('click', async () => {
-                    if(confirm("Lançar valor e concluir consulta?")) {
+                document.getElementById(`btn-done-${a.id}`).addEventListener('click', async () => {
+                    if(confirm("Deseja concluir o atendimento e lançar o valor no caixa?")) {
                         await addDoc(collection(db, "financeiro"), { data: new Date().toLocaleDateString('pt-BR'), descricao: "Consulta: "+a.servico, valor: a.valor, ts: Date.now() });
                         await deleteDoc(doc(db, "agendamentos", a.id));
                     }
                 });
-                document.getElementById(`btn-cancel-${a.id}`).addEventListener('click', async () => {
-                    if(confirm("Remover agendamento?")) await deleteDoc(doc(db, "agendamentos", a.id));
+                document.getElementById(`btn-del-appt-${a.id}`).addEventListener('click', async () => {
+                    if(confirm("Deseja realmente cancelar este horário?")) await deleteDoc(doc(db, "agendamentos", a.id));
                 });
             });
         }
 
-        /* ================= AGENDAMENTO MANUAL ================= */
-        function abrirModalAgendamento() {
+        /* ================= NOVO AGENDAMENTO MANUAL ================= */
+        function abrirModalAgendar() {
             document.getElementById('modal-agendar').classList.add('active');
             document.getElementById('man-nome').value = ''; document.getElementById('man-wpp').value = '';
             document.getElementById('man-data').value = ''; document.getElementById('man-servico').value = '';
             document.getElementById('man-hora').innerHTML = '<option value="">Escolha a data primeiro</option>';
             document.getElementById('man-hora').disabled = true; document.getElementById('man-aviso').innerText = '';
         }
-        function escutarMudancaDataModal() {
+
+        function gerarListaDeHorariosModal() {
             const dataInput = document.getElementById('man-data').value;
             const selectHora = document.getElementById('man-hora');
             const aviso = document.getElementById('man-aviso');
             
-            selectHora.innerHTML = '<option value="">Carregando...</option>'; selectHora.disabled = true; aviso.innerText = '';
+            selectHora.innerHTML = '<option value="">Carregando...</option>';
+            selectHora.disabled = true; aviso.innerText = '';
             if(!dataInput) return;
 
             const dataBr = dataInput.split('-').reverse().join('/');
-            let bloqueadosDoDia = listaBloqueiosAtuais[dataBr] || [];
+            const diaDaSemana = new Date(dataInput + "T00:00:00").getDay();
+            
+            let paramsDia = null;
+            if(gradeConfig.excecoes && gradeConfig.excecoes[dataBr]) {
+                paramsDia = gradeConfig.excecoes[dataBr]; 
+            } else if (gradeConfig.dias.includes(diaDaSemana)) {
+                paramsDia = gradeConfig; 
+            }
 
-            let startM = parseInt(gradeConfig.start.split(':')[0])*60;
-            let endM = parseInt(gradeConfig.end.split(':')[0])*60;
-            let interv = parseInt(gradeConfig.int);
+            if(!paramsDia) {
+                selectHora.innerHTML = '<option value="">Data Indisponível</option>';
+                aviso.innerText = "A clínica não abriu agenda para este dia.";
+                return;
+            }
 
+            let startM = parseInt(paramsDia.start.split(':')[0])*60;
+            let endM = parseInt(paramsDia.end.split(':')[0])*60;
+            let interv = parseInt(paramsDia.int);
+            
             selectHora.innerHTML = '<option value="">Selecione o Horário...</option>';
-            let livres = 0;
+            let qtdLivres = 0;
 
-            for(let m = startM; m < endM; m += interv) {
+            for(let m = startM; m < endM; m += interv){
                 let h = Math.floor(m/60).toString().padStart(2,'0')+":"+(m%60).toString().padStart(2,'0');
-                if(!bloqueadosDoDia.includes(h)) {
+                let keyBloqueio = `${diaDaSemana}-${h}`;
+                
+                if(!gradeConfig.bloqueios.includes(keyBloqueio)) {
                     let ocupado = agendamentosDB.some(a => a.data === dataBr && a.hora === h);
                     if(!ocupado) {
                         selectHora.innerHTML += `<option value="${h}">${h}</option>`;
-                        livres++;
+                        qtdLivres++;
                     }
                 }
             }
-            if(livres === 0) { aviso.innerText = "Nenhum horário livre nesta data."; } else { selectHora.disabled = false; }
+
+            if(qtdLivres === 0) {
+                selectHora.innerHTML = '<option value="">Agenda Lotada</option>';
+                aviso.innerText = "Não há mais horários livres.";
+            } else {
+                selectHora.disabled = false;
+            }
         }
+
         async function salvarAgendamentoManual() {
             const n = document.getElementById('man-nome').value; const w = document.getElementById('man-wpp').value;
-            const s = document.getElementById('man-servico').value; const d = document.getElementById('man-data').value;
+            const sVal = document.getElementById('man-servico').value; const d = document.getElementById('man-data').value;
             const h = document.getElementById('man-hora').value;
+            
+            if(!n || !sVal || !d || !h) return alert("Por favor, preencha todos os campos.");
 
-            if(!n || !s || !d || !h) return alert("Por favor, preencha todos os campos e selecione o horário.");
+            const servNome = sVal.split('|')[0]; const servValor = parseFloat(sVal.split('|')[1]);
+            const dataBr = d.split('-').reverse().join('/');
 
-            await addDoc(collection(db, "agendamentos"), {
-                pacienteNome: n + " (Balcão)", pacienteWhatsapp: w,
-                servico: s.split('|')[0], valor: parseFloat(s.split('|')[1]),
-                data: d.split('-').reverse().join('/'), hora: h, ts: Date.now()
+            await addDoc(collection(db, "agendamentos"), { 
+                pacienteNome: n + " (Balcão)", pacienteWhatsapp: w, 
+                servico: servNome, valor: servValor, data: dataBr, hora: h, ts: Date.now() 
             });
+
             fecharModais();
             document.getElementById('filtro-data-agenda').value = d;
             renderizarAgendaPrincipal();
-            alert("Agendamento efetuado!");
+            alert("✅ Agendamento inserido com sucesso!");
         }
 
         /* ================= FINANCEIRO ================= */
         function lerFinanceiro() {
             onSnapshot(query(collection(db, "financeiro"), orderBy("ts", "desc")), (snap) => {
                 let html = "";
-                if(snap.empty) html = "<tr><td colspan='3' style='text-align:center;'>Nenhum ganho registrado.</td></tr>";
+                if(snap.empty) html = "<tr><td colspan='3' style='text-align:center;'>Nenhuma entrada registrada.</td></tr>";
                 snap.forEach(d => {
                     html += `<tr><td>${d.data().data}</td><td><b>${d.data().descricao}</b></td><td style="color:var(--success); font-weight:bold;">+ R$ ${d.data().valor.toFixed(2)}</td></tr>`;
                 });
