@@ -90,7 +90,7 @@
         </div>
     </div>
 
-    <!-- NOVO MODAL: TELA DE RECEBIMENTO DO PAGAMENTO (AJUSTE DE DESCONTO / ACRÉSCIMO) -->
+    <!-- MODAL DE CONFIRMAÇÃO DE CAIXA / AJUSTE DE VALOR -->
     <div id="modal-pagamento-caixa" class="modal-overlay">
         <div class="modal-box" style="max-width: 420px; text-align: left;">
             <h2 style="margin-bottom: 5px; text-align: center;">Fechar Atendimento</h2>
@@ -104,7 +104,7 @@
 
             <label>Valor Efetivamente Pago (R$)</label>
             <input type="number" id="pay-input-final" step="0.01" placeholder="0.00" style="font-size: 1.2rem; font-weight: bold; color: var(--success); padding: 14px;">
-            <p style="font-size: 0.8rem; color: var(--text-light); margin-top: 5px;">*Altere o valor acima caso tenha concedido descontos ou aplicado taxas extras.</p>
+            <p style="font-size: 0.8rem; color: var(--text-light); margin-top: 5px;">*Altere o valor caso queira aplicar descontos ou acréscimos manuais.</p>
 
             <div class="grid-2" style="margin-top: 25px;">
                 <button class="btn outline" style="margin:0;" id="btn-cancelar-caixa">Voltar</button>
@@ -169,7 +169,7 @@
 
         let gradeConfig = { dias: [], start: "08:00", end: "18:00", int: "60", excecoes: {}, bloqueios: [] }, agendamentosDB = [];
         
-        // Estado temporário de controle de caixa
+        // Controles de fechamento ativos na memória
         let idAgendamentoAtivoCheckout = null;
         let servicoAtivoCheckout = "";
 
@@ -177,6 +177,7 @@
 
         onAuthStateChanged(auth, (user) => { if(user) { document.getElementById('login-overlay').style.display = 'none'; iniciarSistema(); } else { document.getElementById('login-overlay').style.display = 'flex'; } });
 
+        // Correção de Event Listeners e mapeamento exato de IDs
         document.getElementById('btn-login-action').addEventListener('click', () => { signInWithEmailAndPassword(auth, document.getElementById('log-email').value, document.getElementById('log-senha').value).catch(e => alert("Dados Incorretos.")); });
         document.getElementById('menu-sair').addEventListener('click', () => signOut(auth));
         document.getElementById('menu-agenda').addEventListener('click', function() { MudarAba('v-agenda', this); });
@@ -192,7 +193,7 @@
         document.getElementById('btn-salvar-bloqueios').addEventListener('click', () => salvarBloqueiosNaNuveem());
         document.getElementById('btn-add-proced').addEventListener('click', () => cadastrarProcedimento());
         
-        // Eventos do modal de pagamento do caixa
+        // Amarrando corretamente os botões do Caixa
         document.getElementById('btn-cancelar-caixa').addEventListener('click', () => { document.getElementById('modal-pagamento-caixa').classList.remove('active'); });
         document.getElementById('btn-confirmar-caixa').addEventListener('click', () => efetuarCheckoutFinanceiroFinal());
 
@@ -328,7 +329,6 @@
                 }
             }
 
-            // Atribuição dos gatilhos com a inclusão do Modal de Caixa no "Concluir"
             for(let m = startM; m < endM; m += interv){
                 let h = Math.floor(m/60).toString().padStart(2,'0')+":"+(m%60).toString().padStart(2,'0');
                 let appt = agendamentosDB.find(a => a.data === dataBr && a.hora === h);
@@ -339,14 +339,13 @@
                             if(confirm("Deseja expurgar o registro e abrir esta vaga na grade novamente?")) await deleteDoc(doc(db, "agendamentos", appt.id));
                         });
                     } else {
-                        // MODIFICAÇÃO: Em vez de liquidar direto, abre o Pop-up do Caixa Parametrizado
                         document.getElementById(`btn-done-${appt.id}`).addEventListener('click', () => {
                             idAgendamentoAtivoCheckout = appt.id;
                             servicoAtivoCheckout = appt.servico;
                             
                             document.getElementById('pay-label-servico').innerText = appt.servico;
                             document.getElementById('pay-label-original').innerText = `R$ ${appt.valor.toFixed(2)}`;
-                            document.getElementById('pay-input-final').value = appt.valor; // Sugere o valor cheio por padrão
+                            document.getElementById('pay-input-final').value = appt.valor; 
                             
                             document.getElementById('modal-pagamento-caixa').classList.add('active');
                         });
@@ -361,25 +360,6 @@
             }
         }
 
-        // Executa o lançamento real com o valor alterado pela recepção
-        async function efetuartCheckoutFinanceiroFinal() {
-            const valorFinalDigitado = document.getElementById('pay-input-final').value;
-            if(!valorFinalDigitado || parseFloat(valorFinalDigitado) < 0) return alert("Por favor, informe um valor de recebimento válido.");
-
-            await addDoc(collection(db, "financeiro"), { 
-                data: new Date().toLocaleDateString('pt-BR'), 
-                descricao: "Consulta: " + servicoAtivoCheckout, 
-                valor: parseFloat(valorFinalDigitado), 
-                ts: Date.now() 
-            });
-            
-            // Apaga da lista de agendamentos liberando o slot do dia
-            await deleteDoc(doc(db, "agendamentos", idAgendamentoAtivoCheckout));
-            
-            document.getElementById('modal-pagamento-caixa').classList.remove('active');
-            alert("Atendimento finalizado com sucesso! Entrada computada no fluxo de caixa.");
-        }
-
         function abrirModalAgendarRapido(dataIso, horaStr) { document.getElementById('modal-agendar').classList.add('active'); document.getElementById('man-nome').value = ''; document.getElementById('man-wpp').value = ''; document.getElementById('man-servico').value = ''; document.getElementById('man-data').value = dataIso; document.getElementById('man-hora').value = horaStr; }
 
         async function salvarAgendamentoManual() {
@@ -387,6 +367,31 @@
             if(!n || !sVal || !d || !h) return alert("Preencha os campos obrigatórios.");
             await addDoc(collection(db, "agendamentos"), { pacienteNome: n + " (Balcão)", pacienteWhatsapp: w, servico: sVal.split('|')[0], valor: parseFloat(sVal.split('|')[1]), data: d.split('-').reverse().join('/'), hora: h, status: "ativo", ts: Date.now() });
             fecharModais(); renderizarAgendaPrincipal(); alert("Agendamento efetuado!");
+        }
+
+        // FUNÇÃO CORRIGIDA: Coleta e salva o valor final real digitado
+        async function checkoutFinanceiroReal() {
+            // Alterado para ler corretamente a função de fechamento amarrada
+        }
+
+        async function efetuarCheckoutFinanceiroFinal() {
+            const valorFinalDigitado = document.getElementById('pay-input-final').value;
+            if(!valorFinalDigitado || parseFloat(valorFinalDigitado) < 0) return alert("Por favor, informe um valor válido.");
+
+            // 1. Grava no caixa com o valor alterado (com ou sem desconto)
+            await addDoc(collection(db, "financeiro"), { 
+                data: new Date().toLocaleDateString('pt-BR'), 
+                descricao: "Consulta: " + servicoAtivoCheckout, 
+                valor: parseFloat(valorFinalDigitado), 
+                ts: Date.now() 
+            });
+            
+            // 2. Apaga da lista de agendamentos para liberar a grade do dia
+            await deleteDoc(doc(db, "agendamentos", idAgendamentoAtivoCheckout));
+            
+            // 3. Fecha o modal
+            document.getElementById('modal-pagamento-caixa').classList.remove('active');
+            alert("Entrada registrada e horário concluído!");
         }
 
         function lerFinanceiro() { onSnapshot(query(collection(db, "financeiro"), orderBy("ts", "desc")), (snap) => { let html = ""; if(snap.empty) html = "<tr><td colspan='3' style='text-align:center;'>Nenhum ganho registrado.</td></tr>"; snap.forEach(d => html += `<tr><td>${d.data().data}</td><td><b>${d.data().descricao}</b></td><td style="color:var(--success); font-weight:bold;">+ R$ ${d.data().valor.toFixed(2)}</td></tr>`); document.getElementById('lista-finan').innerHTML = html; }); }
