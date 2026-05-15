@@ -65,16 +65,18 @@
         .appt-time { font-weight: 800; color: var(--primary); font-size: 1.1rem; background: #e0e7ff; padding: 5px 10px; border-radius: 6px; display: inline-block; margin-bottom: 10px;}
 
         /* Modais */
-        .modal-overlay { position: fixed; inset: 0; background: rgba(17, 24, 39, 0.8); display: flex; align-items: center; justify-content: center; z-index: 9999; visibility: hidden; opacity: 0; transition: 0.2s;}
-        .modal-overlay.active { visibility: visible; opacity: 1; }
+        .modal-overlay { position: fixed; inset: 0; background: rgba(17, 24, 39, 0.8); display: none; align-items: center; justify-content: center; z-index: 9999; }
+        .modal-overlay.active { display: flex; }
         .modal-box { background: white; padding: 35px; border-radius: 16px; width: 100%; max-width: 500px; max-height: 90vh; overflow-y: auto;}
-        #login-overlay { background: var(--sidebar); visibility: visible; opacity: 1; }
+        
+        /* LOGIN ESPECÍFICO */
+        #login-overlay { position: fixed; inset: 0; background: var(--sidebar); display: flex; align-items: center; justify-content: center; z-index: 9999; }
     </style>
 </head>
 <body>
 
     <!-- TELA DE LOGIN -->
-    <div id="login-overlay" class="modal-overlay active">
+    <div id="login-overlay">
         <div class="modal-box" style="text-align: center; max-width: 400px;">
             <h2 style="margin-bottom: 20px;">Acesso Restrito Yod</h2>
             <input type="email" id="log-email" placeholder="E-mail da Recepção">
@@ -215,28 +217,27 @@
         import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, deleteDoc, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
         import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
 
-        // SUAS CHAVES DO FIREBASE
         const firebaseConfig = { apiKey: "AIzaSyD4SElQHlfQjbN2NsHC0Z9_1Gobb6WHd8o", authDomain: "clinicabase-a85a7.firebaseapp.com", projectId: "clinicabase-a85a7", storageBucket: "clinicabase-a85a7.firebasestorage.app", messagingSenderId: "324071825277", appId: "1:324071825277:web:6a0d3c4413f7a7569fb614" };
         const app = initializeApp(firebaseConfig); const db = getFirestore(app); const auth = getAuth(app);
 
-        // Variáveis Globais Corrigidas
         let bloqueiosTemporarios = [];
         let configGradeGlobal = null;
         let todosAgendamentos = [];
 
+        // Verifica a Autenticação. Se estiver logado, esconde a tela preta com display: none!
         onAuthStateChanged(auth, (user) => { 
             if(user) { 
-                document.getElementById('login-overlay').classList.remove('active'); 
+                document.getElementById('login-overlay').style.display = 'none'; 
                 iniciarSistema(); 
             } else { 
-                document.getElementById('login-overlay').classList.add('active'); 
+                document.getElementById('login-overlay').style.display = 'flex'; 
             }
         });
 
         window.fazerLogin = () => signInWithEmailAndPassword(auth, document.getElementById('log-email').value, document.getElementById('log-senha').value).catch(e => alert("Erro ao entrar. E-mail ou senha incorretos."));
         window.sairAdmin = () => signOut(auth);
         window.switchView = (id, el) => { document.querySelectorAll('.view').forEach(s => s.classList.remove('active')); document.getElementById(id).classList.add('active'); document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active')); el.classList.add('active'); }
-        window.fecharModais = () => document.querySelectorAll('.modal-overlay').forEach(m => { if(m.id !== 'login-overlay') m.classList.remove('active') });
+        window.fecharModais = () => document.querySelectorAll('.modal-overlay').forEach(m => { m.classList.remove('active') });
 
         async function iniciarSistema() {
             // Marca
@@ -271,7 +272,7 @@
                     selectMan += `<option value="${p.nome}|${p.valor}">${p.nome} - R$ ${p.valor.toFixed(2)}</option>`;
                 });
                 document.getElementById('lista-procedimentos').innerHTML = html;
-                document.getElementById('man-servico').innerHTML = selectMan; // Atualiza dropdown do Modal Manual
+                document.getElementById('man-servico').innerHTML = selectMan; 
             });
         }
         window.removerP = async (id) => { if(confirm("Deseja apagar este procedimento?")) await deleteDoc(doc(db, "procedimentos", id)); }
@@ -281,7 +282,7 @@
             const snap = await getDoc(doc(db, "configuracoes", "grade"));
             if(snap.exists()) {
                 const g = snap.data();
-                configGradeGlobal = g; // Salva para o Agendamento Manual usar
+                configGradeGlobal = g; 
                 bloqueiosTemporarios = g.bloqueados || [];
                 
                 document.getElementById('g-start').value = g.start; 
@@ -289,7 +290,7 @@
                 document.getElementById('g-int').value = g.int;
                 g.dias.forEach(d => document.getElementById('d'+d).checked = true);
             } else {
-                bloqueiosTemporarios = []; // Previne erro se não houver grade
+                bloqueiosTemporarios = []; 
             }
         }
 
@@ -328,22 +329,22 @@
             
             const conf = { start: document.getElementById('g-start').value, end: document.getElementById('g-end').value, int: document.getElementById('g-int').value, dias: d, bloqueados: bloqueiosTemporarios };
             await setDoc(doc(db, "configuracoes", "grade"), conf);
-            configGradeGlobal = conf; // Atualiza na memória
+            configGradeGlobal = conf; 
             
             alert("✅ Grade salva! O portal do cliente já está com as novas regras.");
         }
 
-        /* ================= AGENDA (LEITURA) ================= */
+        /* ================= AGENDA ================= */
         function lerAgenda() {
             onSnapshot(query(collection(db, "agendamentos"), orderBy("ts", "asc")), (snap) => {
                 const box = document.getElementById('lista-agenda'); box.innerHTML = "";
-                todosAgendamentos = []; // Atualiza lista local
+                todosAgendamentos = []; 
                 
                 if(snap.empty) { box.innerHTML = "<p style='color:gray; padding:20px;'>Nenhum paciente agendado no momento.</p>"; return; }
                 
                 snap.forEach(d => {
                     const a = d.data();
-                    todosAgendamentos.push(a); // Guarda para checar conflitos
+                    todosAgendamentos.push(a); 
                     
                     const num = a.pacienteWhatsapp ? a.pacienteWhatsapp.replace(/\D/g,'') : '';
                     let wppBtn = num ? `<a href="https://wa.me/55${num}" target="_blank" style="color:var(--success); font-weight:bold; text-decoration:none;">📲 WhatsApp</a>` : '';
@@ -373,7 +374,7 @@
         }
         window.cancelarConsulta = async (id) => { if(confirm("Deseja realmente apagar este agendamento?")) await deleteDoc(doc(db, "agendamentos", id)); }
 
-        /* ================= AGENDAMENTO MANUAL (NOVIDADE) ================= */
+        /* ================= AGENDAMENTO MANUAL ================= */
         let horaManualSelecionada = null;
 
         window.abrirModalAgendar = () => {
@@ -412,9 +413,7 @@
             for(let m = startM; m < endM; m += interv){
                 let h = Math.floor(m/60).toString().padStart(2,'0')+":"+(m%60).toString().padStart(2,'0');
                 
-                // Só mostra se NÃO estiver bloqueado (Pausa)
                 if(!bloqueios.includes(h)) {
-                    // Verifica se já tem agendamento para essa Data e Hora exata
                     let jaAgendado = todosAgendamentos.some(a => a.data === dataBrFormatada && a.hora === h);
                     
                     if(jaAgendado) {
@@ -445,7 +444,7 @@
             const dataBr = d.split('-').reverse().join('/');
 
             await addDoc(collection(db, "agendamentos"), { 
-                pacienteNome: n + " (Agend. Manual)", 
+                pacienteNome: n + " (Recepção)", 
                 pacienteWhatsapp: w, 
                 servico: servNome, 
                 valor: servValor, 
