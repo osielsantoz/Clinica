@@ -2,65 +2,203 @@
 <html lang="pt-PT">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Marcar Consulta</title>
     <style>
         :root { --primary-accent: #3b82f6; --bg-color: #f8fafc; --card-bg: #ffffff; --text-main: #0f172a; --border-color: #e2e8f0; }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-        body { background-color: var(--bg-color); padding: 20px; display: flex; flex-direction: column; align-items: center; }
-        .navbar { width: 100%; max-width: 600px; background: var(--card-bg); padding: 15px 25px; border-radius: 12px; border: 1px solid var(--border-color); display: flex; align-items: center; gap: 15px; margin-bottom: 20px; }
+        body { background-color: var(--bg-color); padding: 20px; display: flex; flex-direction: column; align-items: center; color: var(--text-main);}
+        .navbar { width: 100%; max-width: 500px; background: var(--card-bg); padding: 15px 25px; border-radius: 12px; border: 1px solid var(--border-color); display: flex; align-items: center; gap: 15px; margin-bottom: 20px; justify-content: space-between;}
         .logo { width: 40px; height: 40px; background: var(--primary-accent); border-radius: 8px; overflow: hidden; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;}
         .logo img { width: 100%; height: 100%; object-fit: cover; }
-        .container { width: 100%; max-width: 600px; background: var(--card-bg); border-radius: 16px; border: 1px solid var(--border-color); padding: 30px; }
+        .container { width: 100%; max-width: 500px; background: var(--card-bg); border-radius: 16px; border: 1px solid var(--border-color); padding: 30px; }
+        
+        .screen { display: none; } .screen.active { display: block; }
+        
         .time-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); gap: 10px; margin-top: 15px; }
-        .time-btn { padding: 12px; border: 1px solid var(--border-color); border-radius: 8px; cursor: pointer; text-align: center; font-weight: bold; }
-        .time-btn.selected { background: var(--primary-accent); color: white; }
-        .btn { background: var(--primary-accent); color: #fff; border: none; padding: 15px; border-radius: 10px; width: 100%; font-weight: bold; cursor: pointer; margin-top: 25px; }
+        .time-btn { padding: 12px; border: 1px solid var(--border-color); border-radius: 8px; cursor: pointer; text-align: center; font-weight: bold; background: #f8fafc;}
+        .time-btn.selected { background: var(--primary-accent); color: white; border-color: var(--primary-accent); }
+        .btn { background: var(--primary-accent); color: #fff; border: none; padding: 15px; border-radius: 10px; width: 100%; font-weight: bold; cursor: pointer; margin-top: 20px; }
+        .btn.outline { background: transparent; color: var(--primary-accent); border: 2px solid var(--primary-accent); margin-top: 10px;}
         label { display: block; margin-top: 15px; font-weight: bold; font-size: 0.9rem; }
-        input, select { width: 100%; padding: 12px; margin-top: 5px; border-radius: 8px; border: 1px solid var(--border-color); }
+        input, select { width: 100%; padding: 14px; margin-top: 5px; border-radius: 8px; border: 1px solid var(--border-color); outline: none;}
+        .msg-erro { color: #ef4444; font-size: 0.9rem; margin-top: 10px; text-align: center; font-weight: bold;}
     </style>
 </head>
 <body>
-    <nav class="navbar"><div class="logo" id="ui-logo">CL</div><h2 id="ui-nome">Carregando...</h2></nav>
+    <nav class="navbar">
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <div class="logo" id="ui-logo">CL</div>
+            <h2 id="ui-nome" style="font-size: 1.1rem;">Carregando...</h2>
+        </div>
+        <button id="btn-sair" style="display:none; background:none; border:none; color:red; font-weight:bold; cursor:pointer;" onclick="sairApp()">Sair</button>
+    </nav>
+
     <div class="container">
-        <h1>Nova Marcação</h1>
-        <label>Procedimento</label>
-        <select id="servico"><option>Limpeza de Pele</option><option>Botox</option></select>
-        <label>Data</label><input type="date" id="data" onchange="carregarHorarios()">
-        <label>Escolha o Horário</label>
-        <div class="time-grid" id="horarios"></div>
-        <button class="btn" onclick="confirmar()">Confirmar Marcação</button>
+        
+        <!-- TELA DE LOGIN -->
+        <div id="tela-login" class="screen active">
+            <h1 style="margin-bottom: 20px;">Acesso ao Portal</h1>
+            <input type="email" id="log-email" placeholder="Seu E-mail">
+            <input type="password" id="log-senha" placeholder="Sua Senha">
+            <button class="btn" onclick="fazerLogin()">Entrar</button>
+            <button class="btn outline" onclick="alternarTela('tela-cadastro')">Criar Conta Nova</button>
+            <div id="login-erro" class="msg-erro"></div>
+        </div>
+
+        <!-- TELA DE CADASTRO -->
+        <div id="tela-cadastro" class="screen">
+            <h1 style="margin-bottom: 20px;">Nova Conta</h1>
+            <input type="text" id="cad-nome" placeholder="Nome Completo">
+            <input type="email" id="cad-email" placeholder="E-mail">
+            <input type="password" id="cad-senha" placeholder="Crie uma Senha (mínimo 6 letras)">
+            <button class="btn" onclick="fazerCadastro()">Criar e Entrar</button>
+            <button class="btn outline" onclick="alternarTela('tela-login')">Voltar para Login</button>
+            <div id="cad-erro" class="msg-erro"></div>
+        </div>
+
+        <!-- TELA DE AGENDAMENTO -->
+        <div id="tela-agendar" class="screen">
+            <h1 style="margin-bottom: 5px;">Nova Marcação</h1>
+            <p style="color: gray; font-size: 0.9rem;">Preencha os dados abaixo.</p>
+
+            <label>1. Procedimento</label>
+            <select id="servico"><option value="">Carregando procedimentos...</option></select>
+
+            <label>2. Data</label>
+            <input type="date" id="data" onchange="verificarDataEGerarHorarios()">
+            <div id="aviso-data" class="msg-erro"></div>
+
+            <div id="box-horarios" style="display: none;">
+                <label>3. Escolha o Horário</label>
+                <div class="time-grid" id="horarios"></div>
+                <button class="btn" onclick="confirmarAgendamento()">Confirmar Marcação</button>
+            </div>
+        </div>
+
     </div>
+
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, getDoc, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
 
         const firebaseConfig = { apiKey: "AIzaSyD4SElQHlfQjbN2NsHC0Z9_1Gobb6WHd8o", authDomain: "clinicabase-a85a7.firebaseapp.com", projectId: "clinicabase-a85a7", storageBucket: "clinicabase-a85a7.firebasestorage.app", messagingSenderId: "324071825277", appId: "1:324071825277:web:6a0d3c4413f7a7569fb614" };
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
+        const app = initializeApp(firebaseConfig); const db = getFirestore(app); const auth = getAuth(app);
 
-        window.onload = () => {
-            let c = JSON.parse(localStorage.getItem('sys_config'));
-            if(c){
+        let usuarioLogado = null;
+        let configGrade = null;
+        let listaProcedimentos = [];
+
+        // Controle de Autenticação
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                usuarioLogado = user;
+                document.getElementById('btn-sair').style.display = 'block';
+                alternarTela('tela-agendar');
+                carregarSetupInicial();
+            } else {
+                usuarioLogado = null;
+                document.getElementById('btn-sair').style.display = 'none';
+                alternarTela('tela-login');
+            }
+        });
+
+        window.fazerLogin = () => {
+            const e = document.getElementById('log-email').value; const s = document.getElementById('log-senha').value;
+            signInWithEmailAndPassword(auth, e, s).catch(error => document.getElementById('login-erro').innerText = "Dados incorretos.");
+        }
+
+        window.fazerCadastro = () => {
+            const n = document.getElementById('cad-nome').value; const e = document.getElementById('cad-email').value; const s = document.getElementById('cad-senha').value;
+            if(!n) return document.getElementById('cad-erro').innerText = "Preencha o nome.";
+            createUserWithEmailAndPassword(auth, e, s)
+                .then((cred) => updateProfile(cred.user, { displayName: n }))
+                .catch(error => document.getElementById('cad-erro').innerText = "Erro ao criar conta. A senha deve ter 6 caracteres.");
+        }
+
+        window.sairApp = () => signOut(auth);
+        window.alternarTela = (id) => { document.querySelectorAll('.screen').forEach(s => s.classList.remove('active')); document.getElementById(id).classList.add('active'); }
+
+        // Carregar configurações da nuvem
+        async function carregarSetupInicial() {
+            // 1. Identidade Visual
+            const confSnap = await getDoc(doc(db, "configuracoes", "geral"));
+            if(confSnap.exists()) {
+                const c = confSnap.data();
                 document.documentElement.style.setProperty('--primary-accent', c.cor);
                 document.getElementById('ui-nome').innerText = c.nome;
                 if(c.logo) document.getElementById('ui-logo').innerHTML = `<img src="${c.logo}">`;
             }
+
+            // 2. Regra de Horários e Dias
+            const gradeSnap = await getDoc(doc(db, "configuracoes", "grade"));
+            if(gradeSnap.exists()) configGrade = gradeSnap.data();
+
+            // 3. Puxar Procedimentos
+            onSnapshot(collection(db, "procedimentos"), (snap) => {
+                const select = document.getElementById('servico');
+                select.innerHTML = "<option value=''>Selecione o serviço...</option>";
+                listaProcedimentos = [];
+                snap.forEach(d => {
+                    const p = d.data();
+                    listaProcedimentos.push(p);
+                    select.innerHTML += `<option value="${p.nome}|${p.valor}">${p.nome} - R$ ${p.valor.toFixed(2)}</option>`;
+                });
+            });
         }
-        window.carregarHorarios = () => {
-            const g = JSON.parse(localStorage.getItem('clinica_grade'));
-            const grid = document.getElementById('horarios'); grid.innerHTML = "";
-            if(!g) { grid.innerHTML = "Sem horários."; return; }
-            let s = parseInt(g.start.split(':')[0])*60, e = parseInt(g.end.split(':')[0])*60, i = parseInt(g.int);
+
+        window.verificarDataEGerarHorarios = () => {
+            const dataInput = document.getElementById('data').value;
+            const aviso = document.getElementById('aviso-data');
+            const box = document.getElementById('box-horarios');
+            const grid = document.getElementById('horarios');
+            
+            box.style.display = 'none'; grid.innerHTML = ''; aviso.innerText = '';
+            if(!dataInput || !configGrade) return;
+
+            // Extrai o dia da semana da data escolhida pelo cliente
+            // O JavaScript considera Domingo=0, Segunda=1, Terca=2...
+            const diaDaSemana = new Date(dataInput + "T00:00:00").getDay();
+
+            // Verifica se o dia clicado está dentro do Array de dias salvos pelo Painel
+            if(!configGrade.dias.includes(diaDaSemana)) {
+                aviso.innerText = "A clínica não atende neste dia da semana. Escolha outra data.";
+                return;
+            }
+
+            box.style.display = 'block';
+            let s = parseInt(configGrade.start.split(':')[0])*60, e = parseInt(configGrade.end.split(':')[0])*60, i = parseInt(configGrade.int);
             for(let m=s; m<e; m+=i){
                 let h = Math.floor(m/60).toString().padStart(2,'0')+":"+(m%60).toString().padStart(2,'0');
                 grid.innerHTML += `<div class="time-btn" onclick="selectTime(this, '${h}')">${h}</div>`;
             }
         }
+
         let selectedH = null;
         window.selectTime = (el, h) => { document.querySelectorAll('.time-btn').forEach(b => b.classList.remove('selected')); el.classList.add('selected'); selectedH = h; }
-        window.confirmar = async () => {
-            await addDoc(collection(db, "agendamentos"), { servico: document.getElementById('servico').value, data: document.getElementById('data').value, hora: selectedH, ts: Date.now() });
-            alert("Marcação realizada com sucesso!"); location.reload();
+        
+        window.confirmarAgendamento = async () => {
+            const valSelect = document.getElementById('servico').value;
+            const data = document.getElementById('data').value;
+            if(!valSelect || !data || !selectedH) return alert("Preencha o serviço, a data e selecione o horário.");
+
+            const servicoNome = valSelect.split('|')[0];
+            const servicoValor = parseFloat(valSelect.split('|')[1]);
+            const dataBr = data.split('-').reverse().join('/');
+
+            await addDoc(collection(db, "agendamentos"), { 
+                pacienteNome: usuarioLogado.displayName || "Paciente", 
+                pacienteEmail: usuarioLogado.email,
+                servico: servicoNome, 
+                valor: servicoValor,
+                data: dataBr, 
+                hora: selectedH, 
+                ts: Date.now() 
+            });
+            
+            alert("Agendamento enviado para a clínica com sucesso!"); 
+            location.reload();
         }
     </script>
 </body>
