@@ -2,33 +2,69 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Yod - Painel de Gestão</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yod - Gestão</title>
     <style>
-        :root { --primary-accent: #3b82f6; --sidebar-bg: #0f172a; --bg-color: #f1f5f9; --card-bg: #ffffff; --text-main: #0f172a; --border-color: #e2e8f0; --success: #10b981; --danger: #ef4444; }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-        body { background-color: var(--bg-color); color: var(--text-main); display: flex; height: 100vh; overflow: hidden; }
-        .sidebar { width: 260px; background-color: var(--sidebar-bg); color: #fff; display: flex; flex-direction: column; }
-        .sidebar-header { padding: 24px; font-size: 1.1rem; font-weight: bold; border-bottom: 1px solid rgba(255,255,255,0.1); }
-        .nav-item { padding: 15px 24px; color: #cbd5e1; cursor: pointer; transition: 0.2s; }
-        .nav-item.active { background-color: var(--primary-accent); color: #fff; }
-        .main-content { flex: 1; padding: 40px; overflow-y: auto; }
-        .view-section { display: none; max-width: 1200px; margin: 0 auto; } .view-section.active { display: block; }
-        .card-container { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 24px; margin-bottom: 24px; }
-        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
-        input, select { width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 8px; outline: none; margin-top: 5px;}
-        .btn { background: var(--primary-accent); color: #fff; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px;}
-        .table { width: 100%; border-collapse: collapse; margin-top: 15px; background: #fff; border-radius: 8px; overflow: hidden; }
-        .table th, .table td { padding: 12px; border-bottom: 1px solid var(--border-color); text-align: left; }
-        .week-selector { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; }
-        .day-check { display: none; }
-        .day-label { padding: 10px 15px; border: 1px solid var(--border-color); border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 0.9rem; }
-        .day-check:checked + .day-label { background: var(--primary-accent); color: white; border-color: var(--primary-accent); }
-        .agenda-scroll { display: flex; gap: 20px; overflow-x: auto; padding-bottom: 20px; }
-        .day-col { min-width: 320px; background: var(--card-bg); border-radius: 12px; border: 1px solid var(--border-color); }
-        .day-header { padding: 15px; text-align: center; background: #f8fafc; font-weight: bold; border-radius: 12px 12px 0 0;}
-        .slot { border: 1px solid var(--border-color); border-radius: 8px; padding: 12px; margin: 10px; }
-        .slot.booked { border-left: 5px solid var(--primary-accent); background: #f0f7ff; }
-        #login-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--sidebar-bg); display: flex; align-items: center; justify-content: center; z-index: 9999; }
+        :root { --primary: #4f46e5; --bg: #f3f4f6; --card: #ffffff; --text: #1f2937; --text-light: #6b7280; --border: #e5e7eb; --success: #10b981; --danger: #ef4444; --sidebar: #111827; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+        body { background: var(--bg); color: var(--text); display: flex; height: 100vh; overflow: hidden; }
+        
+        /* Sidebar */
+        .sidebar { width: 260px; background: var(--sidebar); color: #fff; display: flex; flex-direction: column; }
+        .brand { padding: 25px 20px; font-size: 1.2rem; font-weight: bold; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; gap: 10px; }
+        .logo-box { width: 35px; height: 35px; background: var(--primary); border-radius: 8px; display: flex; justify-content: center; align-items: center; overflow: hidden; }
+        .logo-box img { width: 100%; height: 100%; object-fit: cover; }
+        .nav-item { padding: 16px 20px; color: #9ca3af; cursor: pointer; display: flex; align-items: center; gap: 12px; transition: 0.2s; border-left: 4px solid transparent; }
+        .nav-item:hover { background: rgba(255,255,255,0.05); color: #fff; }
+        .nav-item.active { background: rgba(255,255,255,0.1); color: #fff; border-left-color: var(--primary); font-weight: 600; }
+        
+        /* Main Content */
+        .main { flex: 1; padding: 40px; overflow-y: auto; }
+        .view { display: none; max-width: 1100px; margin: 0 auto; animation: fadeIn 0.3s; }
+        .view.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        h1 { font-size: 1.8rem; margin-bottom: 5px; color: #111827; }
+        p.sub { color: var(--text-light); margin-bottom: 25px; }
+        
+        .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 25px; margin-bottom: 25px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
+        
+        label { display: block; font-weight: 600; margin-bottom: 8px; font-size: 0.9rem; }
+        input, select { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; outline: none; transition: 0.2s; background: #f9fafb; }
+        input:focus, select:focus { border-color: var(--primary); background: #fff; box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1); }
+        
+        .btn { background: var(--primary); color: #fff; border: none; padding: 12px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.2s; display: inline-flex; justify-content: center; align-items: center; gap: 8px;}
+        .btn:hover { opacity: 0.9; transform: translateY(-1px); }
+        .btn.danger { background: var(--danger); }
+        .btn.success { background: var(--success); }
+        
+        /* Tabela */
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { padding: 15px; border-bottom: 1px solid var(--border); text-align: left; }
+        th { background: #f9fafb; color: var(--text-light); font-weight: 600; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 0.5px; }
+        
+        /* Seletores de Dias */
+        .days-box { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; }
+        .day-cb { display: none; }
+        .day-lbl { padding: 10px 15px; border: 1px solid var(--border); border-radius: 8px; cursor: pointer; font-weight: 600; background: #fff; transition: 0.2s; }
+        .day-cb:checked + .day-lbl { background: var(--primary); color: #fff; border-color: var(--primary); }
+        
+        /* Slots de Grade Visual (Poder bloquear) */
+        .slot-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 10px; margin-top: 20px; padding: 20px; background: #f9fafb; border-radius: 12px; border: 1px dashed var(--border);}
+        .slot-btn { padding: 10px; border-radius: 8px; border: 1px solid var(--success); background: #ecfdf5; color: #065f46; font-weight: bold; cursor: pointer; text-align: center; transition: 0.2s; }
+        .slot-btn.blocked { border-color: var(--danger); background: #fef2f2; color: #991b1b; text-decoration: line-through; }
+        
+        /* Agenda Visual */
+        .agenda-list { display: flex; flex-direction: column; gap: 15px; }
+        .appt-card { display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--border); border-left: 5px solid var(--primary); padding: 20px; border-radius: 12px; background: #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.02);}
+        .appt-info h3 { margin-bottom: 5px; }
+        .appt-info p { color: var(--text-light); font-size: 0.9rem; }
+        .appt-time { font-weight: 800; color: var(--primary); font-size: 1.1rem; background: #e0e7ff; padding: 5px 10px; border-radius: 6px; display: inline-block; margin-bottom: 10px;}
+
+        /* Login Overlay */
+        #login-overlay { position: fixed; inset: 0; background: var(--sidebar); display: flex; align-items: center; justify-content: center; z-index: 9999; }
         .login-box { background: white; padding: 40px; border-radius: 16px; width: 100%; max-width: 400px; text-align: center; }
     </style>
 </head>
@@ -36,65 +72,101 @@
 
     <div id="login-overlay">
         <div class="login-box">
-            <h2 style="margin-bottom: 20px;">Acesso Yod Micropigmentação</h2>
-            <input type="email" id="login-email" placeholder="E-mail da Recepção">
-            <input type="password" id="login-senha" placeholder="Senha">
-            <button class="btn" onclick="fazerLoginAdmin()">Entrar</button>
+            <h2 style="margin-bottom: 20px;">Painel Yod</h2>
+            <input type="email" id="log-email" placeholder="E-mail da Recepção">
+            <input type="password" id="log-senha" placeholder="Senha">
+            <button class="btn" style="width: 100%;" onclick="fazerLogin()">Entrar no Sistema</button>
         </div>
     </div>
 
     <aside class="sidebar">
-        <div class="sidebar-header" id="ui-nome">Yod Micropigmentação</div>
-        <div class="nav-item active" onclick="switchView('agenda', this)">📅 Agenda</div>
-        <div class="nav-item" onclick="switchView('grade', this)">🕒 Grade Horária</div>
-        <div class="nav-item" onclick="switchView('procedimentos', this)">💉 Serviços</div>
-        <div class="nav-item" onclick="switchView('financeiro', this)">💰 Financeiro</div>
-        <div class="nav-item" style="color: #ef4444; margin-top: auto;" onclick="sairAdmin()">Sair</div>
+        <div class="brand">
+            <div class="logo-box" id="ui-logo">Y</div>
+            <span id="ui-nome">Yod</span>
+        </div>
+        <div class="nav-item active" onclick="switchView('v-agenda', this)">📅 Agenda</div>
+        <div class="nav-item" onclick="switchView('v-grade', this)">🕒 Dias e Horários</div>
+        <div class="nav-item" onclick="switchView('v-proced', this)">💉 Procedimentos</div>
+        <div class="nav-item" onclick="switchView('v-finan', this)">💰 Financeiro</div>
+        <div style="flex: 1;"></div>
+        <div class="nav-item" style="color: #ef4444;" onclick="sairAdmin()">Sair do Sistema</div>
     </aside>
 
-    <main class="main-content">
-        <section id="agenda" class="view-section active">
+    <main class="main">
+        <!-- AGENDA -->
+        <section id="v-agenda" class="view active">
             <h1>Agenda de Atendimentos</h1>
-            <div class="agenda-scroll" id="agenda-container"><p style="padding:40px; color:gray;">Carregando agenda...</p></div>
+            <p class="sub">Próximos pacientes marcados.</p>
+            <div class="agenda-list" id="lista-agenda">
+                <p style="color: gray;">Carregando...</p>
+            </div>
         </section>
 
-        <section id="grade" class="view-section">
-            <h1>Configurar Dias e Horários</h1>
-            <div class="card-container">
-                <label>Dias Ativos</label>
-                <div class="week-selector">
-                    <input type="checkbox" id="d1" class="day-check" value="1"><label for="d1" class="day-label">Seg</label>
-                    <input type="checkbox" id="d2" class="day-check" value="2"><label for="d2" class="day-label">Ter</label>
-                    <input type="checkbox" id="d3" class="day-check" value="3"><label for="d3" class="day-label">Qua</label>
-                    <input type="checkbox" id="d4" class="day-check" value="4"><label for="d4" class="day-label">Qui</label>
-                    <input type="checkbox" id="d5" class="day-check" value="5"><label for="d5" class="day-label">Sex</label>
-                    <input type="checkbox" id="d6" class="day-check" value="6"><label for="d6" class="day-label">Sáb</label>
-                    <input type="checkbox" id="d0" class="day-check" value="0"><label for="d0" class="day-label">Dom</label>
+        <!-- GRADE E BLOQUEIOS -->
+        <section id="v-grade" class="view">
+            <h1>Configuração de Horários</h1>
+            <p class="sub">Defina os dias de trabalho e bloqueie os horários que não quer atender (ex: Almoço).</p>
+            
+            <div class="card">
+                <h3>1. Dias de Funcionamento</h3>
+                <div class="days-box" style="margin-top: 15px;">
+                    <input type="checkbox" id="d1" class="day-cb" value="1"><label for="d1" class="day-lbl">Seg</label>
+                    <input type="checkbox" id="d2" class="day-cb" value="2"><label for="d2" class="day-lbl">Ter</label>
+                    <input type="checkbox" id="d3" class="day-cb" value="3"><label for="d3" class="day-lbl">Qua</label>
+                    <input type="checkbox" id="d4" class="day-cb" value="4"><label for="d4" class="day-lbl">Qui</label>
+                    <input type="checkbox" id="d5" class="day-cb" value="5"><label for="d5" class="day-lbl">Sex</label>
+                    <input type="checkbox" id="d6" class="day-cb" value="6"><label for="d6" class="day-lbl">Sáb</label>
+                    <input type="checkbox" id="d0" class="day-cb" value="0"><label for="d0" class="day-lbl">Dom</label>
                 </div>
-                <div class="form-grid">
+
+                <h3>2. Horário Base</h3>
+                <div class="grid-3" style="margin-top: 15px;">
                     <div><label>Abertura</label><input type="time" id="g-start" value="08:00"></div>
                     <div><label>Fechamento</label><input type="time" id="g-end" value="18:00"></div>
-                    <div><label>Intervalo</label><select id="g-int"><option value="30">30 min</option><option value="60" selected>60 min</option></select></div>
+                    <div><label>Duração/Intervalo</label>
+                        <select id="g-int"><option value="30">30 min</option><option value="60" selected>1 Hora</option></select>
+                    </div>
                 </div>
-                <button class="btn" onclick="salvarGrade()">⚙️ Atualizar Grade</button>
+                
+                <button class="btn outline" style="margin-top: 20px; background: transparent; border: 2px solid var(--primary); color: var(--primary);" onclick="gerarPrevia()">🔄 Gerar Grade para Bloqueios</button>
+            </div>
+
+            <div class="card" id="box-previa" style="display: none;">
+                <h3>3. Bloqueio de Horários Específicos</h3>
+                <p style="font-size: 0.9rem; color: gray; margin-top: 5px;">Clique em um horário abaixo para <b>Bloquear</b> (Ficará vermelho). O cliente não verá horários vermelhos.</p>
+                
+                <div class="slot-grid" id="grid-previa"></div>
+
+                <button class="btn success" style="width: 100%; margin-top: 20px; font-size: 1.1rem; padding: 15px;" onclick="salvarGradeFinal()">💾 Salvar Tudo e Publicar para Clientes</button>
             </div>
         </section>
 
-        <section id="procedimentos" class="view-section">
-            <h1>Gerir Serviços</h1>
-            <div class="card-container">
-                <div class="form-grid">
-                    <div><label>Nome do Serviço</label><input type="text" id="p-nome" placeholder="Ex: Micropigmentação Labial"></div>
-                    <div><label>Valor (R$)</label><input type="number" id="p-valor" placeholder="200"></div>
-                </div>
-                <button class="btn" style="width: auto; padding: 12px 30px;" onclick="adicionarProcedimento()">+ Cadastrar</button>
+        <!-- PROCEDIMENTOS -->
+        <section id="v-proced" class="view">
+            <h1>Procedimentos Oferecidos</h1>
+            <p class="sub">Cadastre os serviços que aparecerão no aplicativo do paciente.</p>
+            
+            <div class="card grid-3">
+                <div style="grid-column: span 2;"><label>Nome do Procedimento</label><input type="text" id="p-nome" placeholder="Ex: Micropigmentação de Sobrancelha"></div>
+                <div><label>Valor (R$)</label><input type="number" id="p-valor" placeholder="350"></div>
+                <div style="grid-column: 1 / -1;"><button class="btn" onclick="cadastrarProcedimento()">+ Adicionar Procedimento</button></div>
             </div>
-            <table class="table"><thead><tr><th>Serviço</th><th>Valor</th><th>Ação</th></tr></thead><tbody id="lista-procedimentos"></tbody></table>
+
+            <div class="card" style="padding: 0; overflow: hidden;">
+                <table>
+                    <thead><tr><th>Serviço Cadastrado</th><th>Preço</th><th style="width: 100px;">Ação</th></tr></thead>
+                    <tbody id="lista-procedimentos"></tbody>
+                </table>
+            </div>
         </section>
 
-        <section id="financeiro" class="view-section">
-            <h1>Fluxo de Caixa</h1>
-            <table class="table"><thead><tr><th>Data</th><th>Descrição</th><th>Tipo</th><th>Valor</th></tr></thead><tbody id="f-table"></tbody></table>
+        <!-- FINANCEIRO -->
+        <section id="v-finan" class="view">
+            <h1>Controle de Caixa</h1>
+            <p class="sub">Ganhos de consultas concluídas.</p>
+            <div class="card" style="padding: 0; overflow: hidden;">
+                <table><thead><tr><th>Data</th><th>Descrição do Serviço</th><th style="width: 150px;">Valor Recebido</th></tr></thead><tbody id="lista-finan"></tbody></table>
+            </div>
         </section>
     </main>
 
@@ -103,56 +175,141 @@
         import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, deleteDoc, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
         import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
 
+        // Cole suas chaves aqui se necessário
         const firebaseConfig = { apiKey: "AIzaSyD4SElQHlfQjbN2NsHC0Z9_1Gobb6WHd8o", authDomain: "clinicabase-a85a7.firebaseapp.com", projectId: "clinicabase-a85a7", storageBucket: "clinicabase-a85a7.firebasestorage.app", messagingSenderId: "324071825277", appId: "1:324071825277:web:6a0d3c4413f7a7569fb614" };
         const app = initializeApp(firebaseConfig); const db = getFirestore(app); const auth = getAuth(app);
 
-        onAuthStateChanged(auth, (u) => { 
-            if(u) { document.getElementById('login-overlay').style.display='none'; carregarSetup(); } 
+        let bloqueiosTemporarios = [];
+
+        onAuthStateChanged(auth, (user) => { 
+            if(user) { document.getElementById('login-overlay').style.display='none'; iniciarSistema(); } 
             else { document.getElementById('login-overlay').style.display='flex'; }
         });
 
-        window.fazerLoginAdmin = () => { signInWithEmailAndPassword(auth, document.getElementById('login-email').value, document.getElementById('login-senha').value).catch(e => alert("Acesso negado.")); }
+        window.fazerLogin = () => signInWithEmailAndPassword(auth, document.getElementById('log-email').value, document.getElementById('log-senha').value).catch(e => alert("Erro ao entrar. E-mail ou senha errados."));
         window.sairAdmin = () => signOut(auth);
+        window.switchView = (id, el) => { document.querySelectorAll('.view').forEach(s => s.classList.remove('active')); document.getElementById(id).classList.add('active'); document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active')); el.classList.add('active'); }
 
-        async function carregarSetup() {
-            const snap = await getDoc(doc(db, "configuracoes", "geral"));
-            if(snap.exists()){ document.documentElement.style.setProperty('--primary-accent', snap.data().cor); document.getElementById('ui-nome').innerText = snap.data().nome; }
-            escutarAgendamentos(); carregarGrade(); escutarProcedimentos(); escutarFinanceiro();
+        async function iniciarSistema() {
+            // Puxa Marca
+            const gSnap = await getDoc(doc(db, "configuracoes", "geral"));
+            if(gSnap.exists()){ 
+                document.documentElement.style.setProperty('--primary', gSnap.data().cor); 
+                document.getElementById('ui-nome').innerText = gSnap.data().nome; 
+                if(gSnap.data().logo) document.getElementById('ui-logo').innerHTML = `<img src="${gSnap.data().logo}">`;
+            }
+            // Inicia Listeners
+            lerGradeAtual(); lerProcedimentos(); lerAgenda(); lerFinanceiro();
         }
 
-        window.salvarGrade = async () => {
-            let d = []; document.querySelectorAll('.day-check:checked').forEach(c => d.push(parseInt(c.value)));
-            await setDoc(doc(db, "configuracoes", "grade"), { start: document.getElementById('g-start').value, end: document.getElementById('g-end').value, int: document.getElementById('g-int').value, dias: d });
-            alert("Grade Yod atualizada!");
-        }
-
-        async function carregarGrade() {
-            const snap = await getDoc(doc(db, "configuracoes", "grade"));
-            if(snap.exists()){ const g = snap.data(); document.getElementById('g-start').value=g.start; document.getElementById('g-end').value=g.end; document.getElementById('g-int').value=g.int; g.dias.forEach(d => document.getElementById('d'+d).checked=true); }
-        }
-
-        window.adicionarProcedimento = async () => {
+        /* PROCEDIMENTOS */
+        window.cadastrarProcedimento = async () => {
             const n = document.getElementById('p-nome').value, v = document.getElementById('p-valor').value;
-            if(n && v) { await addDoc(collection(db, "procedimentos"), { nome: n, valor: parseFloat(v) }); document.getElementById('p-nome').value=''; document.getElementById('p-valor').value=''; }
+            if(!n || !v) return alert("Preencha o nome e valor.");
+            await addDoc(collection(db, "procedimentos"), { nome: n, valor: parseFloat(v) });
+            document.getElementById('p-nome').value=''; document.getElementById('p-valor').value='';
+        }
+        function lerProcedimentos() {
+            onSnapshot(collection(db, "procedimentos"), (snap) => {
+                let html = "";
+                if(snap.empty) html = "<tr><td colspan='3' style='text-align:center; color:gray;'>Nenhum procedimento cadastrado.</td></tr>";
+                snap.forEach(d => {
+                    html += `<tr><td><b>${d.data().nome}</b></td><td style="color:var(--success); font-weight:bold;">R$ ${d.data().valor.toFixed(2)}</td><td><button class="btn danger" style="padding: 6px 12px; font-size: 0.8rem;" onclick="removerP('${d.id}')">Remover</button></td></tr>`;
+                });
+                document.getElementById('lista-procedimentos').innerHTML = html;
+            });
+        }
+        window.removerP = async (id) => { if(confirm("Deseja apagar este procedimento?")) await deleteDoc(doc(db, "procedimentos", id)); }
+
+        /* GRADE E BLOQUEIOS */
+        async function lerGradeAtual() {
+            const snap = await getDoc(doc(db, "configuracoes", "grade"));
+            if(snap.exists()) {
+                const g = snap.data();
+                document.getElementById('g-start').value = g.start; document.getElementById('g-end').value = g.end; document.getElementById('g-int').value = g.int;
+                g.dias.forEach(d => document.getElementById('d'+d).checked = true);
+                bloqueiosTemporarios = g.bloqueados || [];
+            }
+        }
+        window.gerarPrevia = () => {
+            const grid = document.getElementById('grid-previa'); grid.innerHTML = '';
+            const s = document.getElementById('g-start').value, e = document.getElementById('g-end').value, int = document.getElementById('g-int').value;
+            if(!s || !e) return alert("Preencha abertura e fechamento.");
+            
+            document.getElementById('box-previa').style.display = 'block';
+            let startM = parseInt(s.split(':')[0])*60, endM = parseInt(e.split(':')[0])*60, interv = parseInt(int);
+            
+            for(let m = startM; m < endM; m += interv){
+                let h = Math.floor(m/60).toString().padStart(2,'0')+":"+(m%60).toString().padStart(2,'0');
+                let isBlocked = bloqueiosTemporarios.includes(h);
+                let cls = isBlocked ? "slot-btn blocked" : "slot-btn";
+                let txt = isBlocked ? h + " (Bloqueado)" : h + " (Livre)";
+                grid.innerHTML += `<div class="${cls}" onclick="toggleBlock(this, '${h}')">${txt}</div>`;
+            }
+        }
+        window.toggleBlock = (el, h) => {
+            if(bloqueiosTemporarios.includes(h)) {
+                bloqueiosTemporarios = bloqueiosTemporarios.filter(i => i !== h); // Remove
+                el.className = "slot-btn"; el.innerText = h + " (Livre)";
+            } else {
+                bloqueiosTemporarios.push(h); // Adiciona
+                el.className = "slot-btn blocked"; el.innerText = h + " (Bloqueado)";
+            }
+        }
+        window.salvarGradeFinal = async () => {
+            let d = []; document.querySelectorAll('.day-check:checked').forEach(c => d.push(parseInt(c.value)));
+            if(d.length === 0) return alert("Selecione os dias de trabalho.");
+            const conf = { start: document.getElementById('g-start').value, end: document.getElementById('g-end').value, int: document.getElementById('g-int').value, dias: d, bloqueados: bloqueiosTemporarios };
+            await setDoc(doc(db, "configuracoes", "grade"), conf);
+            alert("Grade salva! As configurações já estão ativas no aplicativo do paciente.");
         }
 
-        function escutarProcedimentos() { onSnapshot(collection(db, "procedimentos"), (s) => { let h=""; s.forEach(d => h+=`<tr><td>${d.data().nome}</td><td>R$ ${d.data().valor.toFixed(2)}</td><td><button onclick="deletarP('${d.id}')" style="color:red;cursor:pointer;background:none;border:none;">Excluir</button></td></tr>`); document.getElementById('lista-procedimentos').innerHTML=h; }); }
-        window.deletarP = async (id) => await deleteDoc(doc(db, "procedimentos", id));
-
-        function escutarAgendamentos() {
-            onSnapshot(query(collection(db, "agendamentos"), orderBy("ts", "asc")), (s) => {
-                const c = document.getElementById('agenda-container'); c.innerHTML="";
-                s.forEach(d => { const a = d.data(); const num = a.pacienteWhatsapp ? a.pacienteWhatsapp.replace(/\D/g,'') : '';
-                    c.innerHTML += `<div class="day-col"><div class="day-header">${a.data} - ${a.hora}</div><div class="day-body"><div class="slot booked"><b>${a.pacienteNome}</b><br><small>${a.servico}</small><br><a href="https://wa.me/55${num}" target="_blank" style="color:green;text-decoration:none;font-size:0.8rem;">📲 WhatsApp</a><button class="btn" style="background:green;font-size:0.7rem;margin-top:10px;" onclick="concluir('${d.id}','${a.servico}',${a.valor})">Concluir</button></div></div></div>`;
+        /* AGENDA */
+        function lerAgenda() {
+            onSnapshot(query(collection(db, "agendamentos"), orderBy("ts", "asc")), (snap) => {
+                const box = document.getElementById('lista-agenda'); box.innerHTML = "";
+                if(snap.empty) { box.innerHTML = "<p style='color:gray;'>Nenhum paciente agendado.</p>"; return; }
+                snap.forEach(d => {
+                    const a = d.data();
+                    const num = a.pacienteWhatsapp ? a.pacienteWhatsapp.replace(/\D/g,'') : '';
+                    let wppBtn = num ? `<a href="https://wa.me/55${num}" target="_blank" style="color:var(--success); font-weight:bold; text-decoration:none;">📲 Chamar Paciente</a>` : '';
+                    
+                    box.innerHTML += `
+                        <div class="appt-card">
+                            <div class="appt-info">
+                                <div class="appt-time">${a.data} às ${a.hora}</div>
+                                <h3>${a.pacienteNome}</h3>
+                                <p>Procedimento: <b>${a.servico}</b></p>
+                                <p style="margin-top:5px;">${wppBtn}</p>
+                            </div>
+                            <div style="display:flex; flex-direction:column; gap:10px;">
+                                <button class="btn success" onclick="concluirConsulta('${d.id}', '${a.servico}', ${a.valor})">✅ Receber Pagamento</button>
+                                <button class="btn outline" style="border: 1px solid var(--danger); color: var(--danger); background: transparent;" onclick="cancelarConsulta('${d.id}')">❌ Cancelar Horário</button>
+                            </div>
+                        </div>`;
                 });
             });
         }
+        window.concluirConsulta = async (id, s, v) => {
+            if(confirm("Deseja concluir o atendimento e lançar o valor no caixa?")) {
+                await addDoc(collection(db, "financeiro"), { data: new Date().toLocaleDateString('pt-BR'), descricao: s, tipo: 'entrada', valor: v, ts: Date.now() });
+                await deleteDoc(doc(db, "agendamentos", id));
+            }
+        }
+        window.cancelarConsulta = async (id) => { if(confirm("Deseja realmente apagar este agendamento?")) await deleteDoc(doc(db, "agendamentos", id)); }
 
-        window.concluir = async (id, s, v) => { await addDoc(collection(db, "financeiro"), { data: new Date().toLocaleDateString(), descricao: s, tipo: 'entrada', valor: v, ts: Date.now() }); await deleteDoc(doc(db, "agendamentos", id)); }
-
-        function escutarFinanceiro() { onSnapshot(query(collection(db, "financeiro"), orderBy("ts", "desc")), (s) => { let h=""; s.forEach(d => { const t=d.data(); h+=`<tr><td>${t.data}</td><td>${t.descricao}</td><td>${t.tipo}</td><td>R$ ${t.valor.toFixed(2)}</td></tr>`; }); document.getElementById('f-table').innerHTML=h; }); }
-
-        window.switchView = (id, el) => { document.querySelectorAll('.view-section').forEach(s => s.classList.remove('active')); document.getElementById(id).classList.add('active'); document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active')); el.classList.add('active'); }
+        /* FINANCEIRO */
+        function lerFinanceiro() {
+            onSnapshot(query(collection(db, "financeiro"), orderBy("ts", "desc")), (snap) => {
+                let html = "";
+                if(snap.empty) html = "<tr><td colspan='3' style='text-align:center;'>Sem movimentações.</td></tr>";
+                snap.forEach(d => {
+                    const f = d.data();
+                    html += `<tr><td>${f.data}</td><td><b>${f.descricao}</b></td><td style="color:var(--success); font-weight:bold;">+ R$ ${f.valor.toFixed(2)}</td></tr>`;
+                });
+                document.getElementById('lista-finan').innerHTML = html;
+            });
+        }
     </script>
 </body>
 </html>
