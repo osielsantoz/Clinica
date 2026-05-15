@@ -52,7 +52,7 @@
         .time-body-content { flex: 1; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; }
         .time-row.free .time-body-content { background: #ffffff; color: var(--text-light); }
         .time-row.booked .time-body-content { background: #f0fdf4; border-left: 4px solid var(--success); }
-        .time-row.canceled-client .time-body-content { background: #fffbeb; border-left: 4px solid var(--warning); } /* Amarelo de Alerta */
+        .time-row.canceled-client .time-body-content { background: #fffbeb; border-left: 4px solid var(--warning); }
         .paciente-title { font-weight: bold; color: var(--text); font-size: 1.1rem; }
         .proced-subtitle { color: var(--text-light); font-size: 0.9rem; margin-top: 3px; }
         .empty-agenda { text-align: center; padding: 40px; background: #fff; border: 1px dashed var(--border); border-radius: 12px; color: var(--text-light); }
@@ -64,6 +64,7 @@
 </head>
 <body>
 
+    <!-- TELA DE LOGIN -->
     <div id="login-overlay" class="modal-overlay">
         <div class="modal-box" style="text-align: center; max-width: 400px;">
             <h2 style="margin-bottom: 20px;">Acesso Restrito Yod</h2>
@@ -72,6 +73,7 @@
         </div>
     </div>
 
+    <!-- MODAL DE AGENDAMENTO MANUAL -->
     <div id="modal-agendar" class="modal-overlay">
         <div class="modal-box">
             <h2>Adicionar Paciente</h2><p style="color: gray; font-size: 0.9rem; margin-bottom: 20px;">Crie um agendamento rápido na grade.</p>
@@ -85,6 +87,29 @@
                 <div><label>Horário Escolhido</label><input type="text" id="man-hora" readonly style="background:#e5e7eb; font-weight:bold; color:var(--primary);"></div>
             </div>
             <div class="grid-2" style="margin-top: 30px;"><button class="btn outline" id="btn-fechar-modal">Cancelar</button><button class="btn success" id="btn-salvar-manual">Confirmar</button></div>
+        </div>
+    </div>
+
+    <!-- NOVO MODAL: TELA DE RECEBIMENTO DO PAGAMENTO (AJUSTE DE DESCONTO / ACRÉSCIMO) -->
+    <div id="modal-pagamento-caixa" class="modal-overlay">
+        <div class="modal-box" style="max-width: 420px; text-align: left;">
+            <h2 style="margin-bottom: 5px; text-align: center;">Fechar Atendimento</h2>
+            <p style="color: gray; font-size: 0.9rem; text-align: center; margin-bottom: 20px;">Confirme o valor final recebido para o caixa.</p>
+            
+            <div style="background: #f3f4f6; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+                <div style="font-size: 0.9rem; color: var(--text-light);">Procedimento original:</div>
+                <div id="pay-label-servico" style="font-weight: bold; font-size: 1.1rem; color: var(--text);">Carregando...</div>
+                <div style="margin-top: 5px; font-size: 0.9rem; color: var(--text-light);">Valor Tabela: <b id="pay-label-original" style="color:var(--text)">R$ 0,00</b></div>
+            </div>
+
+            <label>Valor Efetivamente Pago (R$)</label>
+            <input type="number" id="pay-input-final" step="0.01" placeholder="0.00" style="font-size: 1.2rem; font-weight: bold; color: var(--success); padding: 14px;">
+            <p style="font-size: 0.8rem; color: var(--text-light); margin-top: 5px;">*Altere o valor acima caso tenha concedido descontos ou aplicado taxas extras.</p>
+
+            <div class="grid-2" style="margin-top: 25px;">
+                <button class="btn outline" style="margin:0;" id="btn-cancelar-caixa">Voltar</button>
+                <button class="btn success" style="margin:0;" id="btn-confirmar-caixa">💾 Registrar Entrada</button>
+            </div>
         </div>
     </div>
 
@@ -143,6 +168,10 @@
         const app = initializeApp(firebaseConfig); const db = getFirestore(app); const auth = getAuth(app);
 
         let gradeConfig = { dias: [], start: "08:00", end: "18:00", int: "60", excecoes: {}, bloqueios: [] }, agendamentosDB = [];
+        
+        // Estado temporário de controle de caixa
+        let idAgendamentoAtivoCheckout = null;
+        let servicoAtivoCheckout = "";
 
         document.getElementById('filtro-data-agenda').value = new Date().toISOString().split('T')[0];
 
@@ -162,6 +191,10 @@
         document.getElementById('btn-salvar-excecao').addEventListener('click', () => salvarDiaPersonalizado());
         document.getElementById('btn-salvar-bloqueios').addEventListener('click', () => salvarBloqueiosNaNuveem());
         document.getElementById('btn-add-proced').addEventListener('click', () => cadastrarProcedimento());
+        
+        // Eventos do modal de pagamento do caixa
+        document.getElementById('btn-cancelar-caixa').addEventListener('click', () => { document.getElementById('modal-pagamento-caixa').classList.remove('active'); });
+        document.getElementById('btn-confirmar-caixa').addEventListener('click', () => efetuarCheckoutFinanceiroFinal());
 
         function MudarAba(viewId, menuEl) { document.querySelectorAll('.view').forEach(s => s.classList.remove('active')); document.getElementById(viewId).classList.add('active'); document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active')); menuEl.classList.add('active'); }
         function fecharModais() { document.getElementById('modal-agendar').classList.remove('active'); }
@@ -236,7 +269,6 @@
 
         function escutarAgenda() { onSnapshot(query(collection(db, "agendamentos"), orderBy("ts", "asc")), (snap) => { agendamentosDB = []; snap.forEach(d => { let obj = d.data(); obj.id = d.id; agendamentosDB.push(obj); }); renderizarAgendaPrincipal(); }); }
 
-        /* ================= ATUALIZAÇÃO DA RENDERIZAÇÃO NO PAINEL ================= */
         window.renderizarAgendaPrincipal = () => {
             const dataInput = document.getElementById('filtro-data-agenda').value; const box = document.getElementById('lista-agenda'); const aviso = document.getElementById('man-aviso-agenda-principal');
             box.innerHTML = ""; aviso.innerText = ""; if(!dataInput) return box.innerHTML = "<div class='empty-agenda'>Selecione uma data acima.</div>";
@@ -251,12 +283,10 @@
                 let h = Math.floor(m/60).toString().padStart(2,'0')+":"+(m%60).toString().padStart(2,'0'), keyBloqueio = `${diaDaSemana}-${h}`;
                 if(gradeConfig.bloqueios.includes(keyBloqueio)) continue;
 
-                // Captura agendamentos da data e hora
                 let appt = agendamentosDB.find(a => a.data === dataBr && a.hora === h);
 
                 if(appt) {
                     if(appt.status === "cancelado") {
-                        // CASO NOVO: AGENDAMENTO CANCELADO AGUARDANDO LIBERAÇÃO
                         box.innerHTML += `
                             <div class="time-row canceled-client">
                                 <div class="time-badge">${h}</div>
@@ -269,7 +299,6 @@
                                 </div>
                             </div>`;
                     } else {
-                        // AGENDAMENTO ATIVO NORMAL
                         const num = appt.pacienteWhatsapp ? appt.pacienteWhatsapp.replace(/\D/g,'') : '';
                         let wppBtn = num ? `<a href="https://wa.me/55${num}" target="_blank" style="color:var(--success); font-weight:bold; text-decoration:none; margin-left:15px;">📲 Conversar</a>` : '';
                         box.innerHTML += `
@@ -288,7 +317,6 @@
                             </div>`;
                     }
                 } else {
-                    // HORÁRIO LIVRE DISPONÍVEL
                     box.innerHTML += `
                         <div class="time-row free">
                             <div class="time-badge">${h}</div>
@@ -300,7 +328,7 @@
                 }
             }
 
-            // Atribui listeners dinâmicos
+            // Atribuição dos gatilhos com a inclusão do Modal de Caixa no "Concluir"
             for(let m = startM; m < endM; m += interv){
                 let h = Math.floor(m/60).toString().padStart(2,'0')+":"+(m%60).toString().padStart(2,'0');
                 let appt = agendamentosDB.find(a => a.data === dataBr && a.hora === h);
@@ -311,9 +339,18 @@
                             if(confirm("Deseja expurgar o registro e abrir esta vaga na grade novamente?")) await deleteDoc(doc(db, "agendamentos", appt.id));
                         });
                     } else {
-                        document.getElementById(`btn-done-${appt.id}`).addEventListener('click', async () => {
-                            if(confirm("Concluir atendimento e lançar no caixa?")) { await addDoc(collection(db, "financeiro"), { data: new Date().toLocaleDateString('pt-BR'), descricao: "Consulta: "+appt.servico, valor: appt.valor, ts: Date.now() }); await deleteDoc(doc(db, "agendamentos", appt.id)); }
+                        // MODIFICAÇÃO: Em vez de liquidar direto, abre o Pop-up do Caixa Parametrizado
+                        document.getElementById(`btn-done-${appt.id}`).addEventListener('click', () => {
+                            idAgendamentoAtivoCheckout = appt.id;
+                            servicoAtivoCheckout = appt.servico;
+                            
+                            document.getElementById('pay-label-servico').innerText = appt.servico;
+                            document.getElementById('pay-label-original').innerText = `R$ ${appt.valor.toFixed(2)}`;
+                            document.getElementById('pay-input-final').value = appt.valor; // Sugere o valor cheio por padrão
+                            
+                            document.getElementById('modal-pagamento-caixa').classList.add('active');
                         });
+                        
                         document.getElementById(`btn-del-${appt.id}`).addEventListener('click', async () => {
                             if(confirm("Deseja apagar esse agendamento?")) await deleteDoc(doc(db, "agendamentos", appt.id));
                         });
@@ -322,6 +359,25 @@
                     document.getElementById(`btn-quick-add-${h.replace(':','')}`).addEventListener('click', () => abrirModalAgendarRapido(dataInput, h));
                 }
             }
+        }
+
+        // Executa o lançamento real com o valor alterado pela recepção
+        async function efetuartCheckoutFinanceiroFinal() {
+            const valorFinalDigitado = document.getElementById('pay-input-final').value;
+            if(!valorFinalDigitado || parseFloat(valorFinalDigitado) < 0) return alert("Por favor, informe um valor de recebimento válido.");
+
+            await addDoc(collection(db, "financeiro"), { 
+                data: new Date().toLocaleDateString('pt-BR'), 
+                descricao: "Consulta: " + servicoAtivoCheckout, 
+                valor: parseFloat(valorFinalDigitado), 
+                ts: Date.now() 
+            });
+            
+            // Apaga da lista de agendamentos liberando o slot do dia
+            await deleteDoc(doc(db, "agendamentos", idAgendamentoAtivoCheckout));
+            
+            document.getElementById('modal-pagamento-caixa').classList.remove('active');
+            alert("Atendimento finalizado com sucesso! Entrada computada no fluxo de caixa.");
         }
 
         function abrirModalAgendarRapido(dataIso, horaStr) { document.getElementById('modal-agendar').classList.add('active'); document.getElementById('man-nome').value = ''; document.getElementById('man-wpp').value = ''; document.getElementById('man-servico').value = ''; document.getElementById('man-data').value = dataIso; document.getElementById('man-hora').value = horaStr; }
