@@ -11,21 +11,21 @@
         
         /* Sidebar */
         .sidebar { width: 260px; background: var(--sidebar); color: #fff; display: flex; flex-direction: column; }
-        .brand { padding: 25px 20px; font-size: 1.2rem; font-weight: bold; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; gap: 10px; }
+        .brand { padding: 25px 20px; font-size: 1.2rem; font-weight: bold; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; align-items: center; gap: 10px; }
         .logo-box { width: 35px; height: 35px; background: var(--primary); border-radius: 8px; display: flex; justify-content: center; align-items: center; overflow: hidden; font-size: 1.2rem;}
         .logo-box img { width: 100%; height: 100%; object-fit: cover; }
         .nav-item { padding: 16px 20px; color: #9ca3af; cursor: pointer; display: flex; align-items: center; gap: 12px; transition: 0.2s; border-left: 4px solid transparent; }
         .nav-item:hover { background: rgba(255,255,255,0.05); color: #fff; }
         .nav-item.active { background: rgba(255,255,255,0.1); color: #fff; border-left-color: var(--primary); font-weight: 600; }
         
-        /* Main Content */
+        /* Layout Principal */
         .main { flex: 1; padding: 40px; overflow-y: auto; }
         .view { display: none; max-width: 1100px; margin: 0 auto; animation: fadeIn 0.3s; }
         .view.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         
-        .header-flex { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
-        h1 { font-size: 1.8rem; color: #111827; }
+        .header-flex { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
+        h1 { font-size: 1.8rem; color: #111827; margin-bottom: 5px;}
         p.sub { color: var(--text-light); margin-bottom: 25px; }
         
         .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 25px; margin-bottom: 25px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
@@ -33,10 +33,10 @@
         .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
         
         label { display: block; font-weight: 600; margin-bottom: 8px; font-size: 0.9rem; margin-top: 10px;}
-        input, select { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; outline: none; transition: 0.2s; background: #f9fafb; }
+        input, select { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; outline: none; transition: 0.2s; background: #f9fafb; font-size: 1rem;}
         input:focus, select:focus { border-color: var(--primary); background: #fff; box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1); }
         
-        .btn { background: var(--primary); color: #fff; border: none; padding: 12px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.2s; display: inline-flex; justify-content: center; align-items: center; gap: 8px;}
+        .btn { background: var(--primary); color: #fff; border: none; padding: 14px 20px; border-radius: 8px; font-weight: bold; font-size: 0.95rem; cursor: pointer; transition: 0.2s; display: inline-flex; justify-content: center; align-items: center; gap: 8px;}
         .btn:hover { opacity: 0.9; transform: translateY(-1px); }
         .btn.danger { background: var(--danger); }
         .btn.success { background: var(--success); }
@@ -46,33 +46,33 @@
         th, td { padding: 15px; border-bottom: 1px solid var(--border); text-align: left; }
         th { background: #f9fafb; color: var(--text-light); font-weight: 600; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 0.5px; }
         
-        /* Checkboxes e Grade */
-        .days-box { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; }
+        /* Seletores de Dias (Checkbox) */
+        .days-box { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 10px; }
         .day-cb { display: none; }
         .day-lbl { padding: 10px 15px; border: 1px solid var(--border); border-radius: 8px; cursor: pointer; font-weight: 600; background: #fff; transition: 0.2s; }
         .day-cb:checked + .day-lbl { background: var(--primary); color: #fff; border-color: var(--primary); }
-        
-        .slot-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 10px; margin-top: 20px; padding: 20px; background: #f9fafb; border-radius: 12px; border: 1px dashed var(--border);}
-        .slot-btn { padding: 10px; border-radius: 8px; border: 1px solid var(--success); background: #ecfdf5; color: #065f46; font-weight: bold; cursor: pointer; text-align: center; transition: 0.2s; }
-        .slot-btn.blocked { border-color: var(--danger); background: #fef2f2; color: #991b1b; text-decoration: line-through; }
-        .slot-btn.selected { background: var(--primary); color: white; border-color: var(--primary); }
 
-        /* Nova Grade Visual da Agenda */
-        .agenda-daily-grid { display: flex; flex-direction: column; gap: 12px; margin-top: 20px; }
-        .time-row { display: flex; align-items: stretch; border: 1px solid var(--border); border-radius: 10px; background: #fff; overflow: hidden; box-shadow: 0 1px 2px rgba(0,0,0,0.02);}
-        .time-label { width: 90px; background: #f9fafb; border-right: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.1rem; color: var(--primary); padding: 15px;}
-        .time-content { flex: 1; padding: 15px; display: flex; justify-content: space-between; align-items: center; }
+        /* Aba Bloqueios - Colunas da Semana */
+        .week-grid { display: flex; gap: 15px; overflow-x: auto; padding-bottom: 15px; }
+        .day-col { min-width: 140px; background: #f9fafb; border: 1px solid var(--border); border-radius: 12px; display: flex; flex-direction: column;}
+        .day-col-header { padding: 12px; text-align: center; font-weight: bold; border-bottom: 1px solid var(--border); background: #fff; border-radius: 12px 12px 0 0; color: var(--text);}
+        .day-col-body { padding: 10px; display: flex; flex-direction: column; gap: 8px; max-height: 400px; overflow-y: auto;}
         
-        .time-row.free .time-content { background: #fff; color: var(--text-light); font-style: italic; }
-        .time-row.booked .time-content { background: #f0fdf4; border-left: 4px solid var(--success); }
-        .time-row.booked .paciente-info { font-weight: bold; color: var(--text); font-style: normal; font-size: 1.1rem;}
-        .time-row.booked .servico-info { color: var(--text-light); font-size: 0.9rem; margin-top: 4px;}
-        
+        .slot-btn { padding: 8px; border-radius: 6px; border: 1px solid var(--success); background: #ecfdf5; color: #065f46; font-weight: bold; cursor: pointer; text-align: center; transition: 0.2s; font-size: 0.9rem;}
+        .slot-btn.blocked { border-color: var(--danger); background: #fef2f2; color: #991b1b; text-decoration: line-through; }
+
+        /* Agenda Principal Visual */
+        .agenda-list { display: flex; flex-direction: column; gap: 15px; }
+        .appt-card { display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--border); border-left: 5px solid var(--primary); padding: 20px; border-radius: 12px; background: #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.02);}
+        .appt-info h3 { margin-bottom: 5px; font-size: 1.2rem;}
+        .appt-info p { color: var(--text-light); font-size: 0.95rem; line-height: 1.5; }
+        .appt-time { font-weight: 800; color: var(--primary); font-size: 1.1rem; background: #e0e7ff; padding: 5px 10px; border-radius: 6px; display: inline-block; margin-bottom: 10px;}
+        .empty-agenda { text-align: center; padding: 40px; background: #fff; border: 1px dashed var(--border); border-radius: 12px; color: var(--text-light); }
+
         /* Modais */
         .modal-overlay { position: fixed; inset: 0; background: rgba(17, 24, 39, 0.8); display: none; align-items: center; justify-content: center; z-index: 9999; }
         .modal-overlay.active { display: flex; }
         .modal-box { background: white; padding: 35px; border-radius: 16px; width: 100%; max-width: 500px; max-height: 90vh; overflow-y: auto;}
-        
         #login-overlay { background: var(--sidebar); visibility: visible; opacity: 1; }
     </style>
 </head>
@@ -88,34 +88,40 @@
         </div>
     </div>
 
-    <!-- MODAL NOVO AGENDAMENTO MANUAL -->
+    <!-- MODAL DE NOVO AGENDAMENTO (MANUAL) -->
     <div id="modal-agendar" class="modal-overlay">
         <div class="modal-box">
-            <h2 style="margin-bottom: 5px;">Novo Agendamento</h2>
-            <p style="color: gray; font-size: 0.9rem; margin-bottom: 20px;">Agende o paciente diretamente pela recepção.</p>
+            <h2 style="margin-bottom: 5px;">Adicionar Paciente</h2>
+            <p style="color: gray; font-size: 0.9rem; margin-bottom: 20px;">Crie um agendamento manual na grade.</p>
             
             <div class="grid-2">
                 <div><label>Nome do Paciente</label><input type="text" id="man-nome" placeholder="Nome Completo"></div>
-                <div><label>WhatsApp</label><input type="tel" id="man-wpp" placeholder="(DDD) 99999-9999"></div>
+                <div><label>WhatsApp</label><input type="tel" id="man-wpp" placeholder="(DD) 99999-9999"></div>
             </div>
 
             <label>Procedimento</label>
             <select id="man-servico"><option value="">Carregando...</option></select>
 
-            <label>Data</label>
-            <input type="date" id="man-data" onchange="gerarHorariosManual()">
-            <div id="man-aviso" style="color:var(--danger); font-size:0.85rem; font-weight:bold; margin-top:5px;"></div>
-
-            <div id="man-box-horarios" style="display:none; margin-top: 15px;">
-                <label>Horários Livres</label>
-                <div class="slot-grid" id="man-grid" style="padding: 10px; margin-top: 5px;"></div>
-                <div class="grid-2" style="margin-top: 25px;">
-                    <button class="btn outline" style="width:100%;" onclick="fecharModais()">Cancelar</button>
-                    <button class="btn success" style="width:100%;" onclick="salvarAgendamentoManual()">Confirmar</button>
+            <div class="grid-2">
+                <div>
+                    <label>Data</label>
+                    <input type="date" id="man-data" onchange="gerarListaDeHorariosModal()">
+                </div>
+                <div>
+                    <label>Horário</label>
+                    <select id="man-hora" disabled>
+                        <option value="">Escolha a data primeiro</option>
+                    </select>
                 </div>
             </div>
             
-            <button class="btn outline" id="btn-cancel-man" style="width:100%; margin-top: 15px;" onclick="fecharModais()">Fechar</button>
+            <div id="man-aviso" style="color:var(--danger); font-size:0.85rem; font-weight:bold; margin-top:10px; text-align: center;"></div>
+
+            <!-- BOTÕES SEMPRE VISÍVEIS -->
+            <div class="grid-2" style="margin-top: 30px;">
+                <button class="btn outline" style="width:100%;" onclick="fecharModais()">Cancelar</button>
+                <button class="btn success" style="width:100%;" onclick="salvarAgendamentoManual()">Confirmar Agendamento</button>
+            </div>
         </div>
     </div>
 
@@ -124,8 +130,9 @@
             <div class="logo-box" id="ui-logo">Y</div>
             <span id="ui-nome">Yod Clínica</span>
         </div>
-        <div class="nav-item active" onclick="switchView('v-agenda', this)">📅 Agenda Diária</div>
-        <div class="nav-item" onclick="switchView('v-grade', this)">🕒 Dias e Horários</div>
+        <div class="nav-item active" onclick="switchView('v-agenda', this)">📅 Agenda Principal</div>
+        <div class="nav-item" onclick="switchView('v-criar', this)">🕒 Criar Horários</div>
+        <div class="nav-item" onclick="switchView('v-bloqueio', this)">🚫 Gerar Bloqueios</div>
         <div class="nav-item" onclick="switchView('v-proced', this)">💉 Procedimentos</div>
         <div class="nav-item" onclick="switchView('v-finan', this)">💰 Financeiro</div>
         <div style="flex: 1;"></div>
@@ -133,37 +140,36 @@
     </aside>
 
     <main class="main">
-        <!-- AGENDA DIÁRIA (VISÃO DA GRADE) -->
+        <!-- 1. AGENDA PRINCIPAL -->
         <section id="v-agenda" class="view active">
             <div class="header-flex">
                 <div>
-                    <h1>Agenda do Dia</h1>
-                    <p class="sub">Selecione uma data para ver os horários livres e ocupados.</p>
+                    <h1>Agenda Principal</h1>
+                    <p class="sub">Visualização dos pacientes cadastrados.</p>
                 </div>
                 <button class="btn" onclick="abrirModalAgendar()">+ Novo Agendamento</button>
             </div>
             
-            <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px; background: var(--card); padding: 15px; border-radius: 10px; border: 1px solid var(--border);">
-                <label style="margin: 0;">Filtrar por Data:</label>
-                <input type="date" id="filtro-data-agenda" style="width: auto; margin: 0;" onchange="renderizarAgendaDoDia()">
+            <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 25px; background: var(--card); padding: 15px 20px; border-radius: 12px; border: 1px solid var(--border);">
+                <label style="margin: 0; font-size: 1rem;">Selecione a Data:</label>
+                <input type="date" id="filtro-data-agenda" style="width: 250px; margin: 0; padding: 10px;" onchange="renderizarAgendaPrincipal()">
             </div>
-
-            <div id="aviso-agenda-dia" style="color: var(--danger); font-weight: bold; margin-bottom: 15px;"></div>
             
-            <div class="agenda-daily-grid" id="lista-agenda">
-                <!-- Horários serão injetados aqui -->
-                <p style="color: gray;">Selecione uma data acima para visualizar a grade.</p>
+            <div class="agenda-list" id="lista-agenda">
+                <!-- Lista de Cards Injetada via JS -->
             </div>
         </section>
 
-        <!-- GRADE E BLOQUEIOS -->
-        <section id="v-grade" class="view">
-            <h1>Configuração da Grade de Horários</h1>
-            <p class="sub">Ajuste os dias que a clínica abre e bloqueie horários de pausa.</p>
+        <!-- 2. CRIAR HORÁRIOS -->
+        <section id="v-criar" class="view">
+            <h1>Criar Horários de Atendimento</h1>
+            <p class="sub">Configure a regra padrão da semana ou adicione uma data personalizada.</p>
             
+            <!-- REGRA SEMANAL -->
             <div class="card">
-                <h3>1. Dias de Funcionamento</h3>
-                <div class="days-box" style="margin-top: 15px;">
+                <h3 style="color: var(--primary); margin-bottom: 15px;">A) Regra Padrão Semanal</h3>
+                <label>Dias da Semana Abertos</label>
+                <div class="days-box">
                     <input type="checkbox" id="d1" class="day-cb" value="1"><label for="d1" class="day-lbl">Seg</label>
                     <input type="checkbox" id="d2" class="day-cb" value="2"><label for="d2" class="day-lbl">Ter</label>
                     <input type="checkbox" id="d3" class="day-cb" value="3"><label for="d3" class="day-lbl">Qua</label>
@@ -173,36 +179,62 @@
                     <input type="checkbox" id="d0" class="day-cb" value="0"><label for="d0" class="day-lbl">Dom</label>
                 </div>
 
-                <h3>2. Horário Base</h3>
-                <div class="grid-3" style="margin-top: 15px;">
-                    <div><label>Abertura</label><input type="time" id="g-start" value="08:00"></div>
-                    <div><label>Fechamento</label><input type="time" id="g-end" value="18:00"></div>
-                    <div><label>Duração/Intervalo</label>
-                        <select id="g-int"><option value="30">30 min</option><option value="60" selected>1 Hora</option></select>
+                <div class="grid-3">
+                    <div><label>Hora de Abertura</label><input type="time" id="g-start" value="08:00"></div>
+                    <div><label>Hora de Fechamento</label><input type="time" id="g-end" value="18:00"></div>
+                    <div><label>Minutos por Atendimento</label>
+                        <select id="g-int">
+                            <option value="15">15 minutos</option>
+                            <option value="30">30 minutos</option>
+                            <option value="60" selected>60 minutos</option>
+                        </select>
                     </div>
                 </div>
-                
-                <button class="btn outline" style="margin-top: 20px; width: 100%;" onclick="gerarPrevia()">🔄 Gerar Prévia de Horários</button>
+                <button class="btn success" style="margin-top: 20px;" onclick="salvarGradeSemanal()">💾 Salvar Regra Semanal</button>
             </div>
 
-            <div class="card" id="box-previa" style="display: none;">
-                <h3>3. Bloqueio de Horários Específicos</h3>
-                <p style="font-size: 0.9rem; color: gray; margin-top: 5px;">Clique em um horário abaixo para <b>Bloquear</b> (Vermelho). O cliente não verá este horário.</p>
-                
-                <div class="slot-grid" id="grid-previa"></div>
-
-                <button class="btn success" style="width: 100%; margin-top: 25px; font-size: 1.1rem; padding: 15px;" onclick="salvarGradeFinal()">💾 Salvar Definitivo na Nuvem</button>
+            <!-- REGRA PERSONALIZADA -->
+            <div class="card">
+                <h3 style="color: var(--primary); margin-bottom: 15px;">B) Adicionar Dia Personalizado (Exceção)</h3>
+                <p style="font-size: 0.85rem; color: gray; margin-bottom: 15px;">Útil para feriados, dias extras ou expedientes reduzidos.</p>
+                <div class="grid-2">
+                    <div><label>Data Específica</label><input type="date" id="c-data"></div>
+                    <div><label>Minutos por Atendimento</label>
+                        <select id="c-int"><option value="15">15 min</option><option value="30">30 min</option><option value="60">60 min</option></select>
+                    </div>
+                    <div><label>Abertura</label><input type="time" id="c-start" value="08:00"></div>
+                    <div><label>Fechamento</label><input type="time" id="c-end" value="12:00"></div>
+                </div>
+                <button class="btn outline" style="margin-top: 20px;" onclick="salvarDiaPersonalizado()">+ Adicionar Exceção para esta Data</button>
+                <div id="lista-excecoes" style="margin-top: 15px; font-size: 0.9rem; color: var(--text);"></div>
             </div>
         </section>
 
-        <!-- PROCEDIMENTOS -->
+        <!-- 3. BLOQUEIOS DE HORÁRIO -->
+        <section id="v-bloqueio" class="view">
+            <div class="header-flex">
+                <div>
+                    <h1>Gerar Bloqueios</h1>
+                    <p class="sub">Selecione os horários (cards) que você <b>NÃO</b> quer atender durante a semana.</p>
+                </div>
+                <button class="btn success" onclick="salvarBloqueiosNaNuveem()">💾 Salvar Bloqueios</button>
+            </div>
+            
+            <div class="card" style="background: transparent; border: none; padding: 0; box-shadow: none;">
+                <div class="week-grid" id="container-bloqueios">
+                    <p style="color: gray;">Configure a aba "Criar Horários" primeiro.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. PROCEDIMENTOS -->
         <section id="v-proced" class="view">
-            <h1>Procedimentos Oferecidos</h1>
-            <p class="sub">Cadastre os serviços para aparecerem no aplicativo.</p>
+            <h1>Gerenciamento de Procedimentos</h1>
+            <p class="sub">Cadastre os serviços e seus respectivos valores.</p>
             
             <div class="card grid-3" style="align-items: end;">
-                <div style="grid-column: span 2;"><label>Nome do Procedimento</label><input type="text" id="p-nome" placeholder="Ex: Micro Labial"></div>
-                <div><label>Valor (R$)</label><input type="number" id="p-valor" placeholder="350"></div>
+                <div style="grid-column: span 2;"><label>Nome do Procedimento</label><input type="text" id="p-nome" placeholder="Ex: Micropigmentação Fio a Fio"></div>
+                <div><label>Valor (R$)</label><input type="number" id="p-valor" placeholder="450"></div>
                 <div style="grid-column: 1 / -1;"><button class="btn" style="width: auto;" onclick="cadastrarProcedimento()">+ Adicionar Procedimento</button></div>
             </div>
 
@@ -214,12 +246,12 @@
             </div>
         </section>
 
-        <!-- FINANCEIRO -->
+        <!-- 5. FINANCEIRO -->
         <section id="v-finan" class="view">
-            <h1>Controle de Caixa</h1>
-            <p class="sub">Ganhos de consultas concluídas.</p>
+            <h1>Controle Financeiro</h1>
+            <p class="sub">Ganhos registrados de consultas concluídas.</p>
             <div class="card" style="padding: 0; overflow: hidden;">
-                <table><thead><tr><th>Data</th><th>Descrição do Serviço</th><th style="width: 150px;">Valor Recebido</th></tr></thead><tbody id="lista-finan"></tbody></table>
+                <table><thead><tr><th>Data</th><th>Descrição do Serviço</th><th style="width: 150px;">Entrada</th></tr></thead><tbody id="lista-finan"></tbody></table>
             </div>
         </section>
     </main>
@@ -229,262 +261,303 @@
         import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, deleteDoc, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
         import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
 
+        // CONFIGURAÇÃO DO FIREBASE (MANTIDA INTACTA)
         const firebaseConfig = { apiKey: "AIzaSyD4SElQHlfQjbN2NsHC0Z9_1Gobb6WHd8o", authDomain: "clinicabase-a85a7.firebaseapp.com", projectId: "clinicabase-a85a7", storageBucket: "clinicabase-a85a7.firebasestorage.app", messagingSenderId: "324071825277", appId: "1:324071825277:web:6a0d3c4413f7a7569fb614" };
         const app = initializeApp(firebaseConfig); const db = getFirestore(app); const auth = getAuth(app);
 
-        let bloqueiosTemporarios = [];
-        let configGradeGlobal = null;
-        let todosAgendamentos = [];
+        let gradeConfig = { dias: [], start: "08:00", end: "18:00", int: 60, excecoes: {}, bloqueios: [] };
+        let agendamentosDB = [];
 
-        // Inicia com a data de hoje no filtro
+        // Inicialização de Data Principal
         document.getElementById('filtro-data-agenda').value = new Date().toISOString().split('T')[0];
 
         onAuthStateChanged(auth, (user) => { 
-            if(user) { 
-                document.getElementById('login-overlay').style.display = 'none'; 
-                iniciarSistema(); 
-            } else { 
-                document.getElementById('login-overlay').style.display = 'flex'; 
-            }
+            if(user) { document.getElementById('login-overlay').classList.remove('active'); iniciarSistema(); } 
+            else { document.getElementById('login-overlay').classList.add('active'); }
         });
 
-        window.fazerLogin = () => signInWithEmailAndPassword(auth, document.getElementById('log-email').value, document.getElementById('log-senha').value).catch(e => alert("Erro ao entrar. E-mail ou senha incorretos."));
+        window.fazerLogin = () => signInWithEmailAndPassword(auth, document.getElementById('log-email').value, document.getElementById('log-senha').value).catch(e => alert("E-mail ou senha incorretos."));
         window.sairAdmin = () => signOut(auth);
         window.switchView = (id, el) => { document.querySelectorAll('.view').forEach(s => s.classList.remove('active')); document.getElementById(id).classList.add('active'); document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active')); el.classList.add('active'); }
         window.fecharModais = () => document.querySelectorAll('.modal-overlay').forEach(m => { m.classList.remove('active') });
 
         async function iniciarSistema() {
+            // Personalização
             const gSnap = await getDoc(doc(db, "configuracoes", "geral"));
             if(gSnap.exists()){ 
                 document.documentElement.style.setProperty('--primary', gSnap.data().cor); 
                 document.getElementById('ui-nome').innerText = gSnap.data().nome; 
                 if(gSnap.data().logo) document.getElementById('ui-logo').innerHTML = `<img src="${gSnap.data().logo}">`;
             }
-            lerGradeAtual(); lerProcedimentos(); escutarAgenda(); lerFinanceiro();
+            lerGradeDoBanco(); lerProcedimentos(); escutarAgenda(); lerFinanceiro();
         }
 
         /* ================= PROCEDIMENTOS ================= */
         window.cadastrarProcedimento = async () => {
             const n = document.getElementById('p-nome').value, v = document.getElementById('p-valor').value;
-            if(!n || !v) return alert("Preencha o nome e valor.");
+            if(!n || !v) return alert("Preencha nome e valor.");
             await addDoc(collection(db, "procedimentos"), { nome: n, valor: parseFloat(v) });
             document.getElementById('p-nome').value=''; document.getElementById('p-valor').value='';
         }
-        
         function lerProcedimentos() {
             onSnapshot(collection(db, "procedimentos"), (snap) => {
-                let html = "";
-                let selectMan = "<option value=''>Selecione um serviço...</option>";
-                if(snap.empty) html = "<tr><td colspan='3' style='text-align:center; color:gray;'>Nenhum procedimento cadastrado.</td></tr>";
+                let html = "", selMan = "<option value=''>Selecione um serviço...</option>";
+                if(snap.empty) html = "<tr><td colspan='3' style='text-align:center;'>Nenhum procedimento cadastrado.</td></tr>";
                 snap.forEach(d => {
                     const p = d.data();
-                    html += `<tr><td><b>${p.nome}</b></td><td style="color:var(--success); font-weight:bold;">R$ ${p.valor.toFixed(2)}</td><td><button class="btn danger" style="padding: 6px 12px; font-size: 0.8rem;" onclick="removerP('${d.id}')">Remover</button></td></tr>`;
-                    selectMan += `<option value="${p.nome}|${p.valor}">${p.nome} - R$ ${p.valor.toFixed(2)}</option>`;
+                    html += `<tr><td><b>${p.nome}</b></td><td style="color:var(--success); font-weight:bold;">R$ ${p.valor.toFixed(2)}</td><td><button class="btn danger" style="padding: 6px; font-size: 0.8rem;" onclick="removerP('${d.id}')">Excluir</button></td></tr>`;
+                    selMan += `<option value="${p.nome}|${p.valor}">${p.nome} - R$ ${p.valor.toFixed(2)}</option>`;
                 });
                 document.getElementById('lista-procedimentos').innerHTML = html;
-                document.getElementById('man-servico').innerHTML = selectMan; 
+                document.getElementById('man-servico').innerHTML = selMan; 
             });
         }
-        window.removerP = async (id) => { if(confirm("Deseja apagar este procedimento?")) await deleteDoc(doc(db, "procedimentos", id)); }
+        window.removerP = async (id) => { if(confirm("Apagar procedimento?")) await deleteDoc(doc(db, "procedimentos", id)); }
 
-        /* ================= GRADE ================= */
-        async function lerGradeAtual() {
+
+        /* ================= ABA: CRIAR HORÁRIOS ================= */
+        async function lerGradeDoBanco() {
             const snap = await getDoc(doc(db, "configuracoes", "grade"));
             if(snap.exists()) {
-                const g = snap.data();
-                configGradeGlobal = g; 
-                bloqueiosTemporarios = g.bloqueados || [];
-                document.getElementById('g-start').value = g.start; 
-                document.getElementById('g-end').value = g.end; 
-                document.getElementById('g-int').value = g.int;
-                g.dias.forEach(d => document.getElementById('d'+d).checked = true);
-                renderizarAgendaDoDia(); // Renderiza a grade se a aba da agenda estiver aberta
-            } else {
-                bloqueiosTemporarios = []; 
+                gradeConfig = snap.data();
+                if(!gradeConfig.excecoes) gradeConfig.excecoes = {};
+                if(!gradeConfig.bloqueios) gradeConfig.bloqueios = [];
+                
+                // Preenche UI
+                document.getElementById('g-start').value = gradeConfig.start; 
+                document.getElementById('g-end').value = gradeConfig.end; 
+                document.getElementById('g-int').value = gradeConfig.int;
+                gradeConfig.dias.forEach(d => document.getElementById('d'+d).checked = true);
+                
+                renderizarListaExcecoes();
+                renderizarAbaBloqueios(); // Atualiza a aba de gerar bloqueios
             }
         }
 
-        window.gerarPrevia = () => {
-            const grid = document.getElementById('grid-previa'); grid.innerHTML = '';
-            const s = document.getElementById('g-start').value, e = document.getElementById('g-end').value, int = document.getElementById('g-int').value;
-            if(!s || !e) return alert("Preencha abertura e fechamento.");
-            
-            document.getElementById('box-previa').style.display = 'block';
-            let startM = parseInt(s.split(':')[0])*60 + parseInt(s.split(':')[1]||0);
-            let endM = parseInt(e.split(':')[0])*60 + parseInt(e.split(':')[1]||0);
-            let interv = parseInt(int);
-            
-            for(let m = startM; m < endM; m += interv){
-                let h = Math.floor(m/60).toString().padStart(2,'0')+":"+(m%60).toString().padStart(2,'0');
-                let isBlocked = bloqueiosTemporarios.includes(h);
-                let cls = isBlocked ? "slot-btn blocked" : "slot-btn";
-                let txt = isBlocked ? h + " (Bloqueado)" : h;
-                grid.innerHTML += `<div class="${cls}" onclick="toggleBlock(this, '${h}')">${txt}</div>`;
-            }
-        }
-
-        window.toggleBlock = (el, h) => {
-            if(bloqueiosTemporarios.includes(h)) {
-                bloqueiosTemporarios = bloqueiosTemporarios.filter(i => i !== h); 
-                el.className = "slot-btn"; el.innerText = h;
-            } else {
-                bloqueiosTemporarios.push(h); 
-                el.className = "slot-btn blocked"; el.innerText = h + " (Bloqueado)";
-            }
-        }
-
-        window.salvarGradeFinal = async () => {
+        window.salvarGradeSemanal = async () => {
             let d = []; document.querySelectorAll('.day-check:checked').forEach(c => d.push(parseInt(c.value)));
-            if(d.length === 0) return alert("Selecione os dias de trabalho na parte 1.");
-            const conf = { start: document.getElementById('g-start').value, end: document.getElementById('g-end').value, int: document.getElementById('g-int').value, dias: d, bloqueados: bloqueiosTemporarios };
-            await setDoc(doc(db, "configuracoes", "grade"), conf);
-            configGradeGlobal = conf; 
-            alert("✅ Grade salva! O portal do cliente já está com as novas regras.");
-            renderizarAgendaDoDia(); // Atualiza a visão da agenda
+            if(d.length === 0) return alert("Marque ao menos um dia da semana.");
+            
+            gradeConfig.dias = d;
+            gradeConfig.start = document.getElementById('g-start').value;
+            gradeConfig.end = document.getElementById('g-end').value;
+            gradeConfig.int = document.getElementById('g-int').value;
+
+            await setDoc(doc(db, "configuracoes", "grade"), gradeConfig);
+            alert("Regra semanal atualizada!");
+            renderizarAbaBloqueios();
         }
 
-        /* ================= AGENDA VISUAL (MÁGICA AQUI) ================= */
-        // Mantém escutando o Firebase e salvando localmente
-        function escutarAgenda() {
-            onSnapshot(query(collection(db, "agendamentos"), orderBy("ts", "asc")), (snap) => {
-                todosAgendamentos = []; 
-                snap.forEach(d => {
-                    let obj = d.data();
-                    obj.id = d.id; // Guarda a ID do documento para poder apagar/concluir
-                    todosAgendamentos.push(obj); 
-                });
-                renderizarAgendaDoDia(); // Redesenha a grade sempre que algo muda
+        window.salvarDiaPersonalizado = async () => {
+            const dataInput = document.getElementById('c-data').value;
+            if(!dataInput) return alert("Escolha uma data.");
+            
+            const dataFormatada = dataInput.split('-').reverse().join('/');
+            
+            gradeConfig.excecoes[dataFormatada] = {
+                start: document.getElementById('c-start').value,
+                end: document.getElementById('c-end').value,
+                int: document.getElementById('c-int').value
+            };
+
+            await setDoc(doc(db, "configuracoes", "grade"), gradeConfig);
+            alert("Data excepcional adicionada!");
+            renderizarListaExcecoes();
+        }
+
+        function renderizarListaExcecoes() {
+            let html = "<b>Datas Personalizadas Ativas:</b><br>";
+            if(Object.keys(gradeConfig.excecoes).length === 0) html += "<i style='color:gray'>Nenhuma exceção criada.</i>";
+            for (const [data, config] of Object.entries(gradeConfig.excecoes)) {
+                html += `<div style="background:#fef3c7; padding:10px; border-radius:6px; margin-top:8px; border:1px solid #fde68a;">
+                            <b>${data}</b>: ${config.start} às ${config.end} (${config.int}m)
+                            <button onclick="removerExcecao('${data}')" style="float:right; color:red; border:none; background:none; cursor:pointer;">X</button>
+                         </div>`;
+            }
+            document.getElementById('lista-excecoes').innerHTML = html;
+        }
+
+        window.removerExcecao = async (dataStr) => {
+            delete gradeConfig.excecoes[dataStr];
+            await setDoc(doc(db, "configuracoes", "grade"), gradeConfig);
+            renderizarListaExcecoes();
+        }
+
+        /* ================= ABA: GERAR BLOQUEIOS ================= */
+        function renderizarAbaBloqueios() {
+            const cont = document.getElementById('container-bloqueios');
+            cont.innerHTML = "";
+            if(gradeConfig.dias.length === 0) return cont.innerHTML = "<p>Configure a grade primeiro.</p>";
+
+            const nomesDias = ["Domingo", "Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira", "Sábado"];
+            
+            gradeConfig.dias.forEach(diaNum => {
+                let startM = parseInt(gradeConfig.start.split(':')[0])*60 + parseInt(gradeConfig.start.split(':')[1]||0);
+                let endM = parseInt(gradeConfig.end.split(':')[0])*60 + parseInt(gradeConfig.end.split(':')[1]||0);
+                let interv = parseInt(gradeConfig.int);
+
+                let slotsHTML = "";
+                for(let m = startM; m < endM; m += interv){
+                    let h = Math.floor(m/60).toString().padStart(2,'0')+":"+(m%60).toString().padStart(2,'0');
+                    let keyUnica = `${diaNum}-${h}`; // Ex: 1-12:00 (Segunda ao meio dia)
+                    let bloqueado = gradeConfig.bloqueios.includes(keyUnica);
+                    
+                    let cls = bloqueado ? "slot-btn blocked" : "slot-btn";
+                    slotsHTML += `<div class="${cls}" onclick="toggleBlockLocal(this, '${keyUnica}')">${h}</div>`;
+                }
+
+                cont.innerHTML += `
+                    <div class="day-col">
+                        <div class="day-col-header">${nomesDias[diaNum]}</div>
+                        <div class="day-col-body">${slotsHTML}</div>
+                    </div>
+                `;
             });
         }
 
-        // Desenha a grade com os horários livres e ocupados
-        window.renderizarAgendaDoDia = () => {
+        window.toggleBlockLocal = (el, keyUnica) => {
+            if(gradeConfig.bloqueios.includes(keyUnica)) {
+                gradeConfig.bloqueios = gradeConfig.bloqueios.filter(i => i !== keyUnica);
+                el.className = "slot-btn";
+            } else {
+                gradeConfig.bloqueios.push(keyUnica);
+                el.className = "slot-btn blocked";
+            }
+        }
+
+        window.salvarBloqueiosNaNuveem = async () => {
+            await setDoc(doc(db, "configuracoes", "grade"), gradeConfig);
+            alert("Bloqueios aplicados! Os horários vermelhos não aparecerão mais para os clientes.");
+        }
+
+
+        /* ================= ABA: AGENDA PRINCIPAL (CADASTRADOS) ================= */
+        function escutarAgenda() {
+            onSnapshot(query(collection(db, "agendamentos"), orderBy("ts", "asc")), (snap) => {
+                agendamentosDB = []; 
+                snap.forEach(d => {
+                    let obj = d.data(); obj.id = d.id;
+                    agendamentosDB.push(obj); 
+                });
+                renderizarAgendaPrincipal();
+            });
+        }
+
+        window.renderizarAgendaPrincipal = () => {
             const dataInput = document.getElementById('filtro-data-agenda').value;
             const box = document.getElementById('lista-agenda');
-            const aviso = document.getElementById('aviso-agenda-dia');
+            box.innerHTML = "";
             
-            box.style.display = 'flex'; box.innerHTML = ''; aviso.innerText = '';
+            if(!dataInput) return box.innerHTML = "<div class='empty-agenda'>Selecione uma data acima.</div>";
             
-            if(!dataInput) { aviso.innerText = "Selecione uma data no filtro."; return; }
-            if(!configGradeGlobal) { aviso.innerText = "Você precisa configurar a Grade de Horários primeiro."; return; }
+            const dataBr = dataInput.split('-').reverse().join('/');
+            
+            // Filtra o banco apenas pros agendamentos desse dia específico
+            let agendamentosDoDia = agendamentosDB.filter(a => a.data === dataBr);
 
-            const dataBrFormatada = dataInput.split('-').reverse().join('/');
-            const diaSemana = new Date(dataInput + "T00:00:00").getDay();
-            
-            if(!configGradeGlobal.dias.includes(diaSemana)) {
-                aviso.innerText = "A clínica não abre neste dia da semana.";
-                box.style.display = 'none';
-                return;
+            // Ordenar por hora (ex: 08:00 antes de 09:00)
+            agendamentosDoDia.sort((a, b) => a.hora.localeCompare(b.hora));
+
+            if(agendamentosDoDia.length === 0) {
+                return box.innerHTML = `<div class='empty-agenda'>Nenhum paciente marcado para o dia ${dataBr}. A agenda está livre!</div>`;
             }
-            
-            let startM = parseInt(configGradeGlobal.start.split(':')[0])*60 + parseInt(configGradeGlobal.start.split(':')[1]||0);
-            let endM = parseInt(configGradeGlobal.end.split(':')[0])*60 + parseInt(configGradeGlobal.end.split(':')[1]||0);
-            let interv = parseInt(configGradeGlobal.int);
-            let bloqueios = configGradeGlobal.bloqueados || [];
 
-            for(let m = startM; m < endM; m += interv){
-                let h = Math.floor(m/60).toString().padStart(2,'0')+":"+(m%60).toString().padStart(2,'0');
+            agendamentosDoDia.forEach(a => {
+                const num = a.pacienteWhatsapp ? a.pacienteWhatsapp.replace(/\D/g,'') : '';
+                let wppBtn = num ? `<a href="https://wa.me/55${num}" target="_blank" style="color:var(--success); font-weight:bold; text-decoration:none; margin-left:10px;">📲 Chamar</a>` : '';
                 
-                // Se for um horário bloqueado pela clínica, ignora
-                if(bloqueios.includes(h)) continue;
-
-                // Verifica se tem agendamento para ESTE horário NESTA data
-                let appt = todosAgendamentos.find(a => a.data === dataBrFormatada && a.hora === h);
-
-                if(appt) {
-                    // HORÁRIO OCUPADO
-                    const num = appt.pacienteWhatsapp ? appt.pacienteWhatsapp.replace(/\D/g,'') : '';
-                    let wppBtn = num ? `<a href="https://wa.me/55${num}" target="_blank" style="color:var(--success); font-weight:bold; text-decoration:none; margin-left:10px;">📲 Wpp</a>` : '';
-                    
-                    box.innerHTML += `
-                        <div class="time-row booked">
-                            <div class="time-label">${h}</div>
-                            <div class="time-content">
-                                <div>
-                                    <div class="paciente-info">${appt.pacienteNome} ${wppBtn}</div>
-                                    <div class="servico-info">${appt.servico}</div>
-                                </div>
-                                <div style="display:flex; gap:10px;">
-                                    <button class="btn success" style="padding: 8px 12px; font-size: 0.85rem;" onclick="concluirConsulta('${appt.id}', '${appt.servico}', ${appt.valor})">✅ Receber (R$ ${appt.valor})</button>
-                                    <button class="btn outline" style="padding: 8px 12px; font-size: 0.85rem; border-color: var(--danger); color: var(--danger);" onclick="cancelarConsulta('${appt.id}')">❌ Cancelar</button>
-                                </div>
-                            </div>
-                        </div>`;
-                } else {
-                    // HORÁRIO LIVRE
-                    box.innerHTML += `
-                        <div class="time-row free">
-                            <div class="time-label">${h}</div>
-                            <div class="time-content">
-                                <span>Horário Livre</span>
-                            </div>
-                        </div>`;
-                }
-            }
+                box.innerHTML += `
+                    <div class="appt-card">
+                        <div class="appt-info">
+                            <div class="appt-time">🕒 ${a.hora}</div>
+                            <h3>${a.pacienteNome}</h3>
+                            <p style="margin-bottom: 5px;">Procedimento: <b style="color:var(--text);">${a.servico}</b></p>
+                            <p>Contato: ${a.pacienteWhatsapp || 'Não informado'} ${wppBtn}</p>
+                        </div>
+                        <div style="display:flex; flex-direction:column; gap:10px;">
+                            <button class="btn success" onclick="concluirConsulta('${a.id}', '${a.servico}', ${a.valor})">✅ Receber Pagamento</button>
+                            <button class="btn outline" style="border-color: var(--danger); color: var(--danger);" onclick="cancelarConsulta('${a.id}')">❌ Cancelar Marcação</button>
+                        </div>
+                    </div>`;
+            });
         }
 
         window.concluirConsulta = async (id, s, v) => {
-            if(confirm("Confirmar a conclusão deste atendimento e lançar o valor no caixa?")) {
+            if(confirm("Lançar o valor no caixa e concluir o atendimento?")) {
                 await addDoc(collection(db, "financeiro"), { data: new Date().toLocaleDateString('pt-BR'), descricao: "Consulta: "+s, tipo: 'entrada', valor: v, ts: Date.now() });
                 await deleteDoc(doc(db, "agendamentos", id));
             }
         }
-        window.cancelarConsulta = async (id) => { if(confirm("Deseja realmente apagar este agendamento?")) await deleteDoc(doc(db, "agendamentos", id)); }
+        window.cancelarConsulta = async (id) => { if(confirm("Deseja realmente cancelar este horário?")) await deleteDoc(doc(db, "agendamentos", id)); }
 
-        /* ================= AGENDAMENTO MANUAL ================= */
-        let horaManualSelecionada = null;
 
+        /* ================= AGENDAMENTO MANUAL PELA RECEPÇÃO ================= */
         window.abrirModalAgendar = () => {
             document.getElementById('modal-agendar').classList.add('active');
             document.getElementById('man-nome').value = ''; document.getElementById('man-wpp').value = '';
             document.getElementById('man-data').value = ''; document.getElementById('man-servico').value = '';
-            document.getElementById('man-box-horarios').style.display = 'none';
-            document.getElementById('btn-cancel-man').style.display = 'block';
+            document.getElementById('man-hora').innerHTML = '<option value="">Escolha a data primeiro</option>';
+            document.getElementById('man-hora').disabled = true;
+            document.getElementById('man-aviso').innerText = '';
         }
 
-        window.gerarHorariosManual = () => {
+        // Esta função gera as opções do select de horários com base na data escolhida
+        window.gerarListaDeHorariosModal = () => {
             const dataInput = document.getElementById('man-data').value;
-            const grid = document.getElementById('man-grid');
-            const box = document.getElementById('man-box-horarios');
+            const selectHora = document.getElementById('man-hora');
             const aviso = document.getElementById('man-aviso');
             
-            box.style.display = 'none'; grid.innerHTML = ''; aviso.innerText = ''; horaManualSelecionada = null;
-            if(!dataInput || !configGradeGlobal) return;
-
-            const dataBrFormatada = dataInput.split('-').reverse().join('/');
-            const diaSemana = new Date(dataInput + "T00:00:00").getDay();
+            selectHora.innerHTML = '<option value="">Carregando...</option>';
+            selectHora.disabled = true; aviso.innerText = '';
             
-            if(!configGradeGlobal.dias.includes(diaSemana)) {
-                aviso.innerText = "A clínica não atende neste dia da semana."; return;
+            if(!dataInput) return;
+
+            const dataBr = dataInput.split('-').reverse().join('/');
+            const diaDaSemana = new Date(dataInput + "T00:00:00").getDay();
+            
+            // 1. Determina as regras do dia (Se é Exceção ou Padrão)
+            let paramsDia = null;
+            if(gradeConfig.excecoes && gradeConfig.excecoes[dataBr]) {
+                paramsDia = gradeConfig.excecoes[dataBr]; // Puxa regra personalizada
+            } else if (gradeConfig.dias.includes(diaDaSemana)) {
+                paramsDia = gradeConfig; // Puxa regra semanal padrão
             }
 
-            box.style.display = 'block';
-            document.getElementById('btn-cancel-man').style.display = 'none';
+            if(!paramsDia) {
+                selectHora.innerHTML = '<option value="">Data Indisponível</option>';
+                aviso.innerText = "A clínica está fechada neste dia.";
+                return;
+            }
+
+            // 2. Gera os horários possíveis
+            let startM = parseInt(paramsDia.start.split(':')[0])*60 + parseInt(paramsDia.start.split(':')[1]||0);
+            let endM = parseInt(paramsDia.end.split(':')[0])*60 + parseInt(paramsDia.end.split(':')[1]||0);
+            let interv = parseInt(paramsDia.int);
             
-            let startM = parseInt(configGradeGlobal.start.split(':')[0])*60 + parseInt(configGradeGlobal.start.split(':')[1]||0);
-            let endM = parseInt(configGradeGlobal.end.split(':')[0])*60 + parseInt(configGradeGlobal.end.split(':')[1]||0);
-            let interv = parseInt(configGradeGlobal.int);
-            let bloqueios = configGradeGlobal.bloqueados || [];
+            selectHora.innerHTML = '<option value="">Selecione o Horário...</option>';
+            let qtdLivres = 0;
 
             for(let m = startM; m < endM; m += interv){
                 let h = Math.floor(m/60).toString().padStart(2,'0')+":"+(m%60).toString().padStart(2,'0');
+                let keyBloqueio = `${diaDaSemana}-${h}`;
                 
-                if(!bloqueios.includes(h)) {
-                    let jaAgendado = todosAgendamentos.some(a => a.data === dataBrFormatada && a.hora === h);
-                    
-                    if(jaAgendado) {
-                        grid.innerHTML += `<div class="slot-btn blocked" title="Ocupado">${h}</div>`;
-                    } else {
-                        grid.innerHTML += `<div class="slot-btn" style="color:var(--text); border-color:var(--border); background:#fff;" onclick="selecionarHoraManual(this, '${h}')">${h}</div>`;
+                // Se não estiver bloqueado na aba Bloqueios
+                if(!gradeConfig.bloqueios.includes(keyBloqueio)) {
+                    // Verifica se já tem paciente agendado no banco
+                    let ocupado = agendamentosDB.some(a => a.data === dataBr && a.hora === h);
+                    if(!ocupado) {
+                        selectHora.innerHTML += `<option value="${h}">${h} - Livre</option>`;
+                        qtdLivres++;
                     }
                 }
             }
-        }
 
-        window.selecionarHoraManual = (el, h) => {
-            document.querySelectorAll('#man-grid .slot-btn').forEach(b => { if(!b.classList.contains('blocked')) { b.style.background='#fff'; b.style.color='var(--text)'; b.style.borderColor='var(--border)'; }});
-            el.style.background = 'var(--primary)'; el.style.color = 'white'; el.style.borderColor = 'var(--primary)';
-            horaManualSelecionada = h;
+            if(qtdLivres === 0) {
+                selectHora.innerHTML = '<option value="">Agenda Lotada</option>';
+                aviso.innerText = "Não há mais horários livres para esta data.";
+            } else {
+                selectHora.disabled = false;
+            }
         }
 
         window.salvarAgendamentoManual = async () => {
@@ -492,8 +565,9 @@
             const w = document.getElementById('man-wpp').value;
             const sVal = document.getElementById('man-servico').value;
             const d = document.getElementById('man-data').value;
+            const h = document.getElementById('man-hora').value;
             
-            if(!n || !sVal || !d || !horaManualSelecionada) return alert("Preencha tudo e escolha um horário.");
+            if(!n || !sVal || !d || !h) return alert("Preencha Nome, Procedimento, Data e Horário.");
 
             const servNome = sVal.split('|')[0];
             const servValor = parseFloat(sVal.split('|')[1]);
@@ -505,19 +579,21 @@
                 servico: servNome, 
                 valor: servValor, 
                 data: dataBr, 
-                hora: horaManualSelecionada, 
+                hora: h, 
                 ts: Date.now() 
             });
 
             fecharModais();
-            alert("✅ Paciente agendado com sucesso!");
+            document.getElementById('filtro-data-agenda').value = d; // Muda o filtro da tela pra data agendada
+            renderizarAgendaPrincipal();
+            alert("✅ Agendamento inserido com sucesso!");
         }
 
         /* ================= FINANCEIRO ================= */
         function lerFinanceiro() {
             onSnapshot(query(collection(db, "financeiro"), orderBy("ts", "desc")), (snap) => {
                 let html = "";
-                if(snap.empty) html = "<tr><td colspan='3' style='text-align:center; color:gray;'>Nenhuma movimentação.</td></tr>";
+                if(snap.empty) html = "<tr><td colspan='3' style='text-align:center;'>Nenhuma entrada registrada.</td></tr>";
                 snap.forEach(d => {
                     const f = d.data();
                     html += `<tr><td>${f.data}</td><td><b>${f.descricao}</b></td><td style="color:var(--success); font-weight:bold;">+ R$ ${f.valor.toFixed(2)}</td></tr>`;
