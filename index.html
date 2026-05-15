@@ -41,7 +41,7 @@
         .btn.outline { background: transparent; color: var(--text); border: 1px solid var(--border); box-shadow: none; margin-top: 15px;}
         .btn-link { background: none; border: none; color: var(--primary); font-weight: 600; cursor: pointer; margin-top: 20px; width: 100%; font-size: 0.95rem; text-align: center; display: block;}
         
-        /* Lista de Agendamentos do Cliente (Cards) */
+        /* Lista de Agendamentos */
         .client-appointments-list { display: flex; flex-direction: column; gap: 12px; margin-top: 25px; }
         .client-appt-card { border: 1px solid var(--border); border-left: 5px solid var(--primary); padding: 16px; border-radius: 12px; background: #f8fafc; display: flex; justify-content: space-between; align-items: center; }
         .client-appt-time { font-weight: 800; color: var(--primary); font-size: 0.95rem; background: #e0e7ff; padding: 4px 8px; border-radius: 6px; display: inline-block; margin-bottom: 8px; }
@@ -51,7 +51,7 @@
         .btn-cancelar-appt:hover { background: #fef2f2; border-color: var(--danger); }
         .empty-dashboard { text-align: center; padding: 30px 10px; color: var(--text-light); font-style: italic; font-size: 0.95rem; }
 
-        /* Grade de Horários Clicáveis */
+        /* Grade de Horários */
         .grid-horarios { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 12px; }
         .btn-hora { padding: 14px 10px; border: 1px solid var(--border); border-radius: 10px; background: #fff; cursor: pointer; font-weight: bold; color: var(--text); transition: 0.2s; text-align: center; font-size: 0.95rem; }
         .btn-hora:hover { border-color: var(--primary); background: #f5f3ff; }
@@ -64,7 +64,7 @@
         .modal-overlay.active { display: flex; }
         .modal-box { background: white; padding: 30px 24px; border-radius: 16px; width: 100%; max-width: 400px; text-align: center; }
 
-        /* BOTÃO FLUTUANTE DO WHATSAPP PREMIUM */
+        /* Botão Flutuante */
         .wpp-floating-btn { position: fixed; width: 60px; height: 60px; bottom: 30px; right: 30px; background-color: #25d366; color: white; border-radius: 50px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.15); z-index: 9999; display: flex; align-items: center; justify-content: center; text-decoration: none; transition: 0.3s; }
         .wpp-floating-btn:hover { transform: scale(1.08); box-shadow: 0 6px 20px rgba(37, 211, 102, 0.3); }
         .wpp-floating-btn svg { width: 32px; height: 32px; fill: white; }
@@ -72,12 +72,10 @@
 </head>
 <body>
 
-    <!-- BOTÃO FLUTUANTE DA YOD -->
     <a href="https://wa.me/559186009455?text=Olá!%20Gostaria%20de%20tirar%20uma%20dúvida%20sobre%20meu%20agendamento%20na%20Yod." class="wpp-floating-btn" target="_blank" title="Falar com a Yod no WhatsApp">
         <svg viewBox="0 0 32 32"><path d="M16 2a13 13 0 0 0-11.27 19.51L3 29l7.71-2A13 13 0 1 0 16 2zm6.79 17.61c-.3.84-1.52 1.54-2.5 1.66-.74.09-1.7.12-2.73-.21a12.87 12.87 0 0 1-5.34-3.53 11 11 0 0 1-2.22-3.83c-.47-1.32-.1-.23-1.07-1.52A4.27 4.27 0 0 1 9.21 10c.32-.66.86-.77 1.17-.77h.78c.24 0 .47 0 .67.43l1.15 2.78c.1.25.17.5.01.81l-.54 1.1c-.16.3-.33.61-.06 1.07a8.77 8.77 0 0 0 2 2.44 7.55 7.55 0 0 0 3 1.54c.46.2.73.17.94-.07l.86-1c.21-.24.47-.2.72-.1l2.84 1.42c.26.13.43.2.5.33.1.2.1.92-.21 1.76z"/></svg>
     </a>
 
-    <!-- MODAL DE CANCELAMENTO -->
     <div id="modal-cancelar" class="modal-overlay">
         <div class="modal-box">
             <h3 style="font-size: 1.3rem; color: #111827; margin-bottom: 8px;">Cancelar Agendamento?</h3>
@@ -90,14 +88,12 @@
         </div>
     </div>
 
-    <!-- NAVBAR -->
     <nav class="navbar">
         <div class="brand"><div class="logo" id="ui-logo">Y</div><h2 id="ui-nome" class="clinic-title">Yod Micropigmentação e Estética</h2></div>
         <button id="btn-sair" class="btn-sair">Sair</button>
     </nav>
 
     <div class="container">
-        <!-- LOGIN -->
         <div id="t-login" class="screen active">
             <h1>Acesso ao Portal</h1>
             <p class="subtitle">Faça login para gerenciar seus horários.</p>
@@ -106,7 +102,6 @@
             <div id="erro-l" class="erro"></div>
         </div>
 
-        <!-- CADASTRO -->
         <div id="t-cad" class="screen">
             <h1>Criar Perfil de Paciente</h1>
             <p class="subtitle">Cadastre-se rapidamente na plataforma.</p>
@@ -115,15 +110,14 @@
             <div id="erro-c" class="erro"></div>
         </div>
 
-        <!-- DASHBOARD -->
         <div id="t-dashboard" class="screen">
+            <!-- Saudação corrigida -->
             <div class="welcome-user" id="user-greeting">Olá! 👋</div>
             <p style="color: var(--text-light); font-size: 0.95rem; margin-bottom: 20px;">Seus procedimentos agendados na Yod:</p>
             <div class="client-appointments-list" id="meus-cards-agendados"><p style="color: gray; text-align: center;">Carregando...</p></div>
             <button class="btn success" id="btn-ir-marcar">+ Marcar Nova Consulta</button>
         </div>
 
-        <!-- NOVO AGENDAMENTO -->
         <div id="t-agenda" class="screen">
             <h1 style="text-align: left; font-size: 1.4rem; margin-bottom: 5px;">Nova Marcação</h1>
             <p style="color: var(--text-light); font-size: 0.9rem; margin-bottom: 20px;">Escolha as opções para o seu procedimento.</p>
@@ -148,12 +142,29 @@
 
         let pacienteLogado = null, gradeParametros = null, bloqueiosPorDatas = {}, agendamentosExistentes = [], horaSelecionada = null, idAgendamentoParaCancelar = null;
 
-        // Configura o calendário para não permitir retroceder para dias passados
         document.getElementById('data').min = new Date().toISOString().split('T')[0];
 
-        onAuthStateChanged(auth, (user) => { 
-            if(user) { pacienteLogado = user; document.getElementById('btn-sair').style.display = 'block'; document.getElementById('user-greeting').innerText = `Olá, ${user.displayName || 'Paciente'}! 👋`; mudarTela('t-dashboard'); conectarBancoDados(); } 
-            else { pacienteLogado = null; document.getElementById('btn-sair').style.display = 'none'; mudarTela('t-login'); }
+        // LÓGICA DE DETECÇÃO DE USUÁRIO ATUALIZADA (BUSCA DIRETO NO BANCO)
+        onAuthStateChanged(auth, async (user) => { 
+            if(user) { 
+                pacienteLogado = user; 
+                document.getElementById('btn-sair').style.display = 'block';
+                
+                // MÁGICA DA CORREÇÃO: Tenta puxar o nome do documento do banco de dados imediatamente
+                const userDoc = await getDoc(doc(db, "usuarios", user.uid));
+                if(userDoc.exists() && userDoc.data().nome) {
+                    document.getElementById('user-greeting').innerText = `Olá, ${userDoc.data().nome}! 👋`;
+                } else {
+                    document.getElementById('user-greeting').innerText = `Olá, ${user.displayName || 'Paciente'}! 👋`;
+                }
+                
+                mudarTela('t-dashboard'); 
+                conectarBancoDados(); 
+            } else { 
+                pacienteLogado = null; 
+                document.getElementById('btn-sair').style.display = 'none';
+                mudarTela('t-login'); 
+            }
         });
 
         document.getElementById('btn-entrar-action').addEventListener('click', () => {
@@ -163,7 +174,17 @@
         document.getElementById('btn-cadastrar-action').addEventListener('click', async () => {
             const n = document.getElementById('c-nome').value, w = document.getElementById('c-wpp').value, e = document.getElementById('c-email').value, s = document.getElementById('c-senha').value;
             if(!n || !w) return document.getElementById('erro-c').innerText = "Preencha nome completo e WhatsApp.";
-            try { const cr = await createUserWithEmailAndPassword(auth, e, s); await updateProfile(cr.user, { displayName: n }); await setDoc(doc(db, "usuarios", cr.user.uid), { nome: n, whatsapp: w }); } catch(err) { document.getElementById('erro-c').innerText = "Erro ao cadastrar."; }
+            try { 
+                const cr = await createUserWithEmailAndPassword(auth, e, s); 
+                // Salva na nuvem no mesmo milissegundo para o Dashboard ler
+                await setDoc(doc(db, "usuarios", cr.user.uid), { nome: n, whatsapp: w }); 
+                await updateProfile(cr.user, { displayName: n }); 
+                
+                // Força atualização da saudação local no momento do cadastro
+                document.getElementById('user-greeting').innerText = `Olá, ${n}! 👋`;
+            } catch(err) { 
+                document.getElementById('erro-c').innerText = "Erro ao cadastrar."; 
+            }
         });
 
         document.getElementById('btn-sair').addEventListener('click', () => signOut(auth));
@@ -231,7 +252,6 @@
             alert("Solicitação de cancelamento enviada!");
         }
 
-        /* ================= LÓGICA FILTRADA DO RELÓGIO (MÁGICA DE OCULTAR HORÁRIOS PASSADOS) ================= */
         function escutarMudancaDataCalendario() {
             const dataInput = document.getElementById('data').value;
             const grid = document.getElementById('grid-h'); const box = document.getElementById('area-horarios'); const aviso = document.getElementById('aviso-data');
@@ -240,7 +260,6 @@
 
             const dataBr = dataInput.split('-').reverse().join('/'); box.style.display = 'block';
             
-            // Pega a data e hora do momento atual no celular do cliente
             const agora = new Date();
             const hojeIso = agora.toISOString().split('T')[0];
             const horaAtualEmMinutos = (agora.getHours() * 60) + agora.getMinutes();
@@ -250,11 +269,7 @@
 
             for(let m = startM; m < endM; m += interv) {
                 let h = Math.floor(m/60).toString().padStart(2,'0')+":"+(m%60).toString().padStart(2,'0');
-                
-                // NOVIDADE: Se o dia selecionado for HOJE, pula/esconde os horários menores ou iguais ao relógio atual
-                if (dataInput === hojeIso && m <= horaAtualEmMinutos) {
-                    continue; // Pula e esconde o card do horário que já passou
-                }
+                if (dataInput === hojeIso && m <= horaAtualEmMinutos) continue;
 
                 if(!bloqueadosDoDia.includes(h)) {
                     let ocupado = agendamentosExistentes.some(a => a.data === dataBr && a.hora === h && a.status !== "cancelado");
@@ -264,8 +279,6 @@
 
             for(let m = startM; m < endM; m += interv) {
                 let h = Math.floor(m/60).toString().padStart(2,'0')+":"+(m%60).toString().padStart(2,'0');
-                
-                // Ignora atribuição nos botões ocultados para prevenir erros
                 if (dataInput === hojeIso && m <= horaAtualEmMinutos) continue;
 
                 const btn = document.getElementById(`hr-slot-${h.replace(':','')}`);
@@ -277,11 +290,19 @@
         async function submeterAgendamento() {
             const pVal = document.getElementById('servico').value, dVal = document.getElementById('data').value;
             if(!pVal || !dVal || !horaSelecionada) return alert("Preencha todas as etapas.");
+            
+            // Busca o nome do banco de dados na hora de salvar o agendamento também
             const uSnap = await getDoc(doc(db, "usuarios", pacienteLogado.uid));
-            let wpp = uSnap.exists() ? uSnap.data().whatsapp : "";
+            let nomeReal = pacienteLogado.displayName || "Paciente Web";
+            let wpp = "";
+            
+            if(uSnap.exists()) {
+                nomeReal = uSnap.data().nome || nomeReal;
+                wpp = uSnap.data().whatsapp || "";
+            }
 
             await addDoc(collection(db, "agendamentos"), {
-                pacienteNome: pacienteLogado.displayName || "Paciente Web", pacienteEmail: pacienteLogado.email, pacienteWhatsapp: wpp,
+                pacienteNome: nomeReal, pacienteEmail: pacienteLogado.email, pacienteWhatsapp: wpp,
                 servico: pVal.split('|')[0], valor: parseFloat(pVal.split('|')[1]), data: dVal.split('-').reverse().join('/'), hora: horaSelecionada,
                 status: "ativo", ts: Date.now()
             });
