@@ -1,204 +1,66 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-PT">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portal do Cliente</title>
+    <title>Marcar Consulta</title>
     <style>
-        :root { --primary-accent: #3b82f6; --bg-color: #f8fafc; --card-bg: #ffffff; --text-main: #0f172a; --text-muted: #64748b; --border-color: #e2e8f0; --danger: #ef4444; --success: #10b981; }
+        :root { --primary-accent: #3b82f6; --bg-color: #f8fafc; --card-bg: #ffffff; --text-main: #0f172a; --border-color: #e2e8f0; }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-        body { background-color: var(--bg-color); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 20px; }
-        .navbar { width: 100%; max-width: 650px; display: flex; justify-content: space-between; align-items: center; padding: 16px 24px; background: var(--card-bg); border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 20px; }
-        .navbar-brand { display: flex; align-items: center; gap: 10px; }
-        .logo-placeholder { width: 35px; height: 35px; background: var(--primary-accent); border-radius: 8px; color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; overflow: hidden;}
-        .logo-placeholder img { width: 100%; height: 100%; object-fit: cover;}
-        .navbar h2 { font-size: 1.2rem; font-weight: 800; }
-        .btn-logout { background: transparent; border: 1px solid var(--border-color); padding: 8px 16px; border-radius: 8px; font-weight: 600; cursor: pointer; display: none; }
-        .app-container { width: 100%; max-width: 650px; background: var(--card-bg); border-radius: 16px; border: 1px solid var(--border-color); overflow: hidden; }
-        .screen { display: none; padding: 35px 30px; animation: fadeIn 0.3s ease; }
-        .screen.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .screen-header { margin-bottom: 25px; text-align: center; }
-        .screen-header h1 { font-size: 1.6rem; margin-bottom: 8px; font-weight: 800;}
-        .form-group { margin-bottom: 20px; text-align: left; }
-        label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.9rem; }
-        input, select { width: 100%; padding: 14px; border: 1px solid var(--border-color); border-radius: 10px; font-size: 1rem; outline: none; }
-        input:focus, select:focus { border-color: var(--primary-accent); }
-        .btn { background: var(--primary-accent); color: #fff; border: none; width: 100%; padding: 16px; border-radius: 10px; font-size: 1rem; font-weight: bold; cursor: pointer; }
-        .btn-outline { background: transparent; color: var(--text-main); border: 2px dashed var(--border-color); margin-top: 15px; }
-        .link-text { text-align: center; margin-top: 25px; font-size: 0.9rem; color: var(--text-muted); cursor: pointer; color: var(--primary-accent); font-weight: bold;}
-        .btn-back { background: none; border: none; color: var(--text-muted); font-weight: bold; cursor: pointer; margin-bottom: 20px; }
-        .time-slots { display: grid; grid-template-columns: repeat(auto-fill, minmax(85px, 1fr)); gap: 12px; margin-top: 15px; }
-        .time-card { border: 1px solid var(--border-color); border-radius: 8px; padding: 14px 10px; text-align: center; cursor: pointer; font-weight: bold; color: var(--text-muted); background: var(--bg-color); }
-        .time-card.selected { background: var(--primary-accent); color: #fff; border-color: var(--primary-accent); }
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(4px); z-index: 1000; display: none; align-items: center; justify-content: center; padding: 20px; }
-        .modal-overlay.active { display: flex; animation: fadeInModal 0.2s ease; }
-        .modal-box { background: var(--card-bg); width: 100%; max-width: 450px; border-radius: 16px; padding: 35px 30px; text-align: center; }
-        .modal-actions { display: flex; gap: 15px; margin-top: 25px; }
-        @media (max-width: 500px) { .screen { padding: 30px 20px; } }
+        body { background-color: var(--bg-color); padding: 20px; display: flex; flex-direction: column; align-items: center; }
+        .navbar { width: 100%; max-width: 600px; background: var(--card-bg); padding: 15px 25px; border-radius: 12px; border: 1px solid var(--border-color); display: flex; align-items: center; gap: 15px; margin-bottom: 20px; }
+        .logo { width: 40px; height: 40px; background: var(--primary-accent); border-radius: 8px; overflow: hidden; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;}
+        .logo img { width: 100%; height: 100%; object-fit: cover; }
+        .container { width: 100%; max-width: 600px; background: var(--card-bg); border-radius: 16px; border: 1px solid var(--border-color); padding: 30px; }
+        .time-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); gap: 10px; margin-top: 15px; }
+        .time-btn { padding: 12px; border: 1px solid var(--border-color); border-radius: 8px; cursor: pointer; text-align: center; font-weight: bold; }
+        .time-btn.selected { background: var(--primary-accent); color: white; }
+        .btn { background: var(--primary-accent); color: #fff; border: none; padding: 15px; border-radius: 10px; width: 100%; font-weight: bold; cursor: pointer; margin-top: 25px; }
+        label { display: block; margin-top: 15px; font-weight: bold; font-size: 0.9rem; }
+        input, select { width: 100%; padding: 12px; margin-top: 5px; border-radius: 8px; border: 1px solid var(--border-color); }
     </style>
 </head>
 <body>
-
-    <nav class="navbar">
-        <div class="navbar-brand">
-            <div class="logo-placeholder" id="ui-logo">CL</div>
-            <h2 id="ui-nome">Clínica Estética</h2>
-        </div>
-        <button class="btn-logout" id="btn-sair" onclick="fazerLogout()">Sair</button>
-    </nav>
-
-    <div class="app-container">
-        <!-- LOGIN -->
-        <div id="screen-login" class="screen active">
-            <div class="screen-header"><h1>Bem-vindo(a)!</h1><p>Faça login para agendar.</p></div>
-            <form onsubmit="event.preventDefault(); simularLogin();">
-                <div class="form-group"><label>CPF</label><input type="text" required></div>
-                <div class="form-group"><label>Senha</label><input type="password" required></div>
-                <button type="submit" class="btn">Entrar</button>
-                <div class="link-text" onclick="showScreen('screen-cadastro')">Criar minha conta</div>
-            </form>
-        </div>
-
-        <!-- CADASTRO -->
-        <div id="screen-cadastro" class="screen">
-            <button class="btn-back" onclick="showScreen('screen-login')">← Voltar</button>
-            <div class="screen-header"><h1>Crie sua Conta</h1></div>
-            <form onsubmit="event.preventDefault(); simularCadastro();">
-                <div class="form-group"><label>Nome Completo</label><input type="text" required></div>
-                <div class="form-group"><label>CPF</label><input type="text" required></div>
-                <button type="submit" class="btn">Concluir</button>
-            </form>
-        </div>
-
-        <!-- DASHBOARD (Vazio Inicialmente) -->
-        <div id="screen-dashboard" class="screen">
-            <div class="screen-header"><h1 style="text-align: left;">Olá 👋</h1></div>
-            <div id="lista-agendamentos">
-                <p style='text-align:center; color: var(--text-muted); font-style: italic; margin-top: 20px;'>Você não possui horários marcados.</p>
-            </div>
-            <button class="btn btn-outline" onclick="showScreen('screen-booking')">+ Agendar Novo Procedimento</button>
-        </div>
-
-        <!-- AGENDAMENTO DINÂMICO -->
-        <div id="screen-booking" class="screen">
-            <button class="btn-back" onclick="showScreen('screen-dashboard')">← Voltar</button>
-            <div class="screen-header"><h1>Novo Agendamento</h1></div>
-            <form onsubmit="event.preventDefault(); abrirModalConfirmacao();">
-                <div class="form-group">
-                    <label>1. Procedimento</label>
-                    <select id="select-servico" required><option value="">Selecione...</option><option>Limpeza de Pele</option></select>
-                </div>
-                <div class="form-group">
-                    <label>2. Data</label><input type="date" id="input-data" required onchange="lerGradeDoServidorLocal()">
-                </div>
-                <div class="form-group" id="container-horarios" style="display: none;">
-                    <label>3. Horário</label>
-                    <div class="time-slots" id="grid-horarios"></div>
-                    <input type="hidden" id="horario-selecionado" required>
-                </div>
-                <button type="submit" class="btn" id="btn-confirmar-agendamento" style="display: none; margin-top: 30px;">Agendar</button>
-            </form>
-        </div>
+    <nav class="navbar"><div class="logo" id="ui-logo">CL</div><h2 id="ui-nome">Carregando...</h2></nav>
+    <div class="container">
+        <h1>Nova Marcação</h1>
+        <label>Procedimento</label>
+        <select id="servico"><option>Limpeza de Pele</option><option>Botox</option></select>
+        <label>Data</label><input type="date" id="data" onchange="carregarHorarios()">
+        <label>Escolha o Horário</label>
+        <div class="time-grid" id="horarios"></div>
+        <button class="btn" onclick="confirmar()">Confirmar Marcação</button>
     </div>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
-    <!-- MODAIS -->
-    <div id="modal-confirmar" class="modal-overlay">
-        <div class="modal-box">
-            <h2>Confirmar Reserva</h2>
-            <div style="background: #f8fafc; border: 1px solid var(--border-color); border-radius: 12px; padding: 20px; text-align: left; margin-bottom: 25px;">
-                <p><strong>Procedimento:</strong> <br><span id="conf-servico"></span></p>
-                <p><strong>Data/Hora:</strong> <br><span id="conf-datahora" style="color: var(--primary-accent); font-weight: bold;"></span></p>
-            </div>
-            <div class="modal-actions"><button class="btn btn-outline" onclick="fecharModais()">Voltar</button><button class="btn" onclick="finalizarAgendamento()">Confirmar</button></div>
-        </div>
-    </div>
+        const firebaseConfig = { apiKey: "AIzaSyD4SElQHlfQjbN2NsHC0Z9_1Gobb6WHd8o", authDomain: "clinicabase-a85a7.firebaseapp.com", projectId: "clinicabase-a85a7", storageBucket: "clinicabase-a85a7.firebasestorage.app", messagingSenderId: "324071825277", appId: "1:324071825277:web:6a0d3c4413f7a7569fb614" };
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
 
-    <div id="modal-sucesso" class="modal-overlay">
-        <div class="modal-box">
-            <div style="font-size: 3.5rem; margin-bottom: 15px;">✨</div><h2 id="sucesso-titulo">Sucesso!</h2><p id="sucesso-msg">Concluído.</p>
-            <button class="btn" onclick="fecharModais()">Entendi</button>
-        </div>
-    </div>
-
-    <script>
-        // LÊ AS CONFIGURAÇÕES DO ADMIN AO ABRIR O SITE
-        window.onload = function() {
-            let configSalva = JSON.parse(localStorage.getItem('sys_config'));
-            if(configSalva) {
-                document.documentElement.style.setProperty('--primary-accent', configSalva.cor);
-                document.getElementById('ui-nome').innerText = configSalva.nome;
-                
-                const logoDiv = document.getElementById('ui-logo');
-                if(configSalva.logo) {
-                    logoDiv.style.background = 'transparent';
-                    logoDiv.innerHTML = `<img src="${configSalva.logo}" alt="Logo">`;
-                } else {
-                    logoDiv.innerText = configSalva.nome.substring(0,2).toUpperCase();
-                }
+        window.onload = () => {
+            let c = JSON.parse(localStorage.getItem('sys_config'));
+            if(c){
+                document.documentElement.style.setProperty('--primary-accent', c.cor);
+                document.getElementById('ui-nome').innerText = c.nome;
+                if(c.logo) document.getElementById('ui-logo').innerHTML = `<img src="${c.logo}">`;
             }
         }
-
-        function showScreen(screenId) { document.querySelectorAll('.screen').forEach(s => s.classList.remove('active')); document.getElementById(screenId).classList.add('active'); }
-        function simularLogin() { document.getElementById('btn-sair').style.display = 'block'; showScreen('screen-dashboard'); }
-        function simularCadastro() { document.getElementById('btn-sair').style.display = 'block'; mostrarSucesso("Conta criada com sucesso!"); showScreen('screen-dashboard'); }
-        function fazerLogout() { document.getElementById('btn-sair').style.display = 'none'; showScreen('screen-login'); }
-        function fecharModais() { document.querySelectorAll('.modal-overlay').forEach(m => m.classList.remove('active')); }
-        function mostrarSucesso(msg, titulo = "Tudo Certo!") { fecharModais(); document.getElementById('sucesso-titulo').innerText = titulo; document.getElementById('sucesso-msg').innerText = msg; document.getElementById('modal-sucesso').classList.add('active'); }
-
-        // ================= LÊ A GRADE CRIADA NO PAINEL =================
-        function lerGradeDoServidorLocal() {
-            const data = document.getElementById('input-data').value;
-            const grid = document.getElementById('grid-horarios');
-            grid.innerHTML = ''; document.getElementById('horario-selecionado').value = ''; document.getElementById('btn-confirmar-agendamento').style.display = 'none';
-            
-            if(!data) { document.getElementById('container-horarios').style.display = 'none'; return; }
-            document.getElementById('container-horarios').style.display = 'block';
-
-            // Puxa a regra salva pela recepção no painel
-            let grade = JSON.parse(localStorage.getItem('clinica_grade'));
-            
-            if(!grade) {
-                grid.innerHTML = "<p style='grid-column: 1/-1; color: var(--danger); font-size: 0.9rem;'>A clínica ainda não disponibilizou horários.</p>";
-                return;
-            }
-
-            let startMins = parseInt(grade.inicio.split(':')[0]) * 60 + parseInt(grade.inicio.split(':')[1]);
-            let endMins = parseInt(grade.fim.split(':')[0]) * 60 + parseInt(grade.fim.split(':')[1]);
-            let interv = parseInt(grade.intervalo);
-
-            for(let m = startMins; m < endMins; m += interv) {
-                let h = Math.floor(m / 60).toString().padStart(2, '0');
-                let min = (m % 60).toString().padStart(2, '0');
-                let hora = `${h}:${min}`;
-                
-                let div = document.createElement('div');
-                div.className = 'time-card'; div.innerText = hora;
-                div.onclick = function() { selecionarHorario(this, hora); };
-                grid.appendChild(div);
+        window.carregarHorarios = () => {
+            const g = JSON.parse(localStorage.getItem('clinica_grade'));
+            const grid = document.getElementById('horarios'); grid.innerHTML = "";
+            if(!g) { grid.innerHTML = "Sem horários."; return; }
+            let s = parseInt(g.start.split(':')[0])*60, e = parseInt(g.end.split(':')[0])*60, i = parseInt(g.int);
+            for(let m=s; m<e; m+=i){
+                let h = Math.floor(m/60).toString().padStart(2,'0')+":"+(m%60).toString().padStart(2,'0');
+                grid.innerHTML += `<div class="time-btn" onclick="selectTime(this, '${h}')">${h}</div>`;
             }
         }
-
-        function selecionarHorario(elemento, hora) {
-            document.querySelectorAll('.time-card').forEach(el => el.classList.remove('selected'));
-            elemento.classList.add('selected');
-            document.getElementById('horario-selecionado').value = hora;
-            document.getElementById('btn-confirmar-agendamento').style.display = 'flex';
-        }
-
-        function abrirModalConfirmacao() {
-            document.getElementById('conf-servico').innerText = document.getElementById('select-servico').value;
-            document.getElementById('conf-datahora').innerText = `🗓️ ${document.getElementById('input-data').value.split('-').reverse().join('/')} às 🕒 ${document.getElementById('horario-selecionado').value}`;
-            document.getElementById('modal-confirmar').classList.add('active');
-        }
-
-        function finalizarAgendamento() {
-            // Limpa form e volta
-            document.getElementById('select-servico').value = ''; document.getElementById('input-data').value = '';
-            document.getElementById('container-horarios').style.display = 'none'; document.getElementById('btn-confirmar-agendamento').style.display = 'none';
-            mostrarSucesso("Agendamento confirmado com sucesso!");
-            showScreen('screen-dashboard');
-            document.getElementById('lista-agendamentos').innerHTML = "<p style='text-align:center; color: var(--success); font-weight: bold; margin-top: 20px;'>Agendamento computado.</p>";
+        let selectedH = null;
+        window.selectTime = (el, h) => { document.querySelectorAll('.time-btn').forEach(b => b.classList.remove('selected')); el.classList.add('selected'); selectedH = h; }
+        window.confirmar = async () => {
+            await addDoc(collection(db, "agendamentos"), { servico: document.getElementById('servico').value, data: document.getElementById('data').value, hora: selectedH, ts: Date.now() });
+            alert("Marcação realizada com sucesso!"); location.reload();
         }
     </script>
 </body>
