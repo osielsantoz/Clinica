@@ -213,7 +213,7 @@
         <!-- 5. FINANCEIRO -->
         <section id="v-finan" class="view">
             <h1>Controle Financeiro</h1>
-            <p class="sub">Histórico de faturamento de consultas finalizadas.</p>
+            <p class="sub">Histórico de faturamento de quaisquer consultas finalizadas.</p>
             <div class="card" style="padding: 0; overflow: hidden;">
                 <table><thead><tr><th>Data</th><th>Descrição do Serviço</th><th style="width: 150px;">Entrada</th></tr></thead><tbody id="lista-finan"></tbody></table>
             </div>
@@ -228,17 +228,17 @@
         const firebaseConfig = { apiKey: "AIzaSyD4SElQHlfQjbN2NsHC0Z9_1Gobb6WHd8o", authDomain: "clinicabase-a85a7.firebaseapp.com", projectId: "clinicabase-a85a7", storageBucket: "clinicabase-a85a7.firebasestorage.app", messagingSenderId: "324071825277", appId: "1:324071825277:web:6a0d3c4413f7a7569fb614" };
         const app = initializeApp(firebaseConfig); const db = getFirestore(app); const auth = getAuth(app);
 
-        // Variáveis de Estado
+        // Estado do App
         let gradeConfig = { start: "08:00", end: "18:00", int: "60" };
         let listaBloqueiosAtuais = {}; 
         let agendamentosDB = [];
 
-        // Inicialização de Filtros de Data
+        // Filtros Iniciais
         const hojeIso = new Date().toISOString().split('T')[0];
         document.getElementById('filtro-data-agenda').value = hojeIso;
         document.getElementById('data-bloqueio-filtro').value = hojeIso;
 
-        // Monitor de Autenticação Seguro
+        // Monitor de Login
         onAuthStateChanged(auth, (user) => { 
             if(user) { 
                 document.getElementById('login-overlay').style.display = 'none'; 
@@ -248,7 +248,7 @@
             }
         });
 
-        // Configuração dos Cliques de Menu (Resolvendo problemas de Escopo)
+        // Eventos Globais Fixados
         document.getElementById('btn-login-action').addEventListener('click', () => {
             signInWithEmailAndPassword(auth, document.getElementById('log-email').value, document.getElementById('log-senha').value).catch(e => alert("Acesso negado."));
         });
@@ -261,7 +261,7 @@
         document.getElementById('menu-finan').addEventListener('click', function() { MudarAba('v-finan', this); });
 
         document.getElementById('filtro-data-agenda').addEventListener('change', () => renderizarAgendaPrincipal());
-        document.getElementById('data-bloqueio-filtro').addEventListener('change', () => renderizarSlotsBloqueio());
+        document.getElementById('data-bloqueio-filtro').addEventListener('change', () => renderizerSlotsBloqueio());
         document.getElementById('man-data').addEventListener('change', () => escutarMudancaDataModal());
 
         document.getElementById('btn-abrir-modal').addEventListener('click', () => abrirModalAgendamento());
@@ -280,14 +280,12 @@
         function fecharModais() { document.getElementById('modal-agendar').classList.remove('active'); }
 
         async function iniciarPainel() {
-            // Sincroniza Identidade
             const gSnap = await getDoc(doc(db, "configuracoes", "geral"));
             if(gSnap.exists()){ 
                 document.documentElement.style.setProperty('--primary', gSnap.data().cor); 
                 document.getElementById('ui-nome').innerText = gSnap.data().nome; 
                 if(gSnap.data().logo) document.getElementById('ui-logo').innerHTML = `<img src="${gSnap.data().logo}">`;
             }
-            // Dispara Leituras do Firebase
             carregarGradeParametros();
             carregarBloqueiosGlobais();
             lerProcedimentos();
@@ -314,7 +312,6 @@
                 document.getElementById('lista-procedimentos').innerHTML = html;
                 document.getElementById('man-servico').innerHTML = selMan; 
                 
-                // Atribui eventos de exclusão dinamicamente
                 snap.forEach(d => {
                     document.getElementById(`btn-del-${d.id}`).addEventListener('click', async () => {
                         if(confirm("Deseja remover este procedimento?")) await deleteDoc(doc(db, "procedimentos", d.id));
@@ -323,7 +320,7 @@
             });
         }
 
-        /* ================= CONFIGURAÇÃO DE GRADE ================= */
+        /* ================= GRADE PARAMETROS ================= */
         async function carregarGradeParametros() {
             const snap = await getDoc(doc(db, "configuracoes", "parametros_grade"));
             if(snap.exists()) {
@@ -338,12 +335,14 @@
             gradeConfig.start = document.getElementById('g-start').value;
             gradeConfig.end = document.getElementById('g-end').value;
             gradeConfig.int = document.getElementById('g-int').value;
+            
+            // REMOVIDA VALIDAÇÃO ANTIGA QUE CAUSAVA O ERRO!
             await setDoc(doc(db, "configuracoes", "parametros_grade"), gradeConfig);
-            alert("Grade base publicada com sucesso!");
+            alert("Grade publicada com sucesso!");
             renderizerSlotsBloqueio();
         }
 
-        /* ================= CONFIGURAÇÃO DE BLOQUEIOS (POR CALENDÁRIO) ================= */
+        /* ================= GERAR BLOQUEIOS ================= */
         async function carregarBloqueiosGlobais() {
             const snap = await getDoc(doc(db, "configuracoes", "bloqueios_datas"));
             if(snap.exists()) { listaBloqueiosAtuais = snap.data(); }
@@ -371,7 +370,6 @@
                 grid.innerHTML += `<div class="${cls}" id="lock-slot-${h.replace(':','')}">${h}</div>`;
             }
 
-            // Vincula cliques para alternar bloqueio
             for(let m = startM; m < endM; m += interv) {
                 let h = Math.floor(m/60).toString().padStart(2,'0')+":"+(m%60).toString().padStart(2,'0');
                 document.getElementById(`lock-slot-${h.replace(':','')}`).addEventListener('click', function() {
@@ -388,10 +386,10 @@
         }
         async function salvarBloqueiosNoFirebase() {
             await setDoc(doc(db, "configuracoes", "bloqueios_datas"), listaBloqueiosAtuais);
-            alert("Bloqueios salvos com sucesso na nuvem!");
+            alert("Bloqueios salvos com sucesso!");
         }
 
-        /* ================= AGENDA PRINCIPAL (LEITURA) ================= */
+        /* ================= LEITURA DA AGENDA ================= */
         function escutarAgendamentosNuvem() {
             onSnapshot(query(collection(db, "agendamentos"), orderBy("ts", "asc")), (snap) => {
                 agendamentosDB = [];
@@ -430,7 +428,6 @@
                     </div>`;
             });
 
-            // Atribui cliques pros botões gerados
             filtrados.forEach(a => {
                 document.getElementById(`btn-concluir-${a.id}`).addEventListener('click', async () => {
                     if(confirm("Lançar valor e concluir consulta?")) {
@@ -444,7 +441,7 @@
             });
         }
 
-        /* ================= AGENDAMENTO MANUAL (MODAL FIXADO) ================= */
+        /* ================= AGENDAMENTO MANUAL ================= */
         function abrirModalAgendamento() {
             document.getElementById('modal-agendar').classList.add('active');
             document.getElementById('man-nome').value = ''; document.getElementById('man-wpp').value = '';
