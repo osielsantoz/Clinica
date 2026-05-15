@@ -3,76 +3,84 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portal do Cliente - Agendamento Premium</title>
+    <title>Portal do Cliente</title>
     <style>
-        :root { --primary-accent: #3b82f6; --primary-hover: #2563eb; --bg-color: #f8fafc; --card-bg: #ffffff; --text-main: #0f172a; --text-muted: #64748b; --border-color: #e2e8f0; --danger: #ef4444; --success: #10b981; }
+        :root { --primary-accent: #3b82f6; --bg-color: #f8fafc; --card-bg: #ffffff; --text-main: #0f172a; --text-muted: #64748b; --border-color: #e2e8f0; --danger: #ef4444; --success: #10b981; }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
         body { background-color: var(--bg-color); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 20px; }
-        .navbar { width: 100%; max-width: 650px; display: flex; justify-content: space-between; align-items: center; padding: 16px 24px; background: var(--card-bg); border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.02); border: 1px solid var(--border-color); margin-bottom: 20px; }
+        .navbar { width: 100%; max-width: 650px; display: flex; justify-content: space-between; align-items: center; padding: 16px 24px; background: var(--card-bg); border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 20px; }
         .navbar-brand { display: flex; align-items: center; gap: 10px; }
-        .logo-placeholder { width: 35px; height: 35px; background: var(--primary-accent); border-radius: 8px; color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; }
-        .navbar h2 { font-size: 1.2rem; font-weight: 800; color: var(--text-main); }
-        .btn-logout { background: transparent; border: 1px solid var(--border-color); padding: 8px 16px; border-radius: 8px; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: 0.2s; color: var(--text-main); display: none; }
-        .app-container { width: 100%; max-width: 650px; background: var(--card-bg); border-radius: 16px; box-shadow: 0 15px 35px rgba(0,0,0,0.04); border: 1px solid var(--border-color); overflow: hidden; position: relative; }
+        .logo-placeholder { width: 35px; height: 35px; background: var(--primary-accent); border-radius: 8px; color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; overflow: hidden;}
+        .logo-placeholder img { width: 100%; height: 100%; object-fit: cover;}
+        .navbar h2 { font-size: 1.2rem; font-weight: 800; }
+        .btn-logout { background: transparent; border: 1px solid var(--border-color); padding: 8px 16px; border-radius: 8px; font-weight: 600; cursor: pointer; display: none; }
+        .app-container { width: 100%; max-width: 650px; background: var(--card-bg); border-radius: 16px; border: 1px solid var(--border-color); overflow: hidden; }
         .screen { display: none; padding: 35px 30px; animation: fadeIn 0.3s ease; }
         .screen.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .screen-header { margin-bottom: 25px; text-align: center; }
         .screen-header h1 { font-size: 1.6rem; margin-bottom: 8px; font-weight: 800;}
         .form-group { margin-bottom: 20px; text-align: left; }
-        label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.9rem; color: var(--text-main); }
-        input, select { width: 100%; padding: 14px 16px; border: 1px solid var(--border-color); border-radius: 10px; font-size: 1rem; background: #f8fafc; outline: none; transition: 0.2s; }
-        input:focus, select:focus { border-color: var(--primary-accent); background: #fff; box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1); }
-        .btn { background: var(--primary-accent); color: #fff; border: none; width: 100%; padding: 16px; border-radius: 10px; font-size: 1rem; font-weight: bold; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.9rem; }
+        input, select { width: 100%; padding: 14px; border: 1px solid var(--border-color); border-radius: 10px; font-size: 1rem; outline: none; }
+        input:focus, select:focus { border-color: var(--primary-accent); }
+        .btn { background: var(--primary-accent); color: #fff; border: none; width: 100%; padding: 16px; border-radius: 10px; font-size: 1rem; font-weight: bold; cursor: pointer; }
         .btn-outline { background: transparent; color: var(--text-main); border: 2px dashed var(--border-color); margin-top: 15px; }
-        .btn-outline:hover { border-color: var(--primary-accent); color: var(--primary-accent); background: #eff6ff; }
-        .btn-back { background: none; border: none; color: var(--text-muted); font-weight: bold; cursor: pointer; margin-bottom: 20px; display: flex; align-items: center; gap: 5px; font-size: 0.9rem; }
-        .my-appt-card { border: 1px solid var(--border-color); border-radius: 12px; padding: 20px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; background: #ffffff; box-shadow: 0 2px 5px rgba(0,0,0,0.02); transition: 0.2s; }
-        .my-appt-info h4 { font-size: 1.15rem; margin-bottom: 6px; color: var(--text-main); }
-        .my-appt-info p { color: var(--text-muted); font-size: 0.9rem; display: flex; align-items: center; gap: 5px;}
-        .my-appt-date { font-weight: 800; color: var(--primary-accent); margin-bottom: 8px; display: inline-block; background: #eff6ff; padding: 6px 12px; border-radius: 6px; font-size: 0.9rem;}
-        .btn-cancel { background: transparent; color: var(--danger); border: 1px solid var(--border-color); padding: 10px 16px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 0.85rem; }
+        .link-text { text-align: center; margin-top: 25px; font-size: 0.9rem; color: var(--text-muted); cursor: pointer; color: var(--primary-accent); font-weight: bold;}
+        .btn-back { background: none; border: none; color: var(--text-muted); font-weight: bold; cursor: pointer; margin-bottom: 20px; }
         .time-slots { display: grid; grid-template-columns: repeat(auto-fill, minmax(85px, 1fr)); gap: 12px; margin-top: 15px; }
-        .time-card { border: 1px solid var(--border-color); border-radius: 8px; padding: 14px 10px; text-align: center; cursor: pointer; font-weight: bold; color: var(--text-muted); transition: 0.2s; background: var(--bg-color); font-size: 0.95rem; }
+        .time-card { border: 1px solid var(--border-color); border-radius: 8px; padding: 14px 10px; text-align: center; cursor: pointer; font-weight: bold; color: var(--text-muted); background: var(--bg-color); }
         .time-card.selected { background: var(--primary-accent); color: #fff; border-color: var(--primary-accent); }
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(4px); z-index: 1000; display: none; align-items: center; justify-content: center; padding: 20px; }
         .modal-overlay.active { display: flex; animation: fadeInModal 0.2s ease; }
-        @keyframes fadeInModal { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
-        .modal-box { background: var(--card-bg); width: 100%; max-width: 450px; border-radius: 16px; padding: 35px 30px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); text-align: center; }
+        .modal-box { background: var(--card-bg); width: 100%; max-width: 450px; border-radius: 16px; padding: 35px 30px; text-align: center; }
         .modal-actions { display: flex; gap: 15px; margin-top: 25px; }
+        @media (max-width: 500px) { .screen { padding: 30px 20px; } }
     </style>
 </head>
 <body>
 
     <nav class="navbar">
         <div class="navbar-brand">
-            <div class="logo-placeholder">CL</div>
-            <h2 id="clinica-nome">Clínica Estética</h2>
+            <div class="logo-placeholder" id="ui-logo">CL</div>
+            <h2 id="ui-nome">Clínica Estética</h2>
         </div>
-        <button class="btn-logout" id="btn-sair" onclick="fazerLogout()">Sair da Conta</button>
+        <button class="btn-logout" id="btn-sair" onclick="fazerLogout()">Sair</button>
     </nav>
 
     <div class="app-container">
         <!-- LOGIN -->
         <div id="screen-login" class="screen active">
-            <div class="screen-header"><h1>Bem-vindo(a)!</h1><p>Faça login para acessar o portal.</p></div>
+            <div class="screen-header"><h1>Bem-vindo(a)!</h1><p>Faça login para agendar.</p></div>
             <form onsubmit="event.preventDefault(); simularLogin();">
                 <div class="form-group"><label>CPF</label><input type="text" required></div>
                 <div class="form-group"><label>Senha</label><input type="password" required></div>
                 <button type="submit" class="btn">Entrar</button>
+                <div class="link-text" onclick="showScreen('screen-cadastro')">Criar minha conta</div>
             </form>
         </div>
 
-        <!-- PAINEL -->
+        <!-- CADASTRO -->
+        <div id="screen-cadastro" class="screen">
+            <button class="btn-back" onclick="showScreen('screen-login')">← Voltar</button>
+            <div class="screen-header"><h1>Crie sua Conta</h1></div>
+            <form onsubmit="event.preventDefault(); simularCadastro();">
+                <div class="form-group"><label>Nome Completo</label><input type="text" required></div>
+                <div class="form-group"><label>CPF</label><input type="text" required></div>
+                <button type="submit" class="btn">Concluir</button>
+            </form>
+        </div>
+
+        <!-- DASHBOARD (Vazio Inicialmente) -->
         <div id="screen-dashboard" class="screen">
-            <div class="screen-header"><h1 style="text-align: left; font-size: 1.4rem;">Olá 👋</h1></div>
+            <div class="screen-header"><h1 style="text-align: left;">Olá 👋</h1></div>
             <div id="lista-agendamentos">
                 <p style='text-align:center; color: var(--text-muted); font-style: italic; margin-top: 20px;'>Você não possui horários marcados.</p>
             </div>
             <button class="btn btn-outline" onclick="showScreen('screen-booking')">+ Agendar Novo Procedimento</button>
         </div>
 
-        <!-- AGENDAMENTO -->
+        <!-- AGENDAMENTO DINÂMICO -->
         <div id="screen-booking" class="screen">
             <button class="btn-back" onclick="showScreen('screen-dashboard')">← Voltar</button>
             <div class="screen-header"><h1>Novo Agendamento</h1></div>
@@ -82,7 +90,7 @@
                     <select id="select-servico" required><option value="">Selecione...</option><option>Limpeza de Pele</option></select>
                 </div>
                 <div class="form-group">
-                    <label>2. Data</label><input type="date" id="input-data" required onchange="gerarGradeDeHorarios()">
+                    <label>2. Data</label><input type="date" id="input-data" required onchange="lerGradeDoServidorLocal()">
                 </div>
                 <div class="form-group" id="container-horarios" style="display: none;">
                     <label>3. Horário</label>
@@ -106,13 +114,6 @@
         </div>
     </div>
 
-    <div id="modal-cancelar" class="modal-overlay">
-        <div class="modal-box">
-            <h2 style="color: var(--danger)">Cancelar Consulta?</h2>
-            <div class="modal-actions"><button class="btn btn-outline" onclick="fecharModais()">Manter</button><button class="btn danger" onclick="executarCancelamento()">Cancelar</button></div>
-        </div>
-    </div>
-
     <div id="modal-sucesso" class="modal-overlay">
         <div class="modal-box">
             <div style="font-size: 3.5rem; margin-bottom: 15px;">✨</div><h2 id="sucesso-titulo">Sucesso!</h2><p id="sucesso-msg">Concluído.</p>
@@ -121,34 +122,56 @@
     </div>
 
     <script>
-        function showScreen(screenId) { document.querySelectorAll('.screen').forEach(s => s.classList.remove('active')); document.getElementById(screenId).classList.add('active'); }
-        function simularLogin() { document.getElementById('btn-sair').style.display = 'block'; showScreen('screen-dashboard'); }
-        function fazerLogout() { document.getElementById('btn-sair').style.display = 'none'; showScreen('screen-login'); }
-        function fecharModais() { document.querySelectorAll('.modal-overlay').forEach(m => m.classList.remove('active')); }
-        function mostrarSucesso(msg) { fecharModais(); document.getElementById('sucesso-msg').innerText = msg; document.getElementById('modal-sucesso').classList.add('active'); }
-
-        let cardParaCancelar = null;
-        function abrirModalCancelar(cardId) { cardParaCancelar = cardId; document.getElementById('modal-cancelar').classList.add('active'); }
-        function executarCancelamento() {
-            if(cardParaCancelar) {
-                document.getElementById(cardParaCancelar).remove();
-                if(document.getElementById('lista-agendamentos').children.length === 0) {
-                    document.getElementById('lista-agendamentos').innerHTML = "<p style='text-align:center; color: var(--text-muted); font-style: italic; margin-top: 20px;'>Você não possui horários marcados.</p>";
+        // LÊ AS CONFIGURAÇÕES DO ADMIN AO ABRIR O SITE
+        window.onload = function() {
+            let configSalva = JSON.parse(localStorage.getItem('sys_config'));
+            if(configSalva) {
+                document.documentElement.style.setProperty('--primary-accent', configSalva.cor);
+                document.getElementById('ui-nome').innerText = configSalva.nome;
+                
+                const logoDiv = document.getElementById('ui-logo');
+                if(configSalva.logo) {
+                    logoDiv.style.background = 'transparent';
+                    logoDiv.innerHTML = `<img src="${configSalva.logo}" alt="Logo">`;
+                } else {
+                    logoDiv.innerText = configSalva.nome.substring(0,2).toUpperCase();
                 }
             }
-            mostrarSucesso("Seu agendamento foi cancelado.");
         }
 
-        function gerarGradeDeHorarios() {
+        function showScreen(screenId) { document.querySelectorAll('.screen').forEach(s => s.classList.remove('active')); document.getElementById(screenId).classList.add('active'); }
+        function simularLogin() { document.getElementById('btn-sair').style.display = 'block'; showScreen('screen-dashboard'); }
+        function simularCadastro() { document.getElementById('btn-sair').style.display = 'block'; mostrarSucesso("Conta criada com sucesso!"); showScreen('screen-dashboard'); }
+        function fazerLogout() { document.getElementById('btn-sair').style.display = 'none'; showScreen('screen-login'); }
+        function fecharModais() { document.querySelectorAll('.modal-overlay').forEach(m => m.classList.remove('active')); }
+        function mostrarSucesso(msg, titulo = "Tudo Certo!") { fecharModais(); document.getElementById('sucesso-titulo').innerText = titulo; document.getElementById('sucesso-msg').innerText = msg; document.getElementById('modal-sucesso').classList.add('active'); }
+
+        // ================= LÊ A GRADE CRIADA NO PAINEL =================
+        function lerGradeDoServidorLocal() {
             const data = document.getElementById('input-data').value;
             const grid = document.getElementById('grid-horarios');
             grid.innerHTML = ''; document.getElementById('horario-selecionado').value = ''; document.getElementById('btn-confirmar-agendamento').style.display = 'none';
+            
             if(!data) { document.getElementById('container-horarios').style.display = 'none'; return; }
             document.getElementById('container-horarios').style.display = 'block';
 
-            // ZERADO: Gera os horários sem nenhum bloqueio forçado
-            for(let i = 8; i < 18; i++) {
-                let hora = i.toString().padStart(2, '0') + ":00";
+            // Puxa a regra salva pela recepção no painel
+            let grade = JSON.parse(localStorage.getItem('clinica_grade'));
+            
+            if(!grade) {
+                grid.innerHTML = "<p style='grid-column: 1/-1; color: var(--danger); font-size: 0.9rem;'>A clínica ainda não disponibilizou horários.</p>";
+                return;
+            }
+
+            let startMins = parseInt(grade.inicio.split(':')[0]) * 60 + parseInt(grade.inicio.split(':')[1]);
+            let endMins = parseInt(grade.fim.split(':')[0]) * 60 + parseInt(grade.fim.split(':')[1]);
+            let interv = parseInt(grade.intervalo);
+
+            for(let m = startMins; m < endMins; m += interv) {
+                let h = Math.floor(m / 60).toString().padStart(2, '0');
+                let min = (m % 60).toString().padStart(2, '0');
+                let hora = `${h}:${min}`;
+                
                 let div = document.createElement('div');
                 div.className = 'time-card'; div.innerText = hora;
                 div.onclick = function() { selecionarHorario(this, hora); };
@@ -170,20 +193,12 @@
         }
 
         function finalizarAgendamento() {
-            const servico = document.getElementById('select-servico').value;
-            const data = document.getElementById('input-data').value.split('-').reverse().join('/');
-            const hora = document.getElementById('horario-selecionado').value;
-            const lista = document.getElementById('lista-agendamentos');
-            
-            if(lista.innerHTML.includes("Você não possui")) lista.innerHTML = '';
-
-            const newId = 'appt-' + Date.now();
-            lista.insertAdjacentHTML('afterbegin', `<div class="my-appt-card" id="${newId}"><div class="my-appt-info"><span class="my-appt-date">🗓️ ${data} - ${hora}</span><h4>${servico}</h4></div><button class="btn-cancel" onclick="abrirModalCancelar('${newId}')">Cancelar</button></div>`);
-
+            // Limpa form e volta
             document.getElementById('select-servico').value = ''; document.getElementById('input-data').value = '';
             document.getElementById('container-horarios').style.display = 'none'; document.getElementById('btn-confirmar-agendamento').style.display = 'none';
             mostrarSucesso("Agendamento confirmado com sucesso!");
             showScreen('screen-dashboard');
+            document.getElementById('lista-agendamentos').innerHTML = "<p style='text-align:center; color: var(--success); font-weight: bold; margin-top: 20px;'>Agendamento computado.</p>";
         }
     </script>
 </body>
