@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal do Cliente - Agendamento Premium</title>
+    <style>
+        /* ================= VARIÁVEIS DE IDENTIDADE VISUAL ================= */
+        /* Estas cores seriam alteradas pelo Painel Super Admin via integração */
+        :root {
+            --primary-accent: #3b82f6; 
+            --primary-hover: #2563eb;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --danger: #ef4444;
+            --success: #10b981;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        /* ================= BARRA DE NAVEGAÇÃO ================= */
+        .navbar {
+            width: 100%;
+            max-width: 650px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 24px;
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+            border: 1px solid var(--border-color);
+            margin-bottom: 20px;
+        }
+        .navbar-brand { display: flex; align-items: center; gap: 10px; }
+        .logo-placeholder { width: 35px; height: 35px; background: var(--primary-accent); border-radius: 8px; color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; }
+        .navbar h2 { font-size: 1.2rem; font-weight: 800; color: var(--text-main); }
+        .btn-logout { background: transparent; border: 1px solid var(--border-color); padding: 8px 16px; border-radius: 8px; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: 0.2s; color: var(--text-main); display: none; }
+        .btn-logout:hover { background: #fee2e2; border-color: var(--danger); color: var(--danger); }
+
+        /* ================= CONTAINER PRINCIPAL ================= */
+        .app-container {
+            width: 100%;
+            max-width: 650px;
+            background: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.04);
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Gestão de Telas */
+        .screen { display: none; padding: 35px 30px; animation: fadeIn 0.3s ease; }
+        .screen.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .screen-header { margin-bottom: 25px; text-align: center; }
+        .screen-header h1 { font-size: 1.6rem; margin-bottom: 8px; font-weight: 800;}
+        .screen-header p { color: var(--text-muted); font-size: 0.95rem; line-height: 1.5;}
+
+        /* ================= FORMULÁRIOS ================= */
+        .form-group { margin-bottom: 20px; text-align: left; }
+        label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.9rem; color: var(--text-main); }
+        input, select {
+            width: 100%; padding: 14px 16px; border: 1px solid var(--border-color);
+            border-radius: 10px; font-size: 1rem; background: #f8fafc; outline: none; transition: 0.2s;
+        }
+        input:focus, select:focus { border-color: var(--primary-accent); background: #fff; box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1); }
+
+        /* ================= BOTÕES ================= */
+        .btn {
+            background: var(--primary-accent); color: #fff; border: none; width: 100%;
+            padding: 16px; border-radius: 10px; font-size: 1rem; font-weight: bold; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px;
+        }
+        .btn:hover { background: var(--primary-hover); transform: translateY(-1px); }
+        .btn-outline { background: transparent; color: var(--text-main); border: 2px dashed var(--border-color); margin-top: 15px; }
+        .btn-outline:hover { border-color: var(--primary-accent); color: var(--primary-accent); background: #eff6ff; }
+        .link-text { text-align: center; margin-top: 25px; font-size: 0.9rem; color: var(--text-muted); }
+        .link-text a { color: var(--primary-accent); font-weight: bold; text-decoration: none; cursor: pointer; transition: 0.2s; }
+        .link-text a:hover { text-decoration: underline; color: var(--primary-hover); }
+        .btn-back { background: none; border: none; color: var(--text-muted); font-weight: bold; cursor: pointer; margin-bottom: 20px; display: flex; align-items: center; gap: 5px; font-size: 0.9rem; }
+        .btn-back:hover { color: var(--text-main); }
+
+        /* ================= CARDS DO DASHBOARD ================= */
+        .my-appt-card {
+            border: 1px solid var(--border-color); border-radius: 12px; padding: 20px;
+            margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center;
+            background: #ffffff; box-shadow: 0 2px 5px rgba(0,0,0,0.02); transition: 0.2s;
+        }
+        .my-appt-card:hover { border-color: var(--primary-accent); }
+        .my-appt-info h4 { font-size: 1.15rem; margin-bottom: 6px; color: var(--text-main); }
+        .my-appt-info p { color: var(--text-muted); font-size: 0.9rem; display: flex; align-items: center; gap: 5px;}
+        .my-appt-date { font-weight: 800; color: var(--primary-accent); margin-bottom: 8px; display: inline-block; background: #eff6ff; padding: 6px 12px; border-radius: 6px; font-size: 0.9rem;}
+        
+        .btn-cancel {
+            background: transparent; color: var(--danger); border: 1px solid var(--border-color);
+            padding: 10px 16px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.2s; font-size: 0.85rem;
+        }
+        .btn-cancel:hover { border-color: var(--danger); background: #fee2e2; }
+
+        /* ================= GRADE DE HORÁRIOS (AGENDAMENTO) ================= */
+        .date-picker-wrapper { display: flex; gap: 10px; margin-bottom: 20px; }
+        .time-slots { display: grid; grid-template-columns: repeat(auto-fill, minmax(85px, 1fr)); gap: 12px; margin-top: 15px; }
+        .time-card {
+            border: 1px solid var(--border-color); border-radius: 8px; padding: 14px 10px;
+            text-align: center; cursor: pointer; font-weight: bold; color: var(--text-muted); transition: 0.2s; background: var(--bg-color); font-size: 0.95rem;
+        }
+        .time-card:hover:not(.disabled) { border-color: var(--primary-accent); color: var(--primary-accent); background: #fff; box-shadow: 0 4px 6px rgba(59, 130, 246, 0.1); }
+        .time-card.selected { background: var(--primary-accent); color: #fff; border-color: var(--primary-accent); box-shadow: 0 4px 10px rgba(59, 130, 246, 0.2); }
+        .time-card.disabled { background: #f1f5f9; color: #cbd5e1; cursor: not-allowed; text-decoration: line-through; border-color: transparent; }
+
+        /* ================= MODAIS INTERNOS (SEM POPUP NATIVO) ================= */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(4px); z-index: 1000; display: none; align-items: center; justify-content: center; padding: 20px; }
+        .modal-overlay.active { display: flex; animation: fadeInModal 0.2s ease; }
+        @keyframes fadeInModal { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
+        
+        .modal-box { background: var(--card-bg); width: 100%; max-width: 450px; border-radius: 16px; padding: 35px 30px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); text-align: center; }
+        .modal-box h2 { font-size: 1.4rem; margin-bottom: 12px; color: var(--text-main); font-weight: 800; }
+        .modal-box p { font-size: 0.95rem; color: var(--text-muted); margin-bottom: 25px; line-height: 1.5; }
+        .modal-actions { display: flex; gap: 15px; margin-top: 25px; }
+
+        @media (max-width: 500px) {
+            .my-appt-card { flex-direction: column; align-items: flex-start; gap: 15px; }
+            .btn-cancel { width: 100%; }
+            .screen { padding: 30px 20px; }
+            .modal-actions { flex-direction: column; gap: 10px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header do Cliente -->
+    <nav class="navbar">
+        <div class="navbar-brand">
+            <div class="logo-placeholder">CL</div>
+            <h2 id="clinica-nome">Clínica Estética</h2>
+        </div>
+        <button class="btn-logout" id="btn-sair" onclick="fazerLogout()">Sair da Conta</button>
+    </nav>
+
+    <div class="app-container">
+
+        <!-- ================= TELA 1: LOGIN ================= -->
+        <div id="screen-login" class="screen active">
+            <div class="screen-header">
+                <h1>Bem-vindo(a) de volta!</h1>
+                <p>Faça login para agendar ou gerenciar suas consultas.</p>
+            </div>
+            <form onsubmit="event.preventDefault(); simularLogin();">
+                <div class="form-group">
+                    <label>CPF</label>
+                    <input type="text" placeholder="000.000.000-00" required>
+                </div>
+                <div class="form-group">
+                    <label>Senha</label>
+                    <input type="password" placeholder="Sua senha secreta" required>
+                </div>
+                <button type="submit" class="btn">Entrar no Sistema</button>
+                <p class="link-text">Ainda não é paciente? <a onclick="showScreen('screen-cadastro')">Criar minha conta</a></p>
+            </form>
+        </div>
+
+        <!-- ================= TELA 2: CADASTRO ================= -->
+        <div id="screen-cadastro" class="screen">
+            <button class="btn-back" onclick="showScreen('screen-login')">← Voltar ao Login</button>
+            <div class="screen-header">
+                <h1>Crie sua Conta</h1>
+                <p>O cadastro leva menos de 1 minuto.</p>
+            </div>
+            <form onsubmit="event.preventDefault(); simularCadastro();">
+                <div class="form-group"><label>Nome Completo</label><input type="text" placeholder="Como deseja ser chamado(a)?" required></div>
+                <div class="form-group"><label>CPF</label><input type="text" placeholder="000.000.000-00" required></div>
+                <div class="form-group"><label>WhatsApp</label><input type="tel" placeholder="(00) 00000-0000" required></div>
+                <div class="form-group"><label>Crie uma Senha</label><input type="password" placeholder="Mínimo de 6 caracteres" required></div>
+                <button type="submit" class="btn">Concluir e Acessar</button>
+            </form>
+        </div>
+
+        <!-- ================= TELA 3: PAINEL DO CLIENTE (DASHBOARD) ================= -->
+        <div id="screen-dashboard" class="screen">
+            <div class="screen-header">
+                <h1 style="text-align: left; font-size: 1.4rem;">Olá, Paciente 👋</h1>
+                <p style="text-align: left;">Aqui estão seus próximos agendamentos.</p>
+            </div>
+
+            <!-- Lista de Agendamentos -->
+            <div id="lista-agendamentos">
+                <div class="my-appt-card" id="appt-1">
+                    <div class="my-appt-info">
+                        <span class="my-appt-date">🗓️ 15 de Maio, 2026 - 14:00</span>
+                        <h4>Limpeza de Pele Profunda</h4>
+                        <p>📍 Clínica Matriz</p>
+                    </div>
+                    <button class="btn-cancel" onclick="abrirModalCancelar('appt-1')">Cancelar</button>
+                </div>
+            </div>
+
+            <button class="btn btn-outline" onclick="showScreen('screen-booking')">+ Agendar Novo Procedimento</button>
+        </div>
+
+        <!-- ================= TELA 4: MOTOR DE AGENDAMENTO ================= -->
+        <div id="screen-booking" class="screen">
+            <button class="btn-back" onclick="showScreen('screen-dashboard')">← Cancelar e Voltar</button>
+            <div class="screen-header">
+                <h1>Novo Agendamento</h1>
+                <p>Siga os passos para reservar seu horário.</p>
+            </div>
+            
+            <form onsubmit="event.preventDefault(); abrirModalConfirmacao();">
+                <!-- Passo 1: Serviço -->
+                <div class="form-group">
+                    <label>1. Qual procedimento você deseja?</label>
+                    <select id="select-servico" required>
+                        <option value="">Selecione na lista...</option>
+                        <option>Limpeza de Pele - R$ 150,00</option>
+                        <option>Botox Preventivo - R$ 800,00</option>
+                        <option>Preenchimento Labial - R$ 1.200,00</option>
+                        <option>Avaliação Gratuita</option>
+                    </select>
+                </div>
+
+                <!-- Passo 2: Data -->
+                <div class="form-group">
+                    <label>2. Escolha o dia</label>
+                    <div class="date-picker-wrapper">
+                        <!-- Quando a data muda, o JS recalcula a grade -->
+                        <input type="date" id="input-data" required onchange="gerarGradeDeHorarios()">
+                    </div>
+                </div>
+
+                <!-- Passo 3: Horários (Gerados Dinamicamente) -->
+                <div class="form-group" id="container-horarios" style="display: none;">
+                    <label>3. Escolha o horário disponível</label>
+                    <div class="time-slots" id="grid-horarios">
+                        <!-- Os botões entram aqui via JS -->
+                    </div>
+                    <input type="hidden" id="horario-selecionado" required>
+                </div>
+
+                <button type="submit" class="btn" id="btn-confirmar-agendamento" style="display: none; margin-top: 30px;">Revisar e Agendar</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ================= MODAIS INTERNOS (OVERLAYS) ================= -->
+
+    <!-- Modal Confirmar Agendamento -->
+    <div id="modal-confirmar" class="modal-overlay">
+        <div class="modal-box">
+            <h2>Quase lá!</h2>
+            <p>Revise os dados do seu agendamento antes de confirmar.</p>
+            
+            <div style="background: #f8fafc; border: 1px solid var(--border-color); border-radius: 12px; padding: 20px; text-align: left; margin-bottom: 25px;">
+                <p style="margin-bottom: 10px;"><strong>Procedimento:</strong> <br><span id="conf-servico" style="color: var(--text-main);"></span></p>
+                <p style="margin-bottom: 0;"><strong>Data e Hora:</strong> <br><span id="conf-datahora" style="color: var(--primary-accent); font-weight: bold; font-size: 1.1rem;"></span></p>
+            </div>
+
+            <div class="modal-actions">
+                <button class="btn btn-outline" style="margin-top:0;" onclick="fecharModais()">Voltar</button>
+                <button class="btn" onclick="finalizarAgendamento()">Confirmar Agendamento</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Cancelar -->
+    <div id="modal-cancelar" class="modal-overlay">
+        <div class="modal-box">
+            <h2 style="color: var(--danger)">Cancelar Consulta?</h2>
+            <p>Tem certeza que deseja liberar este horário? A clínica será notificada automaticamente.</p>
+            <div class="modal-actions">
+                <button class="btn btn-outline" style="margin-top:0;" onclick="fecharModais()">Não, manter</button>
+                <button class="btn danger" onclick="executarCancelamento()">Sim, Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Sucesso Global -->
+    <div id="modal-sucesso" class="modal-overlay">
+        <div class="modal-box">
+            <div style="font-size: 3.5rem; margin-bottom: 15px;">✨</div>
+            <h2 id="sucesso-titulo">Sucesso!</h2>
+            <p id="sucesso-msg">Operação realizada com sucesso.</p>
+            <button class="btn" onclick="fecharModais()" style="width: 100%;">Entendi</button>
+        </div>
+    </div>
+
+    <script>
+        // ================= CONTROLE DE FLUXO DE TELAS E LOGIN =================
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+        }
+
+        function simularLogin() {
+            document.getElementById('btn-sair').style.display = 'block';
+            showScreen('screen-dashboard');
+        }
+
+        function simularCadastro() {
+            document.getElementById('btn-sair').style.display = 'block';
+            mostrarSucesso("Conta criada com sucesso! Bem-vindo(a) ao nosso sistema.");
+            showScreen('screen-dashboard');
+        }
+
+        function fazerLogout() {
+            document.getElementById('btn-sair').style.display = 'none';
+            showScreen('screen-login');
+        }
+
+        // ================= CONTROLE DE MODAIS =================
+        function fecharModais() {
+            document.querySelectorAll('.modal-overlay').forEach(m => m.classList.remove('active'));
+        }
+
+        function mostrarSucesso(msg, titulo = "Tudo Certo!") {
+            fecharModais();
+            document.getElementById('sucesso-titulo').innerText = titulo;
+            document.getElementById('sucesso-msg').innerText = msg;
+            document.getElementById('modal-sucesso').classList.add('active');
+        }
+
+        // ================= CANCELAR AGENDAMENTO (DASHBOARD) =================
+        let cardParaCancelar = null;
+
+        function abrirModalCancelar(cardId) {
+            cardParaCancelar = cardId;
+            document.getElementById('modal-cancelar').classList.add('active');
+        }
+
+        function executarCancelamento() {
+            if(cardParaCancelar) {
+                const card = document.getElementById(cardParaCancelar);
+                card.style.opacity = '0';
+                card.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    card.remove();
+                    const lista = document.getElementById('lista-agendamentos');
+                    if(lista.children.length === 0) {
+                        lista.innerHTML = "<p style='text-align:center; color: var(--text-muted); font-style: italic; margin-top: 20px;'>Você não possui horários marcados.</p>";
+                    }
+                }, 300);
+            }
+            mostrarSucesso("Seu agendamento foi cancelado com sucesso.");
+        }
+
+        // ================= MOTOR DE GERAÇÃO DE HORÁRIOS (AGENDAMENTO) =================
+        // Esta função simula a leitura das "Regras de Grade e Bloqueios" que a clínica definiu no painel dela.
+        
+        function gerarGradeDeHorarios() {
+            const dataSelecionada = document.getElementById('input-data').value;
+            const containerHorarios = document.getElementById('container-horarios');
+            const grid = document.getElementById('grid-horarios');
+            const btnConfirmar = document.getElementById('btn-confirmar-agendamento');
+            
+            // Reseta a interface
+            grid.innerHTML = '';
+            document.getElementById('horario-selecionado').value = '';
+            btnConfirmar.style.display = 'none';
+
+            if(!dataSelecionada) {
+                containerHorarios.style.display = 'none';
+                return;
+            }
+
+            containerHorarios.style.display = 'block';
+
+            // --- REGRAS VINDAS DO SISTEMA DA CLÍNICA (Simulação) ---
+            // A clínica atende das 08:00 às 18:00, com intervalos de 60 minutos.
+            // O almoço é das 12:00 às 13:00 (bloqueado).
+            
+            const inicioExpediente = 8;
+            const fimExpediente = 18;
+            const horaAlmoco = 12;
+
+            for(let i = inicioExpediente; i < fimExpediente; i++) {
+                let horaFormatada = i.toString().padStart(2, '0') + ":00";
+                
+                let divSlot = document.createElement('div');
+                divSlot.className = 'time-card';
+                divSlot.innerText = horaFormatada;
+
+                // Bloqueia o horário de almoço ou horários que já passaram (ex: 09:00 e 10:00 como teste)
+                if(i === horaAlmoco || i === 9 || i === 10) {
+                    divSlot.classList.add('disabled');
+                    divSlot.title = "Indisponível";
+                } else {
+                    divSlot.onclick = function() { selecionarHorario(this, horaFormatada); };
+                }
+
+                grid.appendChild(divSlot);
+            }
+        }
+
+        function selecionarHorario(elemento, hora) {
+            if(elemento.classList.contains('disabled')) return;
+            
+            // Remove a seleção dos outros
+            document.querySelectorAll('.time-card').forEach(el => el.classList.remove('selected'));
+            
+            // Adiciona seleção ao clicado
+            elemento.classList.add('selected');
+            
+            // Salva o valor no input oculto e mostra o botão final
+            document.getElementById('horario-selecionado').value = hora;
+            document.getElementById('btn-confirmar-agendamento').style.display = 'flex';
+        }
+
+        // ================= CONFIRMAÇÃO FINAL =================
+        function abrirModalConfirmacao() {
+            const servico = document.getElementById('select-servico').value;
+            const data = document.getElementById('input-data').value;
+            const hora = document.getElementById('horario-selecionado').value;
+
+            // Formata a data para padrão BR
+            const dataBR = data.split('-').reverse().join('/');
+
+            document.getElementById('conf-servico').innerText = servico;
+            document.getElementById('conf-datahora').innerText = `🗓️ ${dataBR} às 🕒 ${hora}`;
+
+            document.getElementById('modal-confirmar').classList.add('active');
+        }
+
+        function finalizarAgendamento() {
+            const servico = document.getElementById('select-servico').value;
+            const data = document.getElementById('input-data').value;
+            const hora = document.getElementById('horario-selecionado').value;
+            const dataBR = data.split('-').reverse().join('/');
+
+            // Remove o texto de "sem agendamentos" se existir
+            const lista = document.getElementById('lista-agendamentos');
+            if(lista.innerHTML.includes("Você não possui")) {
+                lista.innerHTML = '';
+            }
+
+            // Gera um ID único
+            const newId = 'appt-' + Date.now();
+
+            // Insere o novo card no topo do Dashboard
+            const novoCardHtml = `
+                <div class="my-appt-card" id="${newId}">
+                    <div class="my-appt-info">
+                        <span class="my-appt-date">🗓️ ${dataBR} - ${hora}</span>
+                        <h4>${servico.split(' - ')[0]}</h4>
+                        <p>📍 Clínica Matriz</p>
+                    </div>
+                    <button class="btn-cancel" onclick="abrirModalCancelar('${newId}')">Cancelar</button>
+                </div>
+            `;
+            
+            lista.insertAdjacentHTML('afterbegin', novoCardHtml);
+
+            // Limpa o formulário
+            document.getElementById('select-servico').value = '';
+            document.getElementById('input-data').value = '';
+            document.getElementById('container-horarios').style.display = 'none';
+            document.getElementById('btn-confirmar-agendamento').style.display = 'none';
+
+            fecharModais();
+            mostrarSucesso("Seu agendamento foi confirmado! A clínica já recebeu sua solicitação.", "Horário Reservado!");
+            showScreen('screen-dashboard');
+        }
+    </script>
+</body>
+</html>
