@@ -7,66 +7,117 @@
     <style>
         :root { --primary: #4f46e5; --bg: #f3f4f6; --card: #ffffff; --text: #1f2937; --text-light: #6b7280; --border: #e5e7eb; --success: #10b981; --danger: #ef4444; --warning: #f59e0b; --sidebar: #111827; }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
-        body { background: var(--bg); color: var(--text); display: flex; height: 100vh; overflow: hidden; }
-        .sidebar { width: 260px; background: var(--sidebar); color: #fff; display: flex; flex-direction: column; }
+        body { background: var(--bg); color: var(--text); display: flex; height: 100vh; overflow: hidden; flex-direction: row; }
+        
+        /* Topbar Mobile (Invisível no PC) */
+        .mobile-header { width: 100%; height: 60px; background: var(--sidebar); color: white; display: none; align-items: center; padding: 0 20px; justify-content: space-between; position: fixed; top: 0; left: 0; z-index: 999; }
+        .menu-toggle-btn { background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer; display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 8px; }
+        .menu-toggle-btn:hover { background: rgba(255,255,255,0.1); }
+
+        /* Sidebar / Menu Lateral (PC) */
+        .sidebar { width: 260px; background: var(--sidebar); color: #fff; display: flex; flex-direction: column; z-index: 1000; transition: transform 0.3s ease; }
         .brand { padding: 25px 20px; font-size: 1.2rem; font-weight: bold; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; align-items: center; gap: 10px; }
         .logo-box { width: 35px; height: 35px; background: var(--primary); border-radius: 8px; display: flex; justify-content: center; align-items: center; overflow: hidden; font-size: 1.2rem;}
         .logo-box img { width: 100%; height: 100%; object-fit: cover; }
+        .nav-menu-container { display: flex; flex-direction: column; flex: 1; }
         .nav-item { padding: 16px 20px; color: #9ca3af; cursor: pointer; display: flex; align-items: center; gap: 12px; transition: 0.2s; border-left: 4px solid transparent; }
         .nav-item:hover { background: rgba(255,255,255,0.05); color: #fff; }
         .nav-item.active { background: rgba(255,255,255,0.1); color: #fff; border-left-color: var(--primary); font-weight: 600; }
+        
+        /* Layout de Conteúdo */
         .main { flex: 1; padding: 40px; overflow-y: auto; }
         .view { display: none; max-width: 1100px; margin: 0 auto; animation: fadeIn 0.3s; }
         .view.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .header-flex { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
-        h1 { font-size: 1.8rem; color: #111827; margin-bottom: 5px;}
+        
+        .header-flex { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; gap: 15px; }
+        h1 { font-size: 1.8rem; color: #111827; margin-bottom: 5px; }
         p.sub { color: var(--text-light); margin-bottom: 25px; }
+        
         .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 25px; margin-bottom: 25px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
         .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
+        
         label { display: block; font-weight: 600; margin-bottom: 8px; font-size: 0.9rem; margin-top: 10px;}
         input, select { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; outline: none; background: #f9fafb; font-size: 1rem;}
-        .btn { background: var(--primary); color: #fff; border: none; padding: 14px 20px; border-radius: 8px; font-weight: bold; font-size: 0.95rem; cursor: pointer; transition: 0.2s; display: inline-flex; justify-content: center; align-items: center; gap: 8px;}
+        
+        /* Botões */
+        .btn { background: var(--primary); color: #fff; border: none; padding: 14px 20px; border-radius: 8px; font-weight: bold; font-size: 0.95rem; cursor: pointer; transition: 0.2s; display: inline-flex; justify-content: center; align-items: center; gap: 8px; text-decoration: none;}
         .btn:hover { opacity: 0.9; transform: translateY(-1px); }
         .btn.danger { background: var(--danger); }
         .btn.success { background: var(--success); }
         .btn.warning { background: var(--warning); color: #fff; }
         .btn.outline { background: transparent; border: 2px solid var(--primary); color: var(--primary); }
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        
+        /* Tabelas Responsivas */
+        .table-responsive { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; min-width: 500px; }
         th, td { padding: 15px; border-bottom: 1px solid var(--border); text-align: left; }
         th { background: #f9fafb; color: var(--text-light); font-weight: 600; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 0.5px; }
-        .days-box { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 10px; }
-        .day-cb { display: none; }
-        .day-lbl { padding: 10px 15px; border: 1px solid var(--border); border-radius: 8px; cursor: pointer; font-weight: 600; background: #fff; transition: 0.2s; }
-        .day-cb:checked + .day-lbl { background: var(--primary); color: #fff; border-color: var(--primary); }
-        .week-grid { display: flex; gap: 15px; overflow-x: auto; padding-bottom: 15px; }
-        .day-col { min-width: 140px; background: #f9fafb; border: 1px solid var(--border); border-radius: 12px; display: flex; flex-direction: column;}
-        .day-col-header { padding: 12px; text-align: center; font-weight: bold; border-bottom: 1px solid var(--border); background: #fff; border-radius: 12px 12px 0 0;}
-        .day-col-body { padding: 10px; display: flex; flex-direction: column; gap: 8px; max-height: 400px; overflow-y: auto;}
-        .slot-btn { padding: 8px; border-radius: 6px; border: 1px solid var(--success); background: #ecfdf5; color: #065f46; font-weight: bold; cursor: pointer; text-align: center; font-size: 0.9rem;}
+        
+        /* Grades de Bloqueio */
+        .slot-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(105px, 1fr)); gap: 10px; margin-top: 20px; padding: 15px; background: #f9fafb; border-radius: 12px; border: 1px dashed var(--border);}
+        .slot-btn { padding: 12px 8px; border-radius: 8px; border: 1px solid var(--success); background: #ecfdf5; color: #065f46; font-weight: bold; cursor: pointer; text-align: center; font-size: 0.9rem;}
         .slot-btn.blocked { border-color: var(--danger); background: #fef2f2; color: #991b1b; text-decoration: line-through; }
+        
+        /* Linhas da Agenda Principal */
         .agenda-list { display: flex; flex-direction: column; gap: 12px; }
         .time-row { display: flex; align-items: stretch; border: 1px solid var(--border); border-radius: 12px; background: #fff; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.02); }
-        .time-badge { width: 90px; background: #f9fafb; border-right: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.1rem; color: var(--primary); padding: 15px; text-align: center;}
-        .time-body-content { flex: 1; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; }
-        .time-row.free .time-body-content { background: #ffffff; color: var(--text-light); }
-        .time-row.booked .time-body-content { background: #f0fdf4; border-left: 4px solid var(--success); }
-        .time-row.canceled-client .time-body-content { background: #fffbeb; border-left: 4px solid var(--warning); }
-        .paciente-title { font-weight: bold; color: var(--text); font-size: 1.1rem; }
-        .proced-subtitle { color: var(--text-light); font-size: 0.9rem; margin-top: 3px; }
+        .time-badge { width: 85px; background: #f9fafb; border-right: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.05rem; color: var(--primary); padding: 15px; text-align: center;}
+        .time-body-content { flex: 1; padding: 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+        .paciente-title { font-weight: bold; color: var(--text); font-size: 1.05rem; }
+        .proced-subtitle { color: var(--text-light); font-size: 0.88rem; margin-top: 3px; }
         .empty-agenda { text-align: center; padding: 40px; background: #fff; border: 1px dashed var(--border); border-radius: 12px; color: var(--text-light); }
-        .modal-overlay { position: fixed; inset: 0; background: rgba(17, 24, 39, 0.8); display: none; align-items: center; justify-content: center; z-index: 9999; }
+        
+        /* Modais */
+        .modal-overlay { position: fixed; inset: 0; background: rgba(17, 24, 39, 0.7); display: none; align-items: center; justify-content: center; z-index: 2000; padding: 15px; }
         .modal-overlay.active { display: flex; }
-        .modal-box { background: white; padding: 35px; border-radius: 16px; width: 100%; max-width: 500px; max-height: 90vh; overflow-y: auto;}
-        #login-overlay { background: var(--sidebar); display: flex; }
+        .modal-box { background: white; padding: 25px; border-radius: 16px; width: 100%; max-width: 500px; max-height: 90vh; overflow-y: auto;}
+        
+        /* Sombra de Fundo Mobile */
+        .sidebar-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 998; display: none; }
+
+        /* ================= REGRA DE LAYOUT RESPONSIVO (MOBILE) ================= */
+        @media (max-width: 768px) {
+            body { flex-direction: column; }
+            .mobile-header { display: flex; }
+            
+            /* Transforma sidebar em gaveta flutuante */
+            .sidebar { position: fixed; top: 0; left: 0; height: 100vh; width: 270px; transform: translateX(-100%); }
+            .sidebar.open { transform: translateX(0); }
+            .sidebar-backdrop.open { display: block; }
+            
+            /* Ajustes do container de conteúdo */
+            .main { padding: 20px; margin-top: 60px; width: 100%; }
+            .grid-2, .grid-3 { grid-template-columns: 1fr; gap: 15px; }
+            .header-flex { flex-direction: column; align-items: start; }
+            .header-flex .btn { width: 100%; margin-top: 10px; }
+            
+            /* Ajustes finos nas linhas de grade */
+            .time-row { flex-direction: column; }
+            .time-badge { width: 100%; padding: 10px; border-right: none; border-bottom: 1px solid var(--border); background: #f9fafb; justify-content: start; }
+            .time-body-content { flex-direction: column; align-items: start; padding: 15px; }
+            .time-body-content .btn, .time-body-content div { width: 100%; }
+            .time-body-content style-div-btns { display: flex; gap: 10px; width: 100%; }
+        }
     </style>
 </head>
 <body>
 
+    <!-- Cortina de fundo para fechar o menu mobile ao clicar fora -->
+    <div class="sidebar-backdrop" id="menu-backdrop"></div>
+
+    <!-- TOPO MOBILE (Aparece apenas em celulares) -->
+    <header class="mobile-header">
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <button class="menu-toggle-btn" id="mobile-menu-trigger">☰</button>
+            <span id="ui-nome-mobile" style="font-weight: bold; font-size: 1.1rem;">Yod Clínica</span>
+        </div>
+    </header>
+
     <!-- TELA DE LOGIN -->
-    <div id="login-overlay" class="modal-overlay">
-        <div class="modal-box" style="text-align: center; max-width: 400px;">
+    <div id="login-overlay" class="modal-overlay" style="display: flex;">
+        <div class="modal-box" style="text-align: center; max-width: 380px;">
             <h2 style="margin-bottom: 20px;">Acesso Restrito Yod</h2>
             <input type="email" id="log-email" placeholder="E-mail da Recepção"><input type="password" id="log-senha" placeholder="Senha">
             <button class="btn" style="width: 100%; margin-top: 15px;" id="btn-login-action">Entrar no Painel</button>
@@ -90,11 +141,11 @@
         </div>
     </div>
 
-    <!-- MODAL DE CONFIRMAÇÃO DE CAIXA / AJUSTE DE VALOR -->
+    <!-- MODAL DE CONFIRMAÇÃO DE CAIXA -->
     <div id="modal-pagamento-caixa" class="modal-overlay">
         <div class="modal-box" style="max-width: 420px; text-align: left;">
             <h2 style="margin-bottom: 5px; text-align: center;">Fechar Atendimento</h2>
-            <p style="color: gray; font-size: 0.9rem; text-align: center; margin-bottom: 20px;">Confirme o valor final recebido para o caixa.</p>
+            <p style="color: gray; font-size: 0.9rem; text-align: center; margin-bottom: 20px;">Confirme o valor recebido para o caixa.</p>
             
             <div style="background: #f3f4f6; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
                 <div style="font-size: 0.9rem; color: var(--text-light);">Procedimento original:</div>
@@ -103,9 +154,8 @@
             </div>
 
             <label>Valor Efetivamente Pago (R$)</label>
-            <input type="number" id="pay-input-final" step="0.01" placeholder="0.00" style="font-size: 1.2rem; font-weight: bold; color: var(--success); padding: 14px;">
-            <p style="font-size: 0.8rem; color: var(--text-light); margin-top: 5px;">*Altere o valor caso queira aplicar descontos ou acréscimos manuais.</p>
-
+            <input type="number" id="pay-input-final" step="0.01" style="font-size: 1.2rem; font-weight: bold; color: var(--success); padding: 14px;">
+            
             <div class="grid-2" style="margin-top: 25px;">
                 <button class="btn outline" style="margin:0;" id="btn-cancelar-caixa">Voltar</button>
                 <button class="btn success" style="margin:0;" id="btn-confirmar-caixa">💾 Registrar Entrada</button>
@@ -113,20 +163,31 @@
         </div>
     </div>
 
-    <aside class="sidebar">
+    <!-- MENU LATERAL / SIDEBAR -->
+    <aside class="sidebar" id="app-sidebar">
         <div class="brand"><div class="logo-box" id="ui-logo">Y</div><span id="ui-nome">Yod Clínica</span></div>
-        <div class="nav-item active" id="menu-agenda">📅 Agenda Principal</div><div class="nav-item" id="menu-criar">🕒 Criar Horários</div><div class="nav-item" id="menu-bloqueio">🚫 Gerar Bloqueios</div><div class="nav-item" id="menu-proced">💉 Procedimentos</div><div class="nav-item" id="menu-finan">💰 Financeiro</div>
-        <div style="flex: 1;"></div><div class="nav-item" style="color: #ef4444;" id="menu-sair">Sair</div>
+        <div class="nav-menu-container">
+            <div class="nav-item active" id="menu-agenda">📅 Agenda Principal</div>
+            <div class="nav-item" id="menu-criar">🕒 Criar Horários</div>
+            <div class="nav-item" id="menu-bloqueio">🚫 Gerar Bloqueios</div>
+            <div class="nav-item" id="menu-proced">💉 Procedimentos</div>
+            <div class="nav-item" id="menu-finan">💰 Financeiro</div>
+            <div style="flex: 1;"></div>
+            <div class="nav-item" style="color: #ef4444; border-top: 1px solid rgba(255,255,255,0.05);" id="menu-sair">Sair do Painel</div>
+        </div>
     </aside>
 
+    <!-- CONTAINER PRINCIPAL -->
     <main class="main">
+        <!-- 1. AGENDA -->
         <section id="v-agenda" class="view active">
             <div class="header-flex"><div><h1>Agenda Principal</h1><p class="sub">Controle completo da grade diária da Yod.</p></div></div>
-            <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 25px; background: var(--card); padding: 15px 20px; border-radius: 12px; border: 1px solid var(--border);"><label style="margin: 0; font-size: 1rem;">Selecione o Dia:</label><input type="date" id="filtro-data-agenda" style="width: 250px; margin: 0; padding: 10px;"></div>
+            <div style="background: var(--card); padding: 15px; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 25px;"><label style="margin: 0; font-size: 1rem; margin-bottom: 6px;">Selecione o Dia de Atendimento:</label><input type="date" id="filtro-data-agenda" style="padding: 10px;"></div>
             <div id="man-aviso-agenda-principal" style="color:var(--danger); font-weight:bold; margin-bottom:15px;"></div>
             <div class="agenda-list" id="lista-agenda"></div>
         </section>
 
+        <!-- 2. CRIAR HORÁRIOS -->
         <section id="v-criar" class="view">
             <h1>Criar Horários de Atendimento</h1><p class="sub">Configure a regra padrão da semana ou adicione uma data personalizada.</p>
             <div class="card">
@@ -143,19 +204,22 @@
             </div>
         </section>
 
+        <!-- 3. BLOQUEIOS -->
         <section id="v-bloqueio" class="view">
             <div class="header-flex"><div><h1>Gerar Bloqueios Semanais</h1><p class="sub">Selecione os horários padrão de pausa.</p></div><button class="btn success" id="btn-salvar-bloqueios">💾 Salvar Bloqueios</button></div>
             <div class="card" style="background: transparent; border: none; padding: 0; box-shadow: none;"><div class="week-grid" id="container-bloqueios"></div></div>
         </section>
 
+        <!-- 4. PROCEDIMENTOS -->
         <section id="v-proced" class="view">
             <h1>Gerenciamento de Procedimentos</h1>
-            <div class="card grid-3" style="align-items: end;"><div style="grid-column: span 2;"><label>Nome do Procedimento</label><input type="text" id="p-nome" placeholder="Ex: Micropigmentação Fio a Fio"></div><div><label>Valor (R$)</label><input type="number" id="p-valor" placeholder="450"></div><div style="grid-column: 1 / -1;"><button class="btn" style="width: auto;" id="btn-add-proced">+ Adicionar Procedimento</button></div></div>
-            <div class="card" style="padding: 0; overflow: hidden;"><table><thead><tr><th>Serviço Cadastrado</th><th>Preço</th><th style="width: 100px;">Ação</th></tr></thead><tbody id="lista-procedimentos"></tbody></table></div>
+            <div class="card grid-3" style="align-items: end;"><div style="grid-column: span 2;"><label>Nome do Procedimento</label><input type="text" id="p-nome" placeholder="Ex: Micropigmentação Labial"></div><div><label>Valor (R$)</label><input type="number" id="p-valor" placeholder="450"></div><div style="grid-column: 1 / -1;"><button class="btn" style="width: auto;" id="btn-add-proced">+ Adicionar Procedimento</button></div></div>
+            <div class="card" style="padding: 0; overflow: hidden;"><div class="table-responsive"><table><thead><tr><th>Serviço Cadastrado</th><th>Preço</th><th style="width: 100px;">Ação</th></tr></thead><tbody id="lista-procedimentos"></tbody></table></div></div>
         </section>
 
+        <!-- 5. FINANCEIRO -->
         <section id="v-finan" class="view">
-            <h1>Controle Financeiro</h1><div class="card" style="padding: 0; overflow: hidden;"><table><thead><tr><th>Data</th><th>Descrição do Serviço</th><th style="width: 150px;">Entrada</th></tr></thead><tbody id="lista-finan"></tbody></table></div>
+            <h1>Controle Financeiro</h1><div class="card" style="padding: 0; overflow: hidden;"><div class="table-responsive"><table><thead><tr><th>Data</th><th>Descrição do Serviço</th><th style="width: 150px;">Entrada</th></tr></thead><tbody id="lista-finan"></tbody></table></div></div>
         </section>
     </main>
 
@@ -168,23 +232,31 @@
         const app = initializeApp(firebaseConfig); const db = getFirestore(app); const auth = getAuth(app);
 
         let gradeConfig = { dias: [], start: "08:00", end: "18:00", int: "60", excecoes: {}, bloqueios: [] }, agendamentosDB = [];
-        
-        // Controles de fechamento ativos na memória
-        let idAgendamentoAtivoCheckout = null;
-        let servicoAtivoCheckout = "";
+        let idAgendamentoAtivoCheckout = null, servicoAtivoCheckout = "";
 
         document.getElementById('filtro-data-agenda').value = new Date().toISOString().split('T')[0];
 
         onAuthStateChanged(auth, (user) => { if(user) { document.getElementById('login-overlay').style.display = 'none'; iniciarSistema(); } else { document.getElementById('login-overlay').style.display = 'flex'; } });
 
-        // Correção de Event Listeners e mapeamento exato de IDs
+        // SISTEMA DE INTERAÇÃO DO MENU MOBILE (3 PONTOS GATILHO)
+        const sidebar = document.getElementById('app-sidebar');
+        const backdrop = document.getElementById('menu-backdrop');
+        
+        document.getElementById('mobile-menu-trigger').addEventListener('click', () => { sidebar.classList.add('open'); backdrop.classList.add('open'); });
+        backdrop.addEventListener('click', fecharMenuMobile);
+
+        function fecharMenuMobile() { sidebar.classList.remove('open'); backdrop.classList.remove('open'); }
+
+        // Eventos e Amarrações Gerais
         document.getElementById('btn-login-action').addEventListener('click', () => { signInWithEmailAndPassword(auth, document.getElementById('log-email').value, document.getElementById('log-senha').value).catch(e => alert("Dados Incorretos.")); });
         document.getElementById('menu-sair').addEventListener('click', () => signOut(auth));
+        
         document.getElementById('menu-agenda').addEventListener('click', function() { MudarAba('v-agenda', this); });
         document.getElementById('menu-criar').addEventListener('click', function() { MudarAba('v-criar', this); });
         document.getElementById('menu-bloqueio').addEventListener('click', function() { MudarAba('v-bloqueio', this); });
         document.getElementById('menu-proced').addEventListener('click', function() { MudarAba('v-proced', this); });
         document.getElementById('menu-finan').addEventListener('click', function() { MudarAba('v-finan', this); });
+        
         document.getElementById('filtro-data-agenda').addEventListener('change', () => renderizarAgendaPrincipal());
         document.getElementById('btn-fechar-modal').addEventListener('click', () => fecharModais());
         document.getElementById('btn-salvar-manual').addEventListener('click', () => salvarAgendamentoManual());
@@ -192,17 +264,26 @@
         document.getElementById('btn-salvar-excecao').addEventListener('click', () => salvarDiaPersonalizado());
         document.getElementById('btn-salvar-bloqueios').addEventListener('click', () => salvarBloqueiosNaNuveem());
         document.getElementById('btn-add-proced').addEventListener('click', () => cadastrarProcedimento());
-        
-        // Amarrando corretamente os botões do Caixa
         document.getElementById('btn-cancelar-caixa').addEventListener('click', () => { document.getElementById('modal-pagamento-caixa').classList.remove('active'); });
         document.getElementById('btn-confirmar-caixa').addEventListener('click', () => efetuarCheckoutFinanceiroFinal());
 
-        function MudarAba(viewId, menuEl) { document.querySelectorAll('.view').forEach(s => s.classList.remove('active')); document.getElementById(viewId).classList.add('active'); document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active')); menuEl.classList.add('active'); }
+        function MudarAba(viewId, menuEl) { 
+            document.querySelectorAll('.view').forEach(s => s.classList.remove('active')); 
+            document.getElementById(viewId).classList.add('active'); 
+            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active')); 
+            menuEl.classList.add('active'); 
+            fecharMenuMobile(); // Fecha gaveta se for mobile
+        }
         function fecharModais() { document.getElementById('modal-agendar').classList.remove('active'); }
 
         async function iniciarSistema() {
             const gSnap = await getDoc(doc(db, "configuracoes", "geral"));
-            if(gSnap.exists()){ document.documentElement.style.setProperty('--primary', gSnap.data().cor); document.getElementById('ui-nome').innerText = gSnap.data().nome; if(gSnap.data().logo) document.getElementById('ui-logo').innerHTML = `<img src="${gSnap.data().logo}">`; }
+            if(gSnap.exists()){ 
+                document.documentElement.style.setProperty('--primary', gSnap.data().cor); 
+                document.getElementById('ui-nome').innerText = gSnap.data().nome; 
+                document.getElementById('ui-nome-mobile').innerText = gSnap.data().nome; 
+                if(gSnap.data().logo) document.getElementById('ui-logo').innerHTML = `<img src="${gSnap.data().logo}">`; 
+            }
             await lerGradeDoBanco(); lerProcedimentos(); escutarAgenda(); lerFinanceiro();
         }
 
@@ -301,7 +382,7 @@
                             </div>`;
                     } else {
                         const num = appt.pacienteWhatsapp ? appt.pacienteWhatsapp.replace(/\D/g,'') : '';
-                        let wppBtn = num ? `<a href="https://wa.me/55${num}" target="_blank" style="color:var(--success); font-weight:bold; text-decoration:none; margin-left:15px;">📲 Conversar</a>` : '';
+                        let wppBtn = num ? `<a href="https://wa.me/55${num}" target="_blank" style="color:var(--success); font-weight:bold; text-decoration:none; margin-left:15px; display:inline-block;">📲 Conversar</a>` : '';
                         box.innerHTML += `
                             <div class="time-row booked">
                                 <div class="time-badge">${h}</div>
@@ -310,9 +391,9 @@
                                         <div class="paciente-title">${appt.pacienteNome} ${wppBtn}</div>
                                         <div class="proced-subtitle">Procedimento: <b>${appt.servico}</b></div>
                                     </div>
-                                    <div style="display:flex; gap:10px;">
-                                        <button class="btn success" style="padding:8px 15px; font-size:0.85rem;" id="btn-done-${appt.id}">✅ Concluir</button>
-                                        <button class="btn outline" style="padding:8px 15px; font-size:0.85rem; border-color:var(--danger); color:var(--danger);" id="btn-del-${appt.id}">❌ Remover</button>
+                                    <div style="display:flex; gap:10px; width:100%; max-width:250px; margin-top:5px;">
+                                        <button class="btn success" style="padding:8px 15px; font-size:0.85rem; flex:1;" id="btn-done-${appt.id}">✅ Concluir</button>
+                                        <button class="btn outline" style="padding:8px 15px; font-size:0.85rem; border-color:var(--danger); color:var(--danger); flex:1;" id="btn-del-${appt.id}">❌ Remover</button>
                                     </div>
                                 </div>
                             </div>`;
@@ -336,20 +417,16 @@
                 if(appt) {
                     if(appt.status === "cancelado") {
                         document.getElementById(`btn-liberar-${appt.id}`).addEventListener('click', async () => {
-                            if(confirm("Deseja expurgar o registro e abrir esta vaga na grade novamente?")) await deleteDoc(doc(db, "agendamentos", appt.id));
+                            if(confirm("Deseja abrir esta vaga na grade novamente?")) await deleteDoc(doc(db, "agendamentos", appt.id));
                         });
                     } else {
                         document.getElementById(`btn-done-${appt.id}`).addEventListener('click', () => {
-                            idAgendamentoAtivoCheckout = appt.id;
-                            servicoAtivoCheckout = appt.servico;
-                            
+                            idAgendamentoAtivoCheckout = appt.id; servicoAtivoCheckout = appt.servico;
                             document.getElementById('pay-label-servico').innerText = appt.servico;
                             document.getElementById('pay-label-original').innerText = `R$ ${appt.valor.toFixed(2)}`;
                             document.getElementById('pay-input-final').value = appt.valor; 
-                            
                             document.getElementById('modal-pagamento-caixa').classList.add('active');
                         });
-                        
                         document.getElementById(`btn-del-${appt.id}`).addEventListener('click', async () => {
                             if(confirm("Deseja apagar esse agendamento?")) await deleteDoc(doc(db, "agendamentos", appt.id));
                         });
@@ -369,27 +446,11 @@
             fecharModais(); renderizarAgendaPrincipal(); alert("Agendamento efetuado!");
         }
 
-        // FUNÇÃO CORRIGIDA: Coleta e salva o valor final real digitado
-        async function checkoutFinanceiroReal() {
-            // Alterado para ler corretamente a função de fechamento amarrada
-        }
-
         async function efetuarCheckoutFinanceiroFinal() {
             const valorFinalDigitado = document.getElementById('pay-input-final').value;
             if(!valorFinalDigitado || parseFloat(valorFinalDigitado) < 0) return alert("Por favor, informe um valor válido.");
-
-            // 1. Grava no caixa com o valor alterado (com ou sem desconto)
-            await addDoc(collection(db, "financeiro"), { 
-                data: new Date().toLocaleDateString('pt-BR'), 
-                descricao: "Consulta: " + servicoAtivoCheckout, 
-                valor: parseFloat(valorFinalDigitado), 
-                ts: Date.now() 
-            });
-            
-            // 2. Apaga da lista de agendamentos para liberar a grade do dia
+            await addDoc(collection(db, "financeiro"), { data: new Date().toLocaleDateString('pt-BR'), descricao: "Consulta: " + servicoAtivoCheckout, valor: parseFloat(valorFinalDigitado), ts: Date.now() });
             await deleteDoc(doc(db, "agendamentos", idAgendamentoAtivoCheckout));
-            
-            // 3. Fecha o modal
             document.getElementById('modal-pagamento-caixa').classList.remove('active');
             alert("Entrada registrada e horário concluído!");
         }
