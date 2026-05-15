@@ -22,7 +22,6 @@
         .table { width: 100%; border-collapse: collapse; margin-top: 15px; background: var(--card-bg); border-radius: 8px; overflow: hidden;}
         .table th, .table td { padding: 12px; border-bottom: 1px solid var(--border-color); text-align: left; }
         
-        /* Dias da Semana */
         .week-selector { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; }
         .day-check { display: none; }
         .day-label { padding: 10px 15px; border: 1px solid var(--border-color); border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 0.9rem; }
@@ -35,14 +34,12 @@
         .slot { border: 1px solid var(--border-color); border-radius: 8px; padding: 12px; }
         .slot.booked { border-left: 5px solid var(--primary-accent); background: #f0f7ff; }
 
-        /* Login Overlay */
         #login-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--sidebar-bg); display: flex; align-items: center; justify-content: center; z-index: 9999; }
         .login-box { background: white; padding: 40px; border-radius: 16px; width: 100%; max-width: 400px; text-align: center; }
     </style>
 </head>
 <body>
 
-    <!-- TELA DE LOGIN DA RECEPÇÃO -->
     <div id="login-overlay">
         <div class="login-box">
             <h2 style="margin-bottom: 10px; color: var(--text-main);">Acesso Restrito</h2>
@@ -63,13 +60,11 @@
     </aside>
 
     <main class="main-content">
-        <!-- AGENDA -->
         <section id="agenda" class="view-section active">
             <h1>Agenda de Atendimentos</h1>
             <div class="agenda-scroll" id="agenda-container"><p style="padding:40px; color:gray;">Crie a grade horária na aba ao lado para começar.</p></div>
         </section>
 
-        <!-- GRADE E DIAS DA SEMANA -->
         <section id="grade" class="view-section">
             <h1>Configurar Horários e Dias</h1>
             <div class="card-container">
@@ -92,7 +87,6 @@
             </div>
         </section>
 
-        <!-- PROCEDIMENTOS (NOVO) -->
         <section id="procedimentos" class="view-section">
             <h1>Gerir Procedimentos</h1>
             <div class="card-container">
@@ -108,7 +102,6 @@
             </table>
         </section>
 
-        <!-- FINANCEIRO -->
         <section id="financeiro" class="view-section">
             <h1>Fluxo de Caixa</h1>
             <table class="table"><thead><tr><th>Data</th><th>Descrição</th><th>Tipo</th><th>Valor</th></tr></thead><tbody id="f-table"></tbody></table>
@@ -123,7 +116,6 @@
         const firebaseConfig = { apiKey: "AIzaSyD4SElQHlfQjbN2NsHC0Z9_1Gobb6WHd8o", authDomain: "clinicabase-a85a7.firebaseapp.com", projectId: "clinicabase-a85a7", storageBucket: "clinicabase-a85a7.firebasestorage.app", messagingSenderId: "324071825277", appId: "1:324071825277:web:6a0d3c4413f7a7569fb614" };
         const app = initializeApp(firebaseConfig); const db = getFirestore(app); const auth = getAuth(app);
 
-        // Verifica se a recepção está logada
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 document.getElementById('login-overlay').style.display = 'none';
@@ -148,13 +140,10 @@
             }
         }
 
-        // ================= GERIR DIAS E HORÁRIOS =================
         window.salvarGrade = async () => {
             let diasAtivos = [];
             document.querySelectorAll('.day-check:checked').forEach(cb => diasAtivos.push(parseInt(cb.value)));
-            
             if(diasAtivos.length === 0) return alert("Selecione pelo menos um dia de funcionamento.");
-
             const config = { start: document.getElementById('g-start').value, end: document.getElementById('g-end').value, int: document.getElementById('g-int').value, dias: diasAtivos };
             await setDoc(doc(db, "configuracoes", "grade"), config);
             alert("Horários salvos na nuvem! O aplicativo do cliente já foi atualizado.");
@@ -169,7 +158,6 @@
             }
         }
 
-        // ================= PROCEDIMENTOS =================
         window.adicionarProcedimento = async () => {
             const n = document.getElementById('p-nome').value; const v = document.getElementById('p-valor').value;
             if(!n || !v) return alert("Preencha nome e valor.");
@@ -190,7 +178,6 @@
             });
         }
 
-        // ================= AGENDA =================
         function escutarAgendamentos() {
             onSnapshot(query(collection(db, "agendamentos"), orderBy("ts", "asc")), async (snap) => {
                 const cont = document.getElementById('agenda-container'); cont.innerHTML = "";
@@ -198,12 +185,17 @@
 
                 snap.forEach(d => {
                     const a = d.data();
+                    // Limpa formatação do número para o link do WhatsApp
+                    const numLimpo = a.pacienteWhatsapp ? a.pacienteWhatsapp.replace(/\D/g, '') : '';
+                    
                     cont.innerHTML += `
                         <div class="day-col">
                             <div class="day-header">${a.data} - ${a.hora}</div>
                             <div class="day-body">
                                 <div class="slot booked">
                                     <b>Paciente:</b> ${a.pacienteNome}<br>
+                                    <b>WhatsApp:</b> ${a.pacienteWhatsapp || 'Não informado'} 
+                                    ${numLimpo ? `<a href="https://wa.me/55${numLimpo}" target="_blank" style="color:var(--success); font-weight:bold; text-decoration:none;">📲 Chamar</a>` : ''}<br>
                                     <b>Serviço:</b> ${a.servico}<br>
                                     <button class="btn" style="margin-top:10px; background:var(--success);" onclick="concluirConsulta('${d.id}', '${a.servico}', ${a.valor})">✅ Receber e Concluir</button>
                                 </div>
