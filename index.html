@@ -50,6 +50,7 @@
         <div id="tela-cadastro" class="screen">
             <h1 style="margin-bottom: 20px;">Nova Conta</h1>
             <input type="text" id="cad-nome" placeholder="Nome Completo">
+            <input type="tel" id="cad-whatsapp" placeholder="WhatsApp (com DDD)">
             <input type="email" id="cad-email" placeholder="E-mail">
             <input type="password" id="cad-senha" placeholder="Crie uma Senha (mínimo 6 letras)">
             <button class="btn" onclick="fazerCadastro()">Criar e Entrar</button>
@@ -80,7 +81,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, getDoc, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, getDoc, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
         import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
 
         const firebaseConfig = { apiKey: "AIzaSyD4SElQHlfQjbN2NsHC0Z9_1Gobb6WHd8o", authDomain: "clinicabase-a85a7.firebaseapp.com", projectId: "clinicabase-a85a7", storageBucket: "clinicabase-a85a7.firebasestorage.app", messagingSenderId: "324071825277", appId: "1:324071825277:web:6a0d3c4413f7a7569fb614" };
@@ -106,21 +107,31 @@
 
         window.fazerLogin = () => {
             const e = document.getElementById('log-email').value; const s = document.getElementById('log-senha').value;
-            signInWithEmailAndPassword(auth, e, s).catch(error => document.getElementById('login-erro').innerText = "Dados incorretos.");
+            signInWithEmailAndPassword(auth, e, s).catch(error => document.getElementById('login-erro').innerText = "E-mail ou senha incorretos.");
         }
 
         window.fazerCadastro = () => {
-            const n = document.getElementById('cad-nome').value; const e = document.getElementById('cad-email').value; const s = document.getElementById('cad-senha').value;
-            if(!n) return document.getElementById('cad-erro').innerText = "Preencha o nome.";
+            const n = document.getElementById('cad-nome').value;
+            const w = document.getElementById('cad-whatsapp').value;
+            const e = document.getElementById('cad-email').value; 
+            const s = document.getElementById('cad-senha').value;
+            
+            if(!n || !w) return document.getElementById('cad-erro').innerText = "Preencha o nome e o WhatsApp.";
+            
             createUserWithEmailAndPassword(auth, e, s)
-                .then((cred) => updateProfile(cred.user, { displayName: n }))
+                .then(async (cred) => {
+                    await updateProfile(cred.user, { displayName: n });
+                    // Salva o WhatsApp do usuário no banco de dados
+                    await setDoc(doc(db, "usuarios", cred.user.uid), {
+                        nome: n, email: e, whatsapp: w
+                    });
+                })
                 .catch(error => document.getElementById('cad-erro').innerText = "Erro ao criar conta. A senha deve ter 6 caracteres.");
         }
 
         window.sairApp = () => signOut(auth);
         window.alternarTela = (id) => { document.querySelectorAll('.screen').forEach(s => s.classList.remove('active')); document.getElementById(id).classList.add('active'); }
 
-        // Carregar configurações da nuvem
         async function carregarSetupInicial() {
             // 1. Identidade Visual
             const confSnap = await getDoc(doc(db, "configuracoes", "geral"));
@@ -157,11 +168,7 @@
             box.style.display = 'none'; grid.innerHTML = ''; aviso.innerText = '';
             if(!dataInput || !configGrade) return;
 
-            // Extrai o dia da semana da data escolhida pelo cliente
-            // O JavaScript considera Domingo=0, Segunda=1, Terca=2...
             const diaDaSemana = new Date(dataInput + "T00:00:00").getDay();
-
-            // Verifica se o dia clicado está dentro do Array de dias salvos pelo Painel
             if(!configGrade.dias.includes(diaDaSemana)) {
                 aviso.innerText = "A clínica não atende neste dia da semana. Escolha outra data.";
                 return;
@@ -183,6 +190,11 @@
             const data = document.getElementById('data').value;
             if(!valSelect || !data || !selectedH) return alert("Preencha o serviço, a data e selecione o horário.");
 
+            // Puxa o número de WhatsApp que o paciente cadastrou
+            const userDoc = await getDoc(doc(db, "usuarios", usuarioLogado.uid));
+            let telefone = "";
+            if(userDoc.exists()) telefone = userDoc.data().whatsapp;
+
             const servicoNome = valSelect.split('|')[0];
             const servicoValor = parseFloat(valSelect.split('|')[1]);
             const dataBr = data.split('-').reverse().join('/');
@@ -190,6 +202,7 @@
             await addDoc(collection(db, "agendamentos"), { 
                 pacienteNome: usuarioLogado.displayName || "Paciente", 
                 pacienteEmail: usuarioLogado.email,
+                pacienteWhatsapp: telefone, // Salvando o número para a recepção ver
                 servico: servicoNome, 
                 valor: servicoValor,
                 data: dataBr, 
