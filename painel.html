@@ -3,113 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema de Gestão - Clínica Premium</title>
+    <title>Sistema de Gestão - Clínica</title>
     <style>
-        /* ================= VARIÁVEIS E ESTÉTICA CLEAN/ROBUSTA ================= */
-        :root {
-            --sidebar-bg: #0f172a; --sidebar-hover: #1e293b;
-            --primary-accent: #3b82f6; --bg-color: #f1f5f9;
-            --card-bg: #ffffff; --text-main: #0f172a;
-            --text-muted: #64748b; --border-color: #e2e8f0;
-            --success: #10b981; --success-light: #d1fae5;
-            --danger: #ef4444; --danger-light: #fee2e2;
-            --warning: #f59e0b; --warning-light: #fef3c7;
-            --blocked: #94a3b8; --blocked-light: #f8fafc;
-            --whatsapp: #25D366;
-        }
-
+        :root { --sidebar-bg: #0f172a; --sidebar-hover: #1e293b; --primary-accent: #3b82f6; --bg-color: #f1f5f9; --card-bg: #ffffff; --text-main: #0f172a; --text-muted: #64748b; --border-color: #e2e8f0; --success: #10b981; --success-light: #d1fae5; --danger: #ef4444; --danger-light: #fee2e2; --blocked: #94a3b8; --blocked-light: #f8fafc; }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-
         body { background-color: var(--bg-color); color: var(--text-main); display: flex; height: 100vh; overflow: hidden; }
-
-        /* ================= MENU LATERAL ================= */
         .sidebar { width: 260px; background-color: var(--sidebar-bg); color: #fff; display: flex; flex-direction: column; z-index: 10; }
         .sidebar-header { padding: 24px; font-size: 1.25rem; font-weight: bold; border-bottom: 1px solid rgba(255,255,255,0.1); }
         .nav-menu { padding: 20px 0; }
         .nav-item { padding: 15px 24px; color: #cbd5e1; cursor: pointer; font-weight: 500; display: flex; align-items: center; gap: 12px; transition: 0.2s; }
         .nav-item:hover { background-color: var(--sidebar-hover); color: #fff; }
         .nav-item.active { background-color: var(--primary-accent); color: #fff; border-right: 4px solid #fff; }
-
-        /* ================= CONTEÚDO PRINCIPAL ================= */
         .main-content { flex: 1; padding: 40px; overflow-y: auto; position: relative; }
         .view-section { display: none; max-width: 1300px; margin: 0 auto; animation: fadeIn 0.3s ease; }
         .view-section.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
         .page-title { font-size: 1.8rem; margin-bottom: 5px; font-weight: 800; }
         .page-subtitle { color: var(--text-muted); margin-bottom: 30px; font-size: 0.95rem; }
         .card-container { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 24px; margin-bottom: 24px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
-
-        /* ================= INPUTS E BOTÕES GERAIS ================= */
-        input[type="text"], input[type="number"], input[type="date"], input[type="time"], input[type="month"], select, textarea {
-            width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 1rem; outline: none; background: #f8fafc; transition: 0.2s; resize: none;
-        }
-        input:focus, select:focus, textarea:focus { border-color: var(--primary-accent); background: #fff; box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1); }
+        input[type="text"], input[type="number"], input[type="date"], input[type="time"], input[type="month"], select { width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 1rem; outline: none; background: #f8fafc; transition: 0.2s; }
+        input:focus, select:focus { border-color: var(--primary-accent); background: #fff; box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1); }
         label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.9rem; color: var(--text-main); }
         .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 20px; }
-
         .btn { background: var(--primary-accent); color: #fff; border: none; padding: 10px 15px; border-radius: 8px; font-weight: bold; font-size: 0.9rem; cursor: pointer; transition: 0.2s; display: inline-flex; align-items: center; justify-content: center; gap: 8px; width: 100%; }
         .btn:hover { opacity: 0.9; transform: translateY(-1px); }
         .btn.success { background: var(--success); }
         .btn.danger { background: var(--danger); }
-        .btn.wpp { background: var(--whatsapp); }
-        .btn.warning { background: var(--warning); color: #000; }
-        .btn.outline-danger { background: transparent; color: var(--danger); border: 1px solid var(--danger); }
-        .btn.outline-danger:hover { background: #fee2e2; }
         .btn.outline { background: transparent; color: var(--text-main); border: 1px solid var(--border-color); }
-        .btn.outline:hover { background: #f1f5f9; }
-
-        /* ================= AGENDA DE HORÁRIOS ================= */
         .agenda-filters { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 15px; }
         .filter-group-btn { display: flex; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden; }
         .filter-group-btn button { background: none; border: none; padding: 10px 20px; font-weight: 600; cursor: pointer; border-right: 1px solid var(--border-color); transition: 0.2s; color: var(--text-muted); }
-        .filter-group-btn button:last-child { border-right: none; }
         .filter-group-btn button.active { background: var(--primary-accent); color: white; }
-        .filter-group-btn button:hover:not(.active) { background: var(--bg-color); }
-
         .agenda-scroll { display: flex; overflow-x: auto; gap: 20px; padding-bottom: 20px; min-height: 650px; }
         .day-col { min-width: 340px; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; display: flex; flex-direction: column; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
         .day-header { padding: 15px; text-align: center; border-bottom: 1px solid var(--border-color); background: #f8fafc; border-radius: 12px 12px 0 0; }
         .day-header h3 { font-size: 1.1rem; color: var(--text-main); margin-bottom: 2px;}
         .day-header span { font-size: 0.85rem; color: var(--text-muted); font-weight: 600; }
         .day-body { padding: 15px; display: flex; flex-direction: column; gap: 12px; overflow-y: auto; flex: 1; }
-
         .slot { border: 1px solid var(--border-color); border-radius: 8px; padding: 12px; transition: 0.2s; position: relative; }
         .slot.free { background: #f8fafc; border-style: dashed; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
         .slot.free:hover { border-color: var(--primary-accent); background: #eff6ff; }
         .slot.free .time { font-weight: bold; color: var(--text-muted); font-size: 1.1rem; }
         .slot.free .status { font-size: 0.85rem; color: var(--success); font-weight: 600; }
-
-        .slot.booked { background: #fff; border-left: 5px solid var(--primary-accent); box-shadow: 0 2px 5px rgba(0,0,0,0.04); }
-        .slot.booked .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
-        .slot.booked .time { font-size: 1.1rem; font-weight: 800; color: var(--primary-accent); }
-        .slot.booked .badge { background: #dbeafe; color: #1e3a8a; font-size: 0.7rem; padding: 4px 8px; border-radius: 6px; font-weight: bold; }
-        .slot.booked h4 { font-size: 1rem; margin-bottom: 3px; }
-        .slot.booked p { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px; }
-        .slot-actions { display: flex; gap: 8px; }
-        .slot-actions .btn { padding: 8px; font-size: 0.8rem; }
-
-        .slot.blocked { background: var(--blocked-light); border-left: 5px solid var(--blocked); opacity: 0.9; }
-        .slot.blocked .time { color: var(--text-main); font-weight: bold; font-size: 1.1rem; margin-bottom: 5px; }
-        .slot.blocked .reason { font-size: 0.9rem; font-weight: 600; color: #475569; display: flex; align-items: center; gap: 5px; }
-        .slot.blocked .btn-unlock { background: none; border: none; color: var(--danger); font-size: 0.8rem; font-weight: bold; cursor: pointer; margin-top: 10px; padding: 0; display: inline-block; }
-        .slot.blocked .btn-unlock:hover { text-decoration: underline; }
-
-        /* ================= SISTEMA DE GRADE ================= */
         .week-selector { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; }
         .day-check { display: none; }
         .day-label { padding: 10px 15px; border: 1px solid var(--border-color); border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 0.9rem; transition: 0.2s; background: var(--card-bg); }
         .day-check:checked + .day-label { background: var(--primary-accent); color: white; border-color: var(--primary-accent); }
-
-        /* ================= FINANCEIRO ================= */
         .dash-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 20px; }
         .dash-card { background: var(--card-bg); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); }
         .dash-card h3 { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;}
         .dash-card h2 { font-size: 1.8rem; color: var(--text-main); }
         .filter-bar { display: flex; gap: 15px; align-items: flex-end; flex-wrap: wrap; margin-bottom: 20px; background: var(--card-bg); padding: 15px; border-radius: 12px; border: 1px solid var(--border-color); }
         .filter-group { flex: 1; min-width: 150px; }
-        .filter-bar .btn { height: 45px; width: auto; min-width: 120px; }
-
         .extrato-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; margin-top: 30px; }
         .table-responsive { width: 100%; overflow-x: auto; background: var(--card-bg); border-radius: 12px; border: 1px solid var(--border-color); }
         .table { width: 100%; border-collapse: collapse; text-align: left; }
@@ -120,216 +65,90 @@
         .badge.expense { background-color: var(--danger-light); color: #991b1b; }
         .val-income { color: var(--success); font-weight: bold; }
         .val-expense { color: var(--danger); font-weight: bold; }
-        
         .empty-state { text-align: center; padding: 30px; color: var(--text-muted); font-style: italic; }
-
-        /* ================= MODAIS OVERLAY ================= */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px); z-index: 1000; display: none; align-items: center; justify-content: center; }
         .modal-overlay.active { display: flex; animation: fadeInModal 0.2s ease; }
         @keyframes fadeInModal { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
-        
-        .modal-box { background: var(--card-bg); width: 100%; max-width: 500px; border-radius: 16px; padding: 30px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); }
+        .modal-box { background: var(--card-bg); width: 100%; max-width: 500px; border-radius: 16px; padding: 30px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); text-align: center; }
         .modal-box h2 { font-size: 1.4rem; margin-bottom: 10px; color: var(--text-main); font-weight: 800; }
-        .modal-box p { font-size: 0.95rem; color: var(--text-muted); margin-bottom: 25px; line-height: 1.5; }
         .modal-actions { display: flex; gap: 15px; margin-top: 25px; }
-
-        @media (max-width: 768px) {
-            body { flex-direction: column; }
-            .sidebar { width: 100%; height: auto; flex-direction: row; overflow-x: auto; }
-            .nav-menu { flex-direction: row; }
-            .main-content { padding: 20px; }
-            .day-col { min-width: 100%; }
-            .agenda-filters { flex-direction: column; align-items: stretch; }
-            .extrato-header { flex-direction: column; align-items: flex-start; gap: 15px; }
-            .extrato-header .btn { width: 100%; }
-        }
+        @media (max-width: 768px) { body { flex-direction: column; } .sidebar { width: 100%; height: auto; flex-direction: row; overflow-x: auto; } .nav-menu { flex-direction: row; } .main-content { padding: 20px; } .day-col { min-width: 100%; } .agenda-filters { flex-direction: column; align-items: stretch; } .extrato-header { flex-direction: column; align-items: flex-start; gap: 15px; } }
     </style>
 </head>
 <body>
 
     <aside class="sidebar">
-        <div class="sidebar-header">Gestão Premium</div>
+        <div class="sidebar-header">Gestão Clínica</div>
         <div class="nav-menu">
             <div class="nav-item active" onclick="switchView('agenda', this)">📅 Agenda Semanal</div>
             <div class="nav-item" onclick="switchView('grade', this)">🕒 Grade & Bloqueios</div>
             <div class="nav-item" onclick="switchView('financeiro', this)">💰 Financeiro</div>
-            <div class="nav-item" onclick="switchView('config', this)">⚙️ Configurações</div>
         </div>
     </aside>
 
     <main class="main-content">
-        
-        <!-- ================= 1. AGENDA SEMANAL DINÂMICA ================= -->
+        <!-- AGENDA -->
         <section id="agenda" class="view-section active">
             <h1 class="page-title">Agenda de Atendimentos</h1>
             <p class="page-subtitle">Acompanhe os horários gerados pela sua configuração de grade.</p>
-
             <div class="agenda-filters">
                 <div class="filter-group-btn">
-                    <button class="active" onclick="mudarFiltroAgenda(this)">Semana</button>
-                    <button onclick="mudarFiltroAgenda(this)">15 Dias</button>
-                    <button onclick="mudarFiltroAgenda(this)">Mês</button>
+                    <button class="active">Semana</button>
+                    <button>15 Dias</button>
+                    <button>Mês</button>
                 </div>
                 <div style="display: flex; gap: 10px; align-items: center;">
                     <input type="date" id="filtro-data-calendario" style="width: auto; height: 40px; padding: 5px 10px;">
-                    <button class="btn" style="width: auto; height: 40px;" onclick="mostrarSucesso('Agenda posicionada na data selecionada.')">Ir para Data</button>
+                    <button class="btn" style="width: auto; height: 40px;" onclick="mostrarSucesso('Data selecionada.')">Ir</button>
                 </div>
             </div>
-
-            <!-- Onde o Motor JS vai injetar os horários -->
             <div class="agenda-scroll" id="agenda-scroll-container">
-                <!-- Os dias serão gerados via JavaScript -->
+                <!-- Gerado via JS sem mockups -->
             </div>
         </section>
 
-        <!-- ================= 2. GRADE DE HORÁRIOS E BLOQUEIOS ================= -->
+        <!-- GRADE -->
         <section id="grade" class="view-section">
-            <h1 class="page-title">Sistema de Horários e Bloqueios</h1>
-            <p class="page-subtitle">Configure o motor da agenda. O sistema criará os blocos visuais na aba "Agenda" baseados nestas regras.</p>
-
+            <h1 class="page-title">Sistema de Horários</h1>
             <div class="card-container">
-                <h3 style="margin-bottom: 20px; font-size: 1.2rem;">1. Definir Grade de Atendimento Base</h3>
-                <p style="color: var(--text-muted); margin-bottom: 20px;">Isto define de quanto em quanto tempo um horário novo é criado na agenda.</p>
-                
+                <h3 style="margin-bottom: 20px;">Definir Grade de Atendimento Base</h3>
                 <div class="form-grid">
-                    <div>
-                        <label>Hora de Abertura</label>
-                        <input type="time" id="grade-start" value="08:00">
-                    </div>
-                    <div>
-                        <label>Hora de Fechamento</label>
-                        <input type="time" id="grade-end" value="18:00">
-                    </div>
-                    <div>
-                        <label>Duração de Cada Atendimento</label>
-                        <select id="grade-interval">
-                            <option value="30">30 minutos</option>
-                            <option value="45">45 minutos</option>
-                            <option value="60" selected>60 minutos (1 hora)</option>
-                            <option value="90">90 minutos (1h 30m)</option>
-                        </select>
+                    <div><label>Abertura</label><input type="time" id="grade-start" value="08:00"></div>
+                    <div><label>Fechamento</label><input type="time" id="grade-end" value="18:00"></div>
+                    <div><label>Duração (Intervalo)</label>
+                        <select id="grade-interval"><option value="30">30 min</option><option value="60" selected>60 min</option></select>
                     </div>
                 </div>
                 <button class="btn success" style="width: auto; margin-top: 10px;" onclick="aplicarNovaGrade()">⚙️ Gerar Horários na Agenda</button>
             </div>
-
-            <div class="card-container" style="border-left: 4px solid var(--danger);">
-                <h3 style="margin-bottom: 20px; font-size: 1.2rem; color: var(--danger);">2. Lançar Bloqueio / Indisponibilidade</h3>
-                <p style="color: var(--text-muted); margin-bottom: 20px;">Corte horários para manutenções, folgas ou horário de almoço.</p>
-
-                <div class="form-grid">
-                    <div><label>Data</label><input type="date" id="block-date"></div>
-                    <div><label>Hora Início</label><input type="time" id="block-start"></div>
-                    <div><label>Hora Fim</label><input type="time" id="block-end"></div>
-                </div>
-                <div style="margin-bottom: 20px;">
-                    <label>Motivo do Bloqueio</label>
-                    <input type="text" id="block-reason" placeholder="Ex: Manutenção da Sala, Almoço...">
-                </div>
-                <button class="btn danger" style="width: auto;" onclick="confirmarCriacaoBloqueio()">⛔ Inserir Bloqueio na Agenda</button>
-            </div>
         </section>
 
-        <!-- ================= 3. FINANCEIRO COM LOCALSTORAGE ================= -->
+        <!-- FINANCEIRO -->
         <section id="financeiro" class="view-section">
             <h1 class="page-title">Painel Financeiro</h1>
-            <p class="page-subtitle">Controle de caixa com salvamento automático no navegador.</p>
-
-            <div class="filter-bar">
-                <div class="filter-group"><label>Mês</label><input type="month" id="filtro-mes"></div>
-                <div class="filter-group"><label>Data Início</label><input type="date"></div>
-                <div class="filter-group"><label>Data Fim</label><input type="date"></div>
-                <button class="btn" onclick="mostrarSucesso('Filtro aplicado (simulação). O extrato reflete os dados salvos.')">Filtrar</button>
-            </div>
-
-            <!-- Valores calculados via JS -->
             <div class="dash-grid">
-                <div class="dash-card">
-                    <h3>Entradas (Faturamento)</h3><h2 id="dash-entradas" style="color: var(--success)">R$ 0,00</h2>
-                </div>
-                <div class="dash-card">
-                    <h3>Saídas (Despesas)</h3><h2 id="dash-saidas" style="color: var(--danger);">R$ 0,00</h2>
-                </div>
+                <div class="dash-card"><h3>Entradas</h3><h2 id="dash-entradas" style="color: var(--success)">R$ 0,00</h2></div>
+                <div class="dash-card"><h3>Saídas</h3><h2 id="dash-saidas" style="color: var(--danger);">R$ 0,00</h2></div>
                 <div class="dash-card" style="background-color: var(--primary-accent); color: white;">
                     <h3 style="color: #cbd5e1;">Saldo Líquido</h3><h2 id="dash-saldo" style="color: white;">R$ 0,00</h2>
                 </div>
             </div>
-
             <div class="extrato-header">
                 <h2>Extrato do Período</h2>
-                <button class="btn danger" style="width: auto;" onclick="abrirModalDespesa()">➖ Lançar Saída / Despesa</button>
+                <button class="btn danger" style="width: auto;" onclick="abrirModalDespesa()">➖ Lançar Saída</button>
             </div>
-
             <div class="table-responsive">
                 <table class="table">
                     <thead><tr><th>Data</th><th>Descrição</th><th>Tipo</th><th>Valor</th></tr></thead>
-                    <!-- Onde as transacoes salvas vao aparecer -->
                     <tbody id="tabela-extrato">
-                        <tr><td colspan="4" class="empty-state">Nenhuma transação salva. Realize um checkout na agenda ou lance uma saída.</td></tr>
+                        <!-- Gerado via JS LocalStorage -->
                     </tbody>
                 </table>
             </div>
         </section>
-
-        <!-- ================= 4. CONFIGURAÇÕES ================= -->
-        <section id="config" class="view-section">
-            <h1 class="page-title">Configurações Master</h1>
-            <div class="card-container">
-                <label>Cor Primária do Sistema</label>
-                <input type="color" id="corTema" value="#0f172a" style="padding: 5px; height: 50px; width: 100px; cursor: pointer; margin-bottom: 20px;">
-                <button class="btn" onclick="mudarCor()" style="max-width: 200px;">Salvar Identidade</button>
-            </div>
-            
-            <div class="card-container" style="border-left: 4px solid var(--danger);">
-                <h3 style="color: var(--danger); margin-bottom: 10px;">Zona de Perigo (Banco de Dados)</h3>
-                <p style="color: var(--text-muted); margin-bottom: 15px;">Como os dados financeiros estão sendo salvos no navegador (LocalStorage), você pode limpá-los aqui para resetar os testes.</p>
-                <button class="btn outline-danger" onclick="limparBancoDeDadosLocal()" style="max-width: 250px;">🗑️ Limpar Dados Financeiros</button>
-            </div>
-        </section>
     </main>
 
-    <!-- ================= MODAIS INTERNOS ================= -->
-
-    <!-- Modal Novo Agendamento -->
-    <div id="modal-novo-agendamento" class="modal-overlay">
-        <div class="modal-box" style="max-width: 600px;">
-            <h2>Adicionar Agendamento</h2>
-            <p>Agendamento manual para <span id="lbl-data-hora" style="font-weight: bold; color: var(--text-main);"></span></p>
-            <div class="form-grid" style="text-align: left; margin-bottom: 0;">
-                <div><label>Nome do Cliente</label><input type="text" id="novo-nome" placeholder="Nome completo"></div>
-                <div><label>WhatsApp</label><input type="text" id="novo-wpp" placeholder="(00) 00000-0000"></div>
-            </div>
-            <div style="text-align: left; margin-bottom: 20px;">
-                <label>Procedimento</label>
-                <select id="novo-proc">
-                    <option>Limpeza de Pele (R$ 150.00)</option>
-                    <option>Botox (R$ 800.00)</option>
-                </select>
-            </div>
-            <div class="modal-actions">
-                <button class="btn outline" onclick="fecharModais()">Cancelar</button>
-                <button class="btn" onclick="confirmarNovoAgendamento()">Confirmar Agendamento</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal Checkout -->
-    <div id="modal-checkout" class="modal-overlay">
-        <div class="modal-box">
-            <h2>Finalizar Atendimento</h2>
-            <p>Dar baixa em <span id="check-nome-cli" style="font-weight: bold;"></span>.</p>
-            <div style="text-align: left; margin-bottom: 20px;">
-                <label>Valor Pago (R$):</label>
-                <input type="number" id="valor-pagamento" placeholder="Ex: 150">
-            </div>
-            <div class="modal-actions">
-                <button class="btn outline" onclick="fecharModais()">Voltar</button>
-                <button class="btn success" onclick="confirmarCheckout()">Finalizar e Salvar no Caixa</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal de Despesa -->
+    <!-- MODAIS -->
     <div id="modal-despesa" class="modal-overlay">
         <div class="modal-box">
             <h2 style="color: var(--danger)">Registrar Saída</h2>
@@ -337,160 +156,30 @@
             <div style="text-align: left;"><label>Valor (R$):</label><input type="number" id="valor-despesa"></div>
             <div class="modal-actions">
                 <button class="btn outline" onclick="fecharModais()">Cancelar</button>
-                <button class="btn danger" onclick="confirmarDespesa()">Registrar Despesa</button>
+                <button class="btn danger" onclick="confirmarDespesa()">Registrar</button>
             </div>
         </div>
     </div>
-
-    <!-- Modal Cancelar -->
-    <div id="modal-cancelar" class="modal-overlay">
-        <div class="modal-box">
-            <h2>Cancelar Agendamento?</h2>
-            <p>O horário de <span id="canc-nome-cli" style="font-weight: bold;"></span> ficará livre na grade.</p>
-            <div class="modal-actions">
-                <button class="btn outline" onclick="fecharModais()">Manter</button>
-                <button class="btn danger" onclick="executarCancelamento()">Cancelar Consulta</button>
-            </div>
-        </div>
-    </div>
-
+    
     <!-- Modal Sucesso -->
     <div id="modal-sucesso" class="modal-overlay">
-        <div class="modal-box" style="max-width: 400px;">
-            <div style="font-size: 3rem; margin-bottom: 10px;">✅</div>
-            <h2 id="sucesso-titulo">Sucesso!</h2>
-            <p id="sucesso-msg">Operação realizada com sucesso.</p>
+        <div class="modal-box" style="max-width: 400px; text-align: center;">
+            <div style="font-size: 3rem; margin-bottom: 10px;">✅</div><h2 id="sucesso-titulo">Sucesso!</h2><p id="sucesso-msg">Operação realizada.</p>
             <button class="btn" onclick="fecharModais()" style="width: 100%;">OK</button>
         </div>
     </div>
 
     <script>
-        let acaoAlvoId = null; 
-
-        // ================= BANCO DE DADOS LOCAL (LOCALSTORAGE) =================
+        // Banco de Dados Financeiro
         let extratoFinanceiro = JSON.parse(localStorage.getItem('extrato_clinica')) || [];
 
-        // Inicia o sistema
         window.onload = function() {
             gerarAgendaDinamica();
-            atualizarDashboardFinanceiro(); // Puxa os dados salvos
-            
+            atualizarDashboardFinanceiro();
             let hoje = new Date().toISOString().split('T')[0];
             document.getElementById('filtro-data-calendario').value = hoje;
         }
 
-        // ================= FUNÇÕES DO FINANCEIRO (SALVAMENTO REAL) =================
-        function formatarMoeda(valor) {
-            return parseFloat(valor).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-        }
-
-        function salvarTransacao(descricao, tipo, valor) {
-            if(!valor || isNaN(valor)) valor = 0;
-            
-            let novaTransacao = {
-                id: Date.now(),
-                data: new Date().toLocaleDateString('pt-BR'),
-                descricao: descricao,
-                tipo: tipo, // 'entrada' ou 'saida'
-                valor: parseFloat(valor)
-            };
-            
-            // Adiciona no array
-            extratoFinanceiro.push(novaTransacao);
-            
-            // Salva no navegador permanentemente
-            localStorage.setItem('extrato_clinica', JSON.stringify(extratoFinanceiro));
-            
-            // Atualiza a tela
-            atualizarDashboardFinanceiro();
-        }
-
-        function atualizarDashboardFinanceiro() {
-            let totalEntradas = 0;
-            let totalSaidas = 0;
-            const tbody = document.getElementById('tabela-extrato');
-            tbody.innerHTML = '';
-
-            if(extratoFinanceiro.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="4" class="empty-state">Nenhuma transação salva. Realize um checkout na agenda ou lance uma saída.</td></tr>`;
-            } else {
-                // Inverte a ordem para os mais novos aparecerem no topo da lista
-                let transacoesOrdenadas = [...extratoFinanceiro].sort((a, b) => b.id - a.id);
-
-                transacoesOrdenadas.forEach(t => {
-                    if(t.tipo === 'entrada') totalEntradas += t.valor;
-                    if(t.tipo === 'saida') totalSaidas += t.valor;
-
-                    let row = `<tr>
-                        <td>${t.data}</td>
-                        <td>${t.descricao}</td>
-                        <td><span class="badge ${t.tipo === 'entrada' ? 'income' : 'expense'}">${t.tipo === 'entrada' ? 'Entrada' : 'Saída'}</span></td>
-                        <td class="${t.tipo === 'entrada' ? 'val-income' : 'val-expense'}">${t.tipo === 'entrada' ? '+' : '-'} R$ ${formatarMoeda(t.valor)}</td>
-                    </tr>`;
-                    tbody.insertAdjacentHTML('beforeend', row);
-                });
-            }
-
-            let saldo = totalEntradas - totalSaidas;
-
-            // Atualiza os H2 do dashboard
-            document.getElementById('dash-entradas').innerText = `R$ ${formatarMoeda(totalEntradas)}`;
-            document.getElementById('dash-saidas').innerText = `R$ ${formatarMoeda(totalSaidas)}`;
-            document.getElementById('dash-saldo').innerText = `R$ ${formatarMoeda(saldo)}`;
-        }
-
-        function limparBancoDeDadosLocal() {
-            if(confirm("ATENÇÃO: Isso apagará todas as entradas e saídas do sistema e zerará o saldo. Tem certeza?")) {
-                localStorage.removeItem('extrato_clinica');
-                extratoFinanceiro = [];
-                atualizarDashboardFinanceiro();
-                mostrarSucesso("Banco de dados local foi resetado.");
-            }
-        }
-
-        // ================= FLUXOS DE CHECKOUT E DESPESA =================
-        function abrirModalCheckout(idCard, nome, valorBase) {
-            acaoAlvoId = idCard;
-            document.getElementById('check-nome-cli').innerText = nome;
-            document.getElementById('valor-pagamento').value = valorBase;
-            document.getElementById('modal-checkout').classList.add('active');
-        }
-
-        function confirmarCheckout() {
-            let valorInformado = document.getElementById('valor-pagamento').value || "0.00";
-            let nomeCliente = document.getElementById('check-nome-cli').innerText;
-            
-            // 1. Atualiza visual do Card da Agenda
-            const card = document.getElementById(acaoAlvoId);
-            if(card) {
-                card.style.opacity = '0.6';
-                card.querySelector('.slot-actions').innerHTML = `<span style="color: var(--success); font-weight: bold; padding: 5px 0;">✔️ Pago e Salvo</span>`;
-                const badge = card.querySelector('.badge');
-                if(badge) { badge.innerText = "Concluído"; badge.style.background = "var(--success-light)"; badge.style.color = "var(--success)"; }
-            }
-
-            // 2. Salva permanentemente no Financeiro
-            salvarTransacao(`Atendimento - ${nomeCliente}`, 'entrada', valorInformado);
-
-            fecharModais();
-            mostrarSucesso(`R$ ${formatarMoeda(valorInformado)} foi salvo permanentemente no fluxo de caixa!`);
-        }
-
-        function abrirModalDespesa() { document.getElementById('modal-despesa').classList.add('active'); }
-        
-        function confirmarDespesa() {
-            let desc = document.getElementById('desc-despesa').value || "Despesa Lançada";
-            let valor = document.getElementById('valor-despesa').value || "0.00";
-            
-            salvarTransacao(desc, 'saida', valor);
-            
-            fecharModais();
-            document.getElementById('desc-despesa').value = '';
-            document.getElementById('valor-despesa').value = '';
-            mostrarSucesso("Despesa salva no banco de dados.");
-        }
-
-        // ================= NAVEGAÇÃO E UTILS =================
         function switchView(viewId, element) {
             document.querySelectorAll('.view-section').forEach(sec => sec.classList.remove('active'));
             document.getElementById(viewId).classList.add('active');
@@ -499,13 +188,12 @@
         }
 
         function fecharModais() { document.querySelectorAll('.modal-overlay').forEach(m => m.classList.remove('active')); }
-        function chamarWpp(num) { window.open(`https://wa.me/+55${num}`, '_blank'); }
-        function mostrarSucesso(msg) { document.getElementById('sucesso-msg').innerText = msg; document.getElementById('modal-sucesso').classList.add('active'); }
+        function mostrarSucesso(msg) { fecharModais(); document.getElementById('sucesso-msg').innerText = msg; document.getElementById('modal-sucesso').classList.add('active'); }
 
-        // ================= MOTOR GERADOR DE AGENDA ================= //
+        // ================= AGENDA TOTALMENTE ZERADA =================
         function aplicarNovaGrade() {
             gerarAgendaDinamica();
-            mostrarSucesso("A Grade de Horários foi atualizada! A Agenda Semanal agora exibe os novos intervalos.");
+            mostrarSucesso("A Grade de Horários foi atualizada!");
             switchView('agenda', document.querySelector('.nav-item:nth-child(1)'));
         }
 
@@ -527,51 +215,19 @@
             const container = document.getElementById('agenda-scroll-container');
             container.innerHTML = ''; 
 
-            const diasMocados = [
-                { titulo: "Hoje", data: "15 de Maio, 2026", dateRef: "15/05/2026" },
-                { titulo: "Amanhã", data: "16 de Maio, 2026", dateRef: "16/05/2026" },
-                { titulo: "Depois", data: "17 de Maio, 2026", dateRef: "17/05/2026" }
+            const diasFormatos = [
+                { titulo: "Segunda-feira", data: "Atual", dateRef: "seg" },
+                { titulo: "Terça-feira", data: "Atual", dateRef: "ter" },
+                { titulo: "Quarta-feira", data: "Atual", dateRef: "qua" }
             ];
 
-            diasMocados.forEach((dia, dIndex) => {
-                let htmlCol = `
-                    <div class="day-col">
-                        <div class="day-header">
-                            <h3>${dia.titulo}</h3>
-                            <span>${dia.data}</span>
-                        </div>
-                        <div class="day-body">
-                `;
+            diasFormatos.forEach((dia, dIndex) => {
+                let htmlCol = `<div class="day-col"><div class="day-header"><h3>${dia.titulo}</h3><span>${dia.data}</span></div><div class="day-body">`;
 
                 horarios.forEach((hora, hIndex) => {
                     let uniqueId = `slot-${dIndex}-${hIndex}`;
-
-                    // Simulação visual para teste
-                    if(dIndex === 0 && hora === "09:00") {
-                        htmlCol += `
-                            <div class="slot booked" id="${uniqueId}">
-                                <div class="header"><span class="time">${hora}</span><span class="badge">Agendado</span></div>
-                                <h4>Mariana Silva</h4><p>Limpeza de Pele (${interval}min)<br>📱 (11) 98765-4321</p>
-                                <div class="slot-actions">
-                                    <button class="btn outline-danger" onclick="abrirModalCancelar('${uniqueId}', 'Mariana Silva')">❌ Cancelar</button>
-                                    <button class="btn success" onclick="abrirModalCheckout('${uniqueId}', 'Mariana Silva', 150)">✅ Checkout</button>
-                                </div>
-                            </div>`;
-                    } 
-                    else if (dIndex === 0 && hora === "12:00") {
-                        htmlCol += `
-                            <div class="slot blocked" id="${uniqueId}">
-                                <div class="time">${hora}</div>
-                                <div class="reason">🍔 Almoço / Pausa</div>
-                                <button class="btn-unlock" onclick="desbloquearHorario('${uniqueId}')">Desbloquear</button>
-                            </div>`;
-                    } 
-                    else {
-                        htmlCol += `
-                            <div class="slot free" id="${uniqueId}" onclick="abrirModalNovoAgendamento('${dia.dateRef}', '${hora}', '${uniqueId}')">
-                                <span class="time">${hora}</span><span class="status">+ Agendar</span>
-                            </div>`;
-                    }
+                    // Gera SOMENTE slots livres (zerados)
+                    htmlCol += `<div class="slot free" id="${uniqueId}"><span class="time">${hora}</span><span class="status">Livre</span></div>`;
                 });
 
                 htmlCol += `</div></div>`;
@@ -579,84 +235,44 @@
             });
         }
 
-        function mudarFiltroAgenda(btn) {
-            btn.parentElement.querySelectorAll('button').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            const container = document.getElementById('agenda-scroll-container');
-            container.style.opacity = '0.5';
-            setTimeout(() => { container.style.opacity = '1'; }, 300);
-        }
+        // ================= FINANCEIRO =================
+        function formatarMoeda(valor) { return parseFloat(valor).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
 
-        // ================= AÇÕES DA AGENDA ================= //
-        let slotClicadoParaAgendar = null;
+        function atualizarDashboardFinanceiro() {
+            let totalEntradas = 0; let totalSaidas = 0;
+            const tbody = document.getElementById('tabela-extrato');
+            tbody.innerHTML = '';
 
-        function abrirModalNovoAgendamento(data, hora, idSlot) {
-            slotClicadoParaAgendar = idSlot;
-            document.getElementById('lbl-data-hora').innerText = `${data} às ${hora}`;
-            document.getElementById('modal-novo-agendamento').classList.add('active');
-        }
-
-        function confirmarNovoAgendamento() {
-            let nome = document.getElementById('novo-nome').value || "Novo Cliente";
-            let slot = document.getElementById(slotClicadoParaAgendar);
-            
-            if(slot) {
-                let hora = slot.querySelector('.time').innerText;
-                slot.className = "slot booked";
-                slot.innerHTML = `
-                    <div class="header"><span class="time">${hora}</span><span class="badge">Agendado</span></div>
-                    <h4>${nome}</h4><p>Serviço Agendado</p>
-                    <div class="slot-actions">
-                        <button class="btn outline-danger" onclick="abrirModalCancelar('${slotClicadoParaAgendar}', '${nome}')">❌ Cancelar</button>
-                        <button class="btn success" onclick="abrirModalCheckout('${slotClicadoParaAgendar}', '${nome}', 0)">✅ Checkout</button>
-                    </div>`;
-                slot.onclick = null;
+            if(extratoFinanceiro.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="4" class="empty-state">Nenhuma transação financeira registrada.</td></tr>`;
+            } else {
+                let transacoesOrdenadas = [...extratoFinanceiro].sort((a, b) => b.id - a.id);
+                transacoesOrdenadas.forEach(t => {
+                    if(t.tipo === 'entrada') totalEntradas += t.valor;
+                    if(t.tipo === 'saida') totalSaidas += t.valor;
+                    let row = `<tr><td>${t.data}</td><td>${t.descricao}</td><td><span class="badge ${t.tipo === 'entrada' ? 'income' : 'expense'}">${t.tipo === 'entrada' ? 'Entrada' : 'Saída'}</span></td><td class="${t.tipo === 'entrada' ? 'val-income' : 'val-expense'}">${t.tipo === 'entrada' ? '+' : '-'} R$ ${formatarMoeda(t.valor)}</td></tr>`;
+                    tbody.insertAdjacentHTML('beforeend', row);
+                });
             }
+
+            document.getElementById('dash-entradas').innerText = `R$ ${formatarMoeda(totalEntradas)}`;
+            document.getElementById('dash-saidas').innerText = `R$ ${formatarMoeda(totalSaidas)}`;
+            document.getElementById('dash-saldo').innerText = `R$ ${formatarMoeda(totalEntradas - totalSaidas)}`;
+        }
+
+        function abrirModalDespesa() { document.getElementById('modal-despesa').classList.add('active'); }
+        
+        function confirmarDespesa() {
+            let desc = document.getElementById('desc-despesa').value || "Despesa";
+            let valor = document.getElementById('valor-despesa').value || "0";
+            
+            extratoFinanceiro.push({ id: Date.now(), data: new Date().toLocaleDateString('pt-BR'), descricao: desc, tipo: 'saida', valor: parseFloat(valor) });
+            localStorage.setItem('extrato_clinica', JSON.stringify(extratoFinanceiro));
             
             fecharModais();
-            mostrarSucesso(`Consulta marcada para ${nome}!`);
-        }
-
-        function abrirModalCancelar(idCard, nome) {
-            acaoAlvoId = idCard;
-            document.getElementById('canc-nome-cli').innerText = nome;
-            document.getElementById('modal-cancelar').classList.add('active');
-        }
-
-        function executarCancelamento() {
-            const card = document.getElementById(acaoAlvoId);
-            if(card) {
-                const horaOriginal = card.querySelector('.time').innerText;
-                card.className = "slot free";
-                card.innerHTML = `<span class="time">${horaOriginal}</span><span class="status">+ Agendar</span>`;
-                card.onclick = function() { abrirModalNovoAgendamento('Data', horaOriginal, acaoAlvoId); };
-            }
-            fecharModais();
-            mostrarSucesso("Agendamento cancelado. Horário livre novamente.");
-        }
-
-        function confirmarCriacaoBloqueio() {
-            let start = document.getElementById('block-start').value;
-            let end = document.getElementById('block-end').value;
-            if(!start || !end) return alert("Preencha hora de início e fim.");
-            mostrarSucesso(`O período das ${start} às ${end} foi bloqueado.`);
-        }
-
-        function desbloquearHorario(idBlock) {
-            const block = document.getElementById(idBlock);
-            if(block) {
-                const hora = block.querySelector('.time').innerText;
-                block.className = "slot free";
-                block.innerHTML = `<span class="time">${hora}</span><span class="status">+ Agendar</span>`;
-                block.onclick = function() { abrirModalNovoAgendamento('Data', hora, idBlock); };
-                mostrarSucesso("Bloqueio removido.");
-            }
-        }
-
-        function mudarCor() { 
-            const cor = document.getElementById('corTema').value; 
-            document.documentElement.style.setProperty('--primary-accent', cor); 
-            mostrarSucesso("Identidade visual do sistema salva."); 
+            document.getElementById('desc-despesa').value = ''; document.getElementById('valor-despesa').value = '';
+            atualizarDashboardFinanceiro();
+            mostrarSucesso("Despesa salva.");
         }
     </script>
 </body>
