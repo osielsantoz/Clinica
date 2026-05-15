@@ -30,22 +30,25 @@
         
         /* Formulários */
         label { display: block; font-weight: 600; margin-top: 18px; margin-bottom: 8px; font-size: 0.9rem; color: #374151; }
-        input, select { width: 100%; padding: 14px; border-radius: 10px; border: 1px solid var(--border); outline: none; background: #f9fafb; font-size: 1rem; transition: 0.2s;}
-        input:focus, select:focus { border-color: var(--primary); background: #fff; box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.08); }
+        input, select, textarea { width: 100%; padding: 14px; border-radius: 10px; border: 1px solid var(--border); outline: none; background: #f9fafb; font-size: 1rem; transition: 0.2s;}
+        input:focus, select:focus, textarea:focus { border-color: var(--primary); background: #fff; box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.08); }
         
         /* Botões */
         .btn { background: var(--primary); color: #fff; border: none; padding: 16px; border-radius: 12px; width: 100%; font-weight: bold; cursor: pointer; margin-top: 25px; font-size: 1rem; transition: 0.2s; display: inline-flex; justify-content: center; align-items: center; gap: 8px; box-shadow: 0 4px 12px rgba(79, 70, 229, 0.15);}
         .btn:hover { opacity: 0.9; transform: translateY(-1px); }
         .btn.success { background: var(--success); box-shadow: 0 4px 12px rgba(16, 185, 129, 0.15); }
+        .btn.danger { background: var(--danger); box-shadow: 0 4px 12px rgba(239, 68, 68, 0.15); }
         .btn.outline { background: transparent; color: var(--text); border: 1px solid var(--border); box-shadow: none; margin-top: 15px;}
         .btn-link { background: none; border: none; color: var(--primary); font-weight: 600; cursor: pointer; margin-top: 20px; width: 100%; font-size: 0.95rem; text-align: center; display: block;}
         
         /* Lista de Agendamentos do Cliente (Cards) */
         .client-appointments-list { display: flex; flex-direction: column; gap: 12px; margin-top: 25px; }
-        .client-appt-card { border: 1px solid var(--border); border-left: 5px solid var(--primary); padding: 16px; border-radius: 12px; background: #f8fafc; }
+        .client-appt-card { border: 1px solid var(--border); border-left: 5px solid var(--primary); padding: 16px; border-radius: 12px; background: #f8fafc; display: flex; justify-content: space-between; align-items: center; }
         .client-appt-time { font-weight: 800; color: var(--primary); font-size: 0.95rem; background: #e0e7ff; padding: 4px 8px; border-radius: 6px; display: inline-block; margin-bottom: 8px; }
         .client-appt-name { font-weight: 700; font-size: 1.1rem; color: #111827; }
         .client-appt-price { color: var(--success); font-weight: bold; font-size: 0.95rem; margin-top: 4px; }
+        .btn-cancelar-appt { background: none; border: 1px solid var(--border); color: var(--danger); padding: 8px 12px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 0.85rem; transition: 0.2s;}
+        .btn-cancelar-appt:hover { background: #fef2f2; border-color: var(--danger); }
         .empty-dashboard { text-align: center; padding: 30px 10px; color: var(--text-light); font-style: italic; font-size: 0.95rem; }
 
         /* Grade de Horários Clicáveis */
@@ -56,20 +59,38 @@
         
         .erro { color: var(--danger); font-size: 0.9rem; text-align: center; margin-top: 15px; font-weight: 600; }
 
+        /* Modais */
+        .modal-overlay { position: fixed; inset: 0; background: rgba(17, 24, 39, 0.8); display: none; align-items: center; justify-content: center; z-index: 99999; padding: 20px; }
+        .modal-overlay.active { display: flex; }
+        .modal-box { background: white; padding: 30px 24px; border-radius: 16px; width: 100%; max-width: 400px; text-align: center; }
+
         /* BOTÃO FLUTUANTE DO WHATSAPP PREMIUM */
-        .wpp-floating-btn { position: fixed; width: 60px; height: 60px; bottom: 30px; right: 30px; background-color: #25d366; color: white; border-radius: 50px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.15); z-index: 99999; display: flex; align-items: center; justify-content: center; text-decoration: none; transition: 0.3s; }
+        .wpp-floating-btn { position: fixed; width: 60px; height: 60px; bottom: 30px; right: 30px; background-color: #25d366; color: white; border-radius: 50px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.15); z-index: 9999; display: flex; align-items: center; justify-content: center; text-decoration: none; transition: 0.3s; }
         .wpp-floating-btn:hover { transform: scale(1.08); box-shadow: 0 6px 20px rgba(37, 211, 102, 0.3); }
         .wpp-floating-btn svg { width: 32px; height: 32px; fill: white; }
     </style>
 </head>
 <body>
 
-    <!-- BOTÃO FLUTUANTE DA YOD (WHATSAPP WEB/APP LINK AUTOMÁTICO) -->
+    <!-- BOTÃO FLUTUANTE DA YOD -->
     <a href="https://wa.me/559186009455?text=Olá!%20Gostaria%20de%20tirar%20uma%20dúvida%20sobre%20meu%20agendamento%20na%20Yod." class="wpp-floating-btn" target="_blank" title="Falar com a Yod no WhatsApp">
         <svg viewBox="0 0 32 32">
             <path d="M16 2a13 13 0 0 0-11.27 19.51L3 29l7.71-2A13 13 0 1 0 16 2zm6.79 17.61c-.3.84-1.52 1.54-2.5 1.66-.74.09-1.7.12-2.73-.21a12.87 12.87 0 0 1-5.34-3.53 11 11 0 0 1-2.22-3.83c-.47-1.32-.1-.23-1.07-1.52A4.27 4.27 0 0 1 9.21 10c.32-.66.86-.77 1.17-.77h.78c.24 0 .47 0 .67.43l1.15 2.78c.1.25.17.5.01.81l-.54 1.1c-.16.3-.33.61-.06 1.07a8.77 8.77 0 0 0 2 2.44 7.55 7.55 0 0 0 3 1.54c.46.2.73.17.94-.07l.86-1c.21-.24.47-.2.72-.1l2.84 1.42c.26.13.43.2.5.33.1.2.1.92-.21 1.76z"/>
         </svg>
     </a>
+
+    <!-- MODAL DE CONFIRMAÇÃO DE CANCELAMENTO COM MOTIVO -->
+    <div id="modal-cancelar" class="modal-overlay">
+        <div class="modal-box">
+            <h3 style="font-size: 1.3rem; color: #111827; margin-bottom: 8px;">Cancelar Agendamento?</h3>
+            <p style="color: var(--text-light); font-size: 0.9rem; margin-bottom: 15px;">Por favor, informe-nos brevemente o motivo do cancelamento:</p>
+            <textarea id="txt-motivo-cancelamento" rows="3" placeholder="Ex: Tive um imprevisto no trabalho..." style="resize: none;"></textarea>
+            <div class="grid-2" style="margin-top: 20px;">
+                <button class="btn outline" style="margin:0; padding:12px;" id="btn-fechar-modal-cancelar">Voltar</button>
+                <button class="btn danger" style="margin:0; padding:12px;" id="btn-confirmar-cancelar-nuvem">Confirmar</button>
+            </div>
+        </div>
+    </div>
 
     <!-- BARRA SUPERIOR -->
     <nav class="navbar">
@@ -106,12 +127,11 @@
             <div id="erro-c" class="erro"></div>
         </div>
 
-        <!-- TELA 3: DASHBOARD PRINCIPAL (DASHBOARD COM MEUS ATENDIMENTOS) -->
+        <!-- TELA 3: DASHBOARD PRINCIPAL -->
         <div id="t-dashboard" class="screen">
             <div class="welcome-user" id="user-greeting">Olá! 👋</div>
             <p style="color: var(--text-light); font-size: 0.95rem; margin-bottom: 20px;">Estes são os seus procedimentos agendados na Yod:</p>
             
-            <!-- Cards de Consultas Marcadas do Usuário -->
             <div class="client-appointments-list" id="meus-cards-agendados">
                 <p style="color: gray; text-align: center;">Carregando seus agendamentos...</p>
             </div>
@@ -119,7 +139,7 @@
             <button class="btn success" id="btn-ir-marcar">+ Marcar Nova Consulta</button>
         </div>
 
-        <!-- TELA 4: FORMULÁRIO DE NOVO AGENDAMENTO (OCULTO POR PADRÃO) -->
+        <!-- TELA 4: FORMULÁRIO DE NOVO AGENDAMENTO -->
         <div id="t-agenda" class="screen">
             <h1 style="text-align: left; font-size: 1.4rem; margin-bottom: 5px;">Nova Marcação</h1>
             <p style="color: var(--text-light); font-size: 0.9rem; margin-bottom: 20px;">Escolha as opções para o seu procedimento.</p>
@@ -131,7 +151,6 @@
             <input type="date" id="data">
             <div id="aviso-data" class="erro" style="text-align: left; margin-top: 6px; font-size: 0.85rem;"></div>
             
-            <!-- GRADE DINÂMICA -->
             <div id="area-horarios" style="display:none; margin-top: 10px;">
                 <label>3. Escolha o Horário Disponível</label>
                 <div class="grid-horarios" id="grid-h"></div>
@@ -144,7 +163,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, getDoc, doc, setDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, getDoc, doc, setDoc, onSnapshot, query, orderBy, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
         import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
 
         const firebaseConfig = { apiKey: "AIzaSyD4SElQHlfQjbN2NsHC0Z9_1Gobb6WHd8o", authDomain: "clinicabase-a85a7.firebaseapp.com", projectId: "clinicabase-a85a7", storageBucket: "clinicabase-a85a7.firebasestorage.app", messagingSenderId: "324071825277", appId: "1:324071825277:web:6a0d3c4413f7a7569fb614" };
@@ -155,6 +174,7 @@
         let bloqueiosPorDatas = {};
         let agendamentosExistentes = [];
         let horaSelecionada = null;
+        let idAgendamentoParaCancelar = null; // Variável de controle para o cancelamento
 
         onAuthStateChanged(auth, (user) => { 
             if(user) { 
@@ -170,7 +190,6 @@
             }
         });
 
-        // Conexões de Eventos Fixadas
         document.getElementById('btn-entrar-action').addEventListener('click', () => {
             const e = document.getElementById('l-email').value, s = document.getElementById('l-senha').value;
             signInWithEmailAndPassword(auth, e, s).catch(() => document.getElementById('erro-l').innerText = "E-mail ou senha incorretos.");
@@ -200,6 +219,12 @@
         document.getElementById('btn-voltar-dash').addEventListener('click', () => mudarTela('t-dashboard'));
         document.getElementById('btn-finalizar-marca').addEventListener('click', () => submeterAgendamento());
         document.getElementById('data').addEventListener('change', () => escutarMudancaDataCalendario());
+        
+        // Eventos do modal de cancelamento
+        document.getElementById('btn-fechar-modal-cancelar').addEventListener('click', () => {
+            document.getElementById('modal-cancelar').classList.remove('active');
+        });
+        document.getElementById('btn-confirmar-cancelar-nuvem').addEventListener('click', () => efetuarCancelamentoComMotivo());
 
         function mudarTela(id) { 
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active')); 
@@ -207,7 +232,6 @@
         }
 
         async function conectarBancoDados() {
-            // Sincroniza Cores e Marca da Yod
             const geralSnap = await getDoc(doc(db, "configuracoes", "geral"));
             if(geralSnap.exists()) {
                 const c = geralSnap.data();
@@ -216,17 +240,14 @@
                 if(c.logo) document.getElementById('ui-logo').innerHTML = `<img src="${c.logo}">`;
             }
 
-            // Grade de Horários Padrão
             const gradeSnap = await getDoc(doc(db, "configuracoes", "parametros_grade"));
             if(gradeSnap.exists()) gradeParametros = gradeSnap.data();
 
-            // Sincroniza Aba de Bloqueios Específicos do Painel
             onSnapshot(doc(db, "configuracoes", "bloqueios_datas"), (snap) => {
                 if(snap.exists()) bloqueiosPorDatas = snap.data();
                 escutarMudancaDataCalendario(); 
             });
 
-            // Dropdown de Procedimentos Cadastrados
             onSnapshot(collection(db, "procedimentos"), (snap) => {
                 const select = document.getElementById('servico');
                 select.innerHTML = "<option value=''>Clique para escolher o procedimento...</option>";
@@ -236,7 +257,6 @@
                 });
             });
 
-            // Escuta Ocupações Gerais do Firebase (Alimenta o Dashboard do Paciente e a Grade)
             onSnapshot(collection(db, "agendamentos"), (snap) => {
                 agendamentosExistentes = [];
                 const boxDashboard = document.getElementById('meus-cards-agendados');
@@ -245,17 +265,33 @@
 
                 snap.forEach(d => {
                     const a = d.data();
-                    agendamentosExistentes.push(a);
+                    let obj = a;
+                    obj.id = d.id; // Guarda a ID estrutural do documento
+                    agendamentosExistentes.push(obj);
 
-                    // SE O AGENDAMENTO PERTENCER A ESTE CLIENTE LOGADO (Pelo E-mail)
                     if(a.pacienteEmail === pacienteLogado.email) {
                         boxDashboard.innerHTML += `
                             <div class="client-appt-card">
-                                <div class="client-appt-time">🗓️ ${a.data} às 🕒 ${a.hora}</div>
-                                <div class="client-appt-name">${a.servico}</div>
-                                <div class="client-appt-price">Investimento: R$ ${a.valor.toFixed(2)}</div>
+                                <div>
+                                    <div class="client-appt-time">Mancado: ${a.data} às ${a.hora}</div>
+                                    <div class="client-appt-name">${a.servico}</div>
+                                    <div class="client-appt-price">R$ ${a.valor.toFixed(2)}</div>
+                                </div>
+                                <button class="btn-cancelar-appt" id="btn-gatilho-cancel-${d.id}">Cancelar</button>
                             </div>`;
                         meusAtendimentosContador++;
+                    }
+                });
+
+                // Cria os gatilhos pros botões de cancelar gerados dinamicamente
+                snap.forEach(d => {
+                    const btn = document.getElementById(`btn-gatilho-cancel-${d.id}`);
+                    if(btn) {
+                        btn.addEventListener('click', () => {
+                            idAgendamentoParaCancelar = d.id;
+                            document.getElementById('txt-motivo-cancelamento').value = "";
+                            document.getElementById('modal-cancelar').classList.add('active');
+                        });
                     }
                 });
 
@@ -267,9 +303,31 @@
             });
         }
 
-        // Desenha os Horários Livres no Celular do Cliente
-        function gerarHorariosNoLayout() {
-            // Caso seja necessário recarregar manualmente
+        // Lógica de Cancelamento com Envio do Motivo
+        async function efetuarCancelamentoComMotivo() {
+            if(!idAgendamentoParaCancelar) return;
+            const motivoText = document.getElementById('txt-motivo-cancelamento').value || "Não informado pelo cliente";
+
+            const apptCancelado = agendamentosExistentes.find(x => x.id === idAgendamentoParaCancelar);
+
+            if(apptCancelado) {
+                // Deleta da coleção ativa de agendamentos para liberar o horário
+                await deleteDoc(doc(db, "agendamentos", idAgendamentoParaCancelar));
+
+                // Opcional: Registra nas notificações ou logs de cancelamentos para auditoria da recepção
+                await addDoc(collection(db, "historico_cancelamentos"), {
+                    pacienteNome: apptCancelado.pacienteNome,
+                    pacienteEmail: apptCancelado.pacienteEmail,
+                    servico: apptCancelado.servico,
+                    data: apptCancelado.data,
+                    hora: apptCancelado.hora,
+                    motivo: motivoText,
+                    ts: Date.now()
+                });
+            }
+
+            document.getElementById('modal-cancelar').classList.remove('active');
+            alert("Agendamento cancelado com sucesso. O horário foi liberado!");
         }
 
         function escutarMudancaDataCalendario() {
@@ -293,7 +351,6 @@
 
             for(let m = startM; m < endM; m += interv) {
                 let h = Math.floor(m/60).toString().padStart(2,'0')+":"+(m%60).toString().padStart(2,'0');
-                
                 if(!bloqueadosDoDia.includes(h)) {
                     let ocupado = agendamentosExistentes.some(a => a.data === dataBr && a.hora === h);
                     if(!ocupado) {
@@ -335,7 +392,7 @@
 
             await addDoc(collection(db, "agendamentos"), {
                 pacienteNome: pacienteLogado.displayName || "Paciente Web",
-                pacienteEmail: pacienteLogado.email, // Link estrutural crucial do Dashboard
+                pacienteEmail: pacienteLogado.email, 
                 pacienteWhatsapp: wpp,
                 servico: servNome,
                 valor: servValor,
