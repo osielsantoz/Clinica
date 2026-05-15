@@ -8,33 +8,25 @@
         :root { --sidebar-bg: #09090b; --primary-accent: #4f46e5; --bg-color: #f4f4f5; --card-bg: #ffffff; --text-main: #09090b; --border-color: #e4e4e7; --success: #10b981; --danger: #ef4444; }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
         body { background-color: var(--bg-color); color: var(--text-main); display: flex; height: 100vh; overflow: hidden; }
-        
-        /* Sidebar */
         .sidebar { width: 260px; background-color: var(--sidebar-bg); color: #fff; display: flex; flex-direction: column; }
         .sidebar-header { padding: 24px; font-size: 1.1rem; font-weight: 900; border-bottom: 1px solid rgba(255,255,255,0.05); }
         .nav-menu { padding: 20px 0; }
         .nav-item { padding: 15px 24px; color: #a1a1aa; cursor: pointer; font-weight: 500; display: flex; align-items: center; gap: 12px; transition: 0.2s; }
         .nav-item:hover, .nav-item.active { background-color: var(--primary-accent); color: #fff; }
-        
-        /* Main */
         .main-content { flex: 1; padding: 40px; overflow-y: auto; }
         .view-section { display: none; max-width: 900px; margin: 0 auto; animation: fadeIn 0.3s ease; }
         .view-section.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        
         .card-container { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 30px; margin-bottom: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.02); }
         input { width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 1rem; margin-bottom: 15px; outline: none; background: #fafafa; }
         input:focus { border-color: var(--primary-accent); background: #fff; }
         label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.9rem; }
-        
         .btn { background: var(--primary-accent); color: #fff; border: none; padding: 14px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; transition: 0.2s; }
         .btn:hover { opacity: 0.9; }
         .btn.danger { background: var(--danger); padding: 6px 12px; font-size: 0.85rem; width: auto; }
-        
-        .upload-box { border: 2px dashed var(--border-color); border-radius: 10px; background: #fafafa; padding: 20px; text-align: center; cursor: pointer; margin-bottom: 20px; }
-        .upload-box img { max-width: 150px; border-radius: 6px; }
-
-        /* Tabelas Corporativas */
+        .upload-box { border: 2px dashed var(--border-color); border-radius: 10px; background: #fafafa; padding: 25px; text-align: center; cursor: pointer; margin-bottom: 20px; transition: 0.2s; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 180px; }
+        .upload-box:hover { background: #f0f0f5; border-color: var(--primary-accent); }
+        .upload-box img { max-width: 140px; max-height: 140px; border-radius: 8px; object-fit: cover; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
         table { width: 100%; border-collapse: collapse; margin-top: 15px; background: #fff; border-radius: 8px; overflow: hidden; border: 1px solid var(--border-color); }
         th, td { padding: 14px; text-align: left; border-bottom: 1px solid var(--border-color); font-size: 0.95rem; }
         th { background: #fafafa; font-weight: 600; color: #71717a; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 0.5px; }
@@ -53,26 +45,27 @@
         <!-- ABA 1: IDENTIDADE VISUAL -->
         <section id="identidade" class="view-section active">
             <h1>Configuração do Sistema</h1>
-            <p style="color:gray; margin-bottom: 20px;">Personalize a identidade visual aplicada nas plataformas Yod.</p>
+            <p style="color:gray; margin-bottom: 20px;">Personalize a identidade visual e salve a logomarca da clínica direto no banco.</p>
             <div class="card-container">
                 <label>Nome do Estabelecimento</label>
                 <input type="text" id="cfg-nome" value="Yod Micropigmentação e Estética">
-                <label>Logomarca</label>
+                
+                <label>Logomarca da Clínica</label>
                 <div class="upload-box" id="upload-trigger">
                     <input type="file" id="file-logo" accept="image/*" style="display: none;">
-                    <div id="upload-preview"><span>📁 Clique para carregar ou trocar a logo</span></div>
+                    <div id="upload-preview"><span style="font-size: 2rem;">📁</span><br><span style="font-weight: 600; color: gray;">Clique para carregar e salvar a logomarca</span></div>
                 </div>
+                
                 <label>Cor Identidade (Botões e Destaques)</label>
                 <input type="color" id="cfg-cor" value="#4f46e5" style="height: 50px; padding:5px; cursor: pointer;">
-                <button class="btn" id="btn-salvar-cfg" style="margin-top: 10px;">Salvar Identidade Visual</button>
+                <button class="btn" id="btn-salvar-cfg" style="margin-top: 10px;">💾 Salvar Identidade Visual no Banco</button>
             </div>
         </section>
 
-        <!-- ABA 2: GERENCIAMENTO E LISTAGEM DE LOGINS (ATUALIZADA) -->
+        <!-- ABA 2: GERENCIAMENTO DE LOGINS -->
         <section id="acessos" class="view-section">
             <h1>Gerenciar Logins da Recepção</h1>
             <p style="color:gray; margin-bottom: 20px;">Crie novos acessos para o painel ou audite as senhas ativas na tabela abaixo.</p>
-            
             <div class="card-container">
                 <h3 style="margin-bottom: 15px; color: var(--primary-accent);">➕ Criar Novo Operador</h3>
                 <div class="grid-2">
@@ -82,7 +75,6 @@
                 <button class="btn" style="background: var(--success);" id="btn-cadastrar-operador">Criar Acesso ao Painel</button>
             </div>
 
-            <!-- TABELA DE AUDITORIA DE LOGINS E SENHAS -->
             <div class="card-container" style="padding: 20px 0 0 0; overflow: hidden;">
                 <h3 style="margin-bottom: 15px; padding-left: 20px;">🔑 Logins com Acesso ao Painel</h3>
                 <table>
@@ -110,27 +102,28 @@
         const firebaseConfig = { apiKey: "AIzaSyD4SElQHlfQjbN2NsHC0Z9_1Gobb6WHd8o", authDomain: "clinicabase-a85a7.firebaseapp.com", projectId: "clinicabase-a85a7", storageBucket: "clinicabase-a85a7.firebasestorage.app", messagingSenderId: "324071825277", appId: "1:324071825277:web:6a0d3c4413f7a7569fb614" };
         const app = initializeApp(firebaseConfig); const db = getFirestore(app); const auth = getAuth(app);
 
-        let logoBase64 = null;
+        let imagemLogoBase64String = null;
 
         window.addEventListener('DOMContentLoaded', async () => {
-            // Sincroniza dados visuais salvos
             const docSnap = await getDoc(doc(db, "configuracoes", "geral"));
             if(docSnap.exists()) {
                 const c = docSnap.data();
                 document.getElementById('cfg-nome').value = c.nome; 
                 document.getElementById('cfg-cor').value = c.cor;
                 document.documentElement.style.setProperty('--primary-accent', c.cor);
-                if(c.logo){ logoBase64 = c.logo; document.getElementById('upload-preview').innerHTML = `<img src="${c.logo}">`; }
+                if(c.logo){ 
+                    imagemLogoBase64String = c.logo; // Puxa string do banco
+                    document.getElementById('upload-preview').innerHTML = `<img src="${c.logo}">`; 
+                }
             }
             escutarEListarLoginsDoBanco();
         });
 
-        // Eventos e Amarrações
         document.getElementById('menu-marca').addEventListener('click', function() { switchAba('identidade', this); });
         document.getElementById('menu-logins').addEventListener('click', function() { switchAba('acessos', this); });
         document.getElementById('upload-trigger').addEventListener('click', () => document.getElementById('file-logo').click());
-        document.getElementById('file-logo').addEventListener('change', (e) => previewUpload(e));
-        document.getElementById('btn-salvar-cfg').addEventListener('click', () => salvarConfig());
+        document.getElementById('file-logo').addEventListener('change', (e) => processarConversaoDeImagem(e));
+        document.getElementById('btn-salvar-cfg').addEventListener('click', () => salvarConfiguracoesGlobais());
         document.getElementById('btn-cadastrar-operador').addEventListener('click', () => criarUsuarioPainel());
 
         function switchAba(viewId, menuEl) {
@@ -140,73 +133,52 @@
             menuEl.classList.add('active');
         }
 
-        function previewUpload(e) {
+        // Transforma o arquivo físico da imagem em string de texto compacta para gravação direta no Firestore
+        function processarConversaoDeImagem(e) {
+            const arquivo = e.target.files[0];
+            if (!arquivo) return;
+            
             const reader = new FileReader();
-            reader.onload = (event) => { logoBase64 = event.target.result; document.getElementById('upload-preview').innerHTML = `<img src="${logoBase64}">`; };
-            reader.readAsDataURL(e.target.files[0]);
+            reader.onload = (event) => { 
+                imagemLogoBase64String = event.target.result; // String binária Base64 criada
+                document.getElementById('upload-preview').innerHTML = `<img src="${imagemLogoBase64String}">`; 
+            };
+            reader.readAsDataURL(arquivo);
         }
 
-        async function salvarConfig() {
-            await setDoc(doc(db, "configuracoes", "geral"), { nome: document.getElementById('cfg-nome').value, cor: document.getElementById('cfg-cor').value, logo: logoBase64 });
-            alert("Identidade visual salva na nuvem!");
+        async function salvarConfiguracoesGlobais() {
+            await setDoc(doc(db, "configuracoes", "geral"), { 
+                nome: document.getElementById('cfg-nome').value, 
+                cor: document.getElementById('cfg-cor').value, 
+                logo: imagemLogoBase64String // Grava de forma persistente no Firestore
+            });
+            alert("✨ Identidade e imagem da Logomarca guardadas de forma segura no Banco de Dados!");
             location.reload();
         }
 
-        /* ================= GESTÃO DE LOGINS COM EXIBIÇÃO DE SENHAS ================= */
         async function criarUsuarioPainel() {
-            const email = document.getElementById('new-email').value;
-            const pass = document.getElementById('new-pass').value;
-
-            if(!email || pass.length < 6) return alert("Por favor, digite um e-mail válido e uma senha com no mínimo 6 caracteres.");
-
+            const email = document.getElementById('new-email').value; const pass = document.getElementById('new-pass').value;
+            if(!email || pass.length < 6) return alert("Preencha os campos.");
             try {
-                // 1. Cadastra na Authentication para dar direito de login
                 await createUserWithEmailAndPassword(auth, email, pass);
-                
-                // 2. Registra na base para que o admin master consiga visualizar e auditar a senha depois
-                const idLimpa = email.replace(/[^a-zA-Z0-9]/g, "_"); // Gera uma ID limpa pro documento
-                await setDoc(doc(db, "logins_autorizados", idLimpa), {
-                    email: email,
-                    senha: pass,
-                    criadoEm: new Date().toLocaleDateString('pt-BR')
-                });
-
-                document.getElementById('new-email').value = ''; 
-                document.getElementById('new-pass').value = '';
-                alert("✅ Operador criado com sucesso! Já pode logar no /painel");
-            } catch (e) {
-                alert("Erro: Este e-mail já pode estar em uso ou a conexão falhou.");
-            }
+                const idLimpa = email.replace(/[^a-zA-Z0-9]/g, "_");
+                await setDoc(doc(db, "logins_autorizados", idLimpa), { email: email, senha: pass, criadoEm: new Date().toLocaleDateString('pt-BR') });
+                document.getElementById('new-email').value = ''; document.getElementById('new-pass').value = '';
+                alert("Operador criado!");
+            } catch (e) { alert("Erro ao criar."); }
         }
 
         function escutarEListarLoginsDoBanco() {
             onSnapshot(collection(db, "logins_autorizados"), (snap) => {
-                const tabelaBody = document.getElementById('lista-logins-tabela');
-                tabelaBody.innerHTML = "";
-
-                if(snap.empty) {
-                    tabelaBody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:gray; font-style:italic;">Nenhum operador de recepção cadastrado ainda.</td></tr>`;
-                    return;
-                }
-
+                const tabelaBody = document.getElementById('lista-logins-tabela'); tabelaBody.innerHTML = "";
+                if(snap.empty) { tabelaBody.innerHTML = `<tr><td colspan="4" style="text-align:center;">Nenhum operador cadastrado.</td></tr>`; return; }
                 snap.forEach(d => {
                     const login = d.data();
-                    tabelaBody.innerHTML += `
-                        <tr>
-                            <td><b>${login.email}</b></td>
-                            <td style="font-family: monospace; font-size:1.05rem; letter-spacing:1px; color:var(--primary-accent); font-weight:bold;">${login.senha}</td>
-                            <td>${login.criadoEm || 'N/A'}</td>
-                            <td><button class="btn danger" id="btn-excluir-log-${d.id}">Remover</button></td>
-                        </tr>`;
+                    tabelaBody.innerHTML += `<tr><td><b>${login.email}</b></td><td style="font-family: monospace; font-size:1.05rem; color:var(--primary-accent); font-weight:bold;">${login.senha}</td><td>${login.criadoEm || 'N/A'}</td><td><button class="btn danger" id="btn-excluir-log-${d.id}">Remover</button></td></tr>`;
                 });
-
-                // Vincula os gatilhos de exclusão de acessos
                 snap.forEach(d => {
                     document.getElementById(`btn-excluir-log-${d.id}`).addEventListener('click', async () => {
-                        if(confirm(`Deseja revogar o acesso do login de ID: ${d.id}? Ele não conseguirá mais entrar no painel.`)) {
-                            await deleteDoc(doc(db, "logins_autorizados", d.id));
-                            alert("Acesso revogado.");
-                        }
+                        if(confirm("Revogar acesso?")) { await deleteDoc(doc(db, "logins_autorizados", d.id)); }
                     });
                 });
             });
