@@ -89,7 +89,7 @@
         </div>
     </div>
 
-    <!-- NOVO MODAL: ALTERAR NOME DO PACIENTE -->
+    <!-- MODAL: ALTERAR NOME DO PACIENTE -->
     <div id="modal-perfil" class="modal-overlay">
         <div class="modal-box">
             <h3 style="font-size: 1.3rem; color: #111827; margin-bottom: 8px;">Editar Perfil</h3>
@@ -129,16 +129,15 @@
 
         <!-- DASHBOARD -->
         <div id="t-dashboard" class="screen">
-            <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 20px;">
-                <div>
-                    <div class="welcome-user" id="user-greeting">Olá! 👋</div>
-                    <p style="color: var(--text-light); font-size: 0.95rem;">Seus procedimentos agendados na Yod:</p>
-                </div>
-                <button class="btn outline" style="margin: 0; padding: 8px 12px; font-size: 0.85rem;" id="btn-abrir-modal-perfil">⚙️ Editar Perfil</button>
-            </div>
+            <div class="welcome-user" id="user-greeting">Olá! 👋</div>
+            <p style="color: var(--text-light); font-size: 0.95rem;">Seus procedimentos agendados na Yod:</p>
             
             <div class="client-appointments-list" id="meus-cards-agendados"><p style="color: gray; text-align: center;">Carregando...</p></div>
+            
             <button class="btn success" id="btn-ir-marcar">+ Marcar Nova Consulta</button>
+            
+            <!-- Botão de Editar Perfil movido para a parte de baixo -->
+            <button class="btn outline" style="width: 100%; margin-top: 20px; font-size: 0.9rem;" id="btn-open-profile-box">⚙️ Editar Meu Perfil (Mudar Nome)</button>
         </div>
 
         <!-- NOVO AGENDAMENTO -->
@@ -176,7 +175,7 @@
                 const userDoc = await getDoc(doc(db, "usuarios", user.uid));
                 if(userDoc.exists() && userDoc.data().nome) {
                     document.getElementById('user-greeting').innerText = `Olá, ${userDoc.data().nome}! 👋`;
-                    document.getElementById('edit-nome-input').value = userDoc.data().nome; // Preenche o campo de edição por padrão
+                    document.getElementById('edit-nome-input').value = userDoc.data().nome;
                 } else {
                     document.getElementById('user-greeting').innerText = `Olá, ${user.displayName || 'Paciente'}! 👋`;
                     document.getElementById('edit-nome-input').value = user.displayName || '';
@@ -218,8 +217,8 @@
         document.getElementById('btn-fechar-modal-cancelar').addEventListener('click', () => document.getElementById('modal-cancelar').classList.remove('active'));
         document.getElementById('btn-confirmar-cancelar-nuvem').addEventListener('click', () => efetuarCancelamentoComMotivo());
         
-        // Amarrações de evento do modal de alteração de nome
-        document.getElementById('btn-abrir-modal-perfil').addEventListener('click', () => document.getElementById('modal-perfil').classList.add('active'));
+        // Ajuste das amarrações para o botão na parte de baixo
+        document.getElementById('btn-open-profile-box').addEventListener('click', () => document.getElementById('modal-perfil').classList.add('active'));
         document.getElementById('btn-fechar-modal-perfil').addEventListener('click', () => document.getElementById('modal-perfil').classList.remove('active'));
         document.getElementById('btn-salvar-perfil-nuvem').addEventListener('click', () => atualizarNomePerfilCliente());
 
@@ -270,26 +269,16 @@
             });
         }
 
-        // FUNÇÃO DE ATUALIZAÇÃO DO NOME DO PACIENTE
         async function atualizarNomePerfilCliente() {
             const novoNome = document.getElementById('edit-nome-input').value;
             if(!novoNome || novoNome.trim().length < 3) return alert("Por favor, digite um nome válido.");
-
             try {
-                // 1. Atualiza no Auth profile do Firebase
                 await updateProfile(auth.currentUser, { displayName: novoNome });
-                
-                // 2. Atualiza na coleção segura de usuários do Firestore
                 await updateDoc(doc(db, "usuarios", pacienteLogado.uid), { nome: novoNome });
-                
-                // 3. Modifica a interface dinamicamente na mesma hora
                 document.getElementById('user-greeting').innerText = `Olá, ${novoNome}! 👋`;
                 document.getElementById('modal-perfil').classList.remove('active');
-                
                 alert("✅ Seu nome de cadastro foi alterado com sucesso!");
-            } catch(e) {
-                alert("Ocorreu um erro ao atualizar o perfil. Verifique sua conexão.");
-            }
+            } catch(e) { alert("Ocorreu um erro ao atualizar."); }
         }
 
         async function efetuarCancelamentoComMotivo() {
@@ -343,10 +332,7 @@
             let nomeReal = pacienteLogado.displayName || "Paciente Web";
             let wpp = "";
             
-            if(uSnap.exists()) {
-                nomeReal = uSnap.data().nome || nomeReal;
-                wpp = uSnap.data().whatsapp || "";
-            }
+            if(uSnap.exists()) { nomeReal = uSnap.data().nome || nomeReal; wpp = uSnap.data().whatsapp || ""; }
 
             await addDoc(collection(db, "agendamentos"), {
                 pacienteNome: nomeReal, pacienteEmail: pacienteLogado.email, pacienteWhatsapp: wpp,
