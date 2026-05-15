@@ -76,6 +76,7 @@
         <svg viewBox="0 0 32 32"><path d="M16 2a13 13 0 0 0-11.27 19.51L3 29l7.71-2A13 13 0 1 0 16 2zm6.79 17.61c-.3.84-1.52 1.54-2.5 1.66-.74.09-1.7.12-2.73-.21a12.87 12.87 0 0 1-5.34-3.53 11 11 0 0 1-2.22-3.83c-.47-1.32-.1-.23-1.07-1.52A4.27 4.27 0 0 1 9.21 10c.32-.66.86-.77 1.17-.77h.78c.24 0 .47 0 .67.43l1.15 2.78c.1.25.17.5.01.81l-.54 1.1c-.16.3-.33.61-.06 1.07a8.77 8.77 0 0 0 2 2.44 7.55 7.55 0 0 0 3 1.54c.46.2.73.17.94-.07l.86-1c.21-.24.47-.2.72-.1l2.84 1.42c.26.13.43.2.5.33.1.2.1.92-.21 1.76z"/></svg>
     </a>
 
+    <!-- MODAL DE CANCELAMENTO -->
     <div id="modal-cancelar" class="modal-overlay">
         <div class="modal-box">
             <h3 style="font-size: 1.3rem; color: #111827; margin-bottom: 8px;">Cancelar Agendamento?</h3>
@@ -88,12 +89,27 @@
         </div>
     </div>
 
+    <!-- NOVO MODAL: ALTERAR NOME DO PACIENTE -->
+    <div id="modal-perfil" class="modal-overlay">
+        <div class="modal-box">
+            <h3 style="font-size: 1.3rem; color: #111827; margin-bottom: 8px;">Editar Perfil</h3>
+            <p style="color: var(--text-light); font-size: 0.9rem; margin-bottom: 15px;">Atualize o seu nome de cadastro no sistema:</p>
+            <input type="text" id="edit-nome-input" placeholder="Seu Nome Completo">
+            <div class="grid-2" style="margin-top: 20px;">
+                <button class="btn outline" style="margin:0; padding:12px;" id="btn-fechar-modal-perfil">Cancelar</button>
+                <button class="btn success" style="margin:0; padding:12px;" id="btn-salvar-perfil-nuvem">Salvar Alteração</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- NAVBAR -->
     <nav class="navbar">
         <div class="brand"><div class="logo" id="ui-logo">Y</div><h2 id="ui-nome" class="clinic-title">Yod Micropigmentação e Estética</h2></div>
         <button id="btn-sair" class="btn-sair">Sair</button>
     </nav>
 
     <div class="container">
+        <!-- LOGIN -->
         <div id="t-login" class="screen active">
             <h1>Acesso ao Portal</h1>
             <p class="subtitle">Faça login para gerenciar seus horários.</p>
@@ -102,6 +118,7 @@
             <div id="erro-l" class="erro"></div>
         </div>
 
+        <!-- CADASTRO -->
         <div id="t-cad" class="screen">
             <h1>Criar Perfil de Paciente</h1>
             <p class="subtitle">Cadastre-se rapidamente na plataforma.</p>
@@ -110,14 +127,21 @@
             <div id="erro-c" class="erro"></div>
         </div>
 
+        <!-- DASHBOARD -->
         <div id="t-dashboard" class="screen">
-            <!-- Saudação corrigida -->
-            <div class="welcome-user" id="user-greeting">Olá! 👋</div>
-            <p style="color: var(--text-light); font-size: 0.95rem; margin-bottom: 20px;">Seus procedimentos agendados na Yod:</p>
+            <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 20px;">
+                <div>
+                    <div class="welcome-user" id="user-greeting">Olá! 👋</div>
+                    <p style="color: var(--text-light); font-size: 0.95rem;">Seus procedimentos agendados na Yod:</p>
+                </div>
+                <button class="btn outline" style="margin: 0; padding: 8px 12px; font-size: 0.85rem;" id="btn-abrir-modal-perfil">⚙️ Editar Perfil</button>
+            </div>
+            
             <div class="client-appointments-list" id="meus-cards-agendados"><p style="color: gray; text-align: center;">Carregando...</p></div>
             <button class="btn success" id="btn-ir-marcar">+ Marcar Nova Consulta</button>
         </div>
 
+        <!-- NOVO AGENDAMENTO -->
         <div id="t-agenda" class="screen">
             <h1 style="text-align: left; font-size: 1.4rem; margin-bottom: 5px;">Nova Marcação</h1>
             <p style="color: var(--text-light); font-size: 0.9rem; margin-bottom: 20px;">Escolha as opções para o seu procedimento.</p>
@@ -144,18 +168,18 @@
 
         document.getElementById('data').min = new Date().toISOString().split('T')[0];
 
-        // LÓGICA DE DETECÇÃO DE USUÁRIO ATUALIZADA (BUSCA DIRETO NO BANCO)
         onAuthStateChanged(auth, async (user) => { 
             if(user) { 
                 pacienteLogado = user; 
                 document.getElementById('btn-sair').style.display = 'block';
                 
-                // MÁGICA DA CORREÇÃO: Tenta puxar o nome do documento do banco de dados imediatamente
                 const userDoc = await getDoc(doc(db, "usuarios", user.uid));
                 if(userDoc.exists() && userDoc.data().nome) {
                     document.getElementById('user-greeting').innerText = `Olá, ${userDoc.data().nome}! 👋`;
+                    document.getElementById('edit-nome-input').value = userDoc.data().nome; // Preenche o campo de edição por padrão
                 } else {
                     document.getElementById('user-greeting').innerText = `Olá, ${user.displayName || 'Paciente'}! 👋`;
+                    document.getElementById('edit-nome-input').value = user.displayName || '';
                 }
                 
                 mudarTela('t-dashboard'); 
@@ -176,11 +200,8 @@
             if(!n || !w) return document.getElementById('erro-c').innerText = "Preencha nome completo e WhatsApp.";
             try { 
                 const cr = await createUserWithEmailAndPassword(auth, e, s); 
-                // Salva na nuvem no mesmo milissegundo para o Dashboard ler
                 await setDoc(doc(db, "usuarios", cr.user.uid), { nome: n, whatsapp: w }); 
                 await updateProfile(cr.user, { displayName: n }); 
-                
-                // Força atualização da saudação local no momento do cadastro
                 document.getElementById('user-greeting').innerText = `Olá, ${n}! 👋`;
             } catch(err) { 
                 document.getElementById('erro-c').innerText = "Erro ao cadastrar."; 
@@ -196,6 +217,11 @@
         document.getElementById('data').addEventListener('change', () => escutarMudancaDataCalendario());
         document.getElementById('btn-fechar-modal-cancelar').addEventListener('click', () => document.getElementById('modal-cancelar').classList.remove('active'));
         document.getElementById('btn-confirmar-cancelar-nuvem').addEventListener('click', () => efetuarCancelamentoComMotivo());
+        
+        // Amarrações de evento do modal de alteração de nome
+        document.getElementById('btn-abrir-modal-perfil').addEventListener('click', () => document.getElementById('modal-perfil').classList.add('active'));
+        document.getElementById('btn-fechar-modal-perfil').addEventListener('click', () => document.getElementById('modal-perfil').classList.remove('active'));
+        document.getElementById('btn-salvar-perfil-nuvem').addEventListener('click', () => atualizarNomePerfilCliente());
 
         function mudarTela(id) { document.querySelectorAll('.screen').forEach(s => s.classList.remove('active')); document.getElementById(id).classList.add('active'); }
 
@@ -242,6 +268,28 @@
                 if(meusAtendimentosContador === 0) boxDashboard.innerHTML = "<div class='empty-dashboard'>Você ainda não possui nenhum procedimento agendado na Yod.</div>";
                 escutarMudancaDataCalendario();
             });
+        }
+
+        // FUNÇÃO DE ATUALIZAÇÃO DO NOME DO PACIENTE
+        async function atualizarNomePerfilCliente() {
+            const novoNome = document.getElementById('edit-nome-input').value;
+            if(!novoNome || novoNome.trim().length < 3) return alert("Por favor, digite um nome válido.");
+
+            try {
+                // 1. Atualiza no Auth profile do Firebase
+                await updateProfile(auth.currentUser, { displayName: novoNome });
+                
+                // 2. Atualiza na coleção segura de usuários do Firestore
+                await updateDoc(doc(db, "usuarios", pacienteLogado.uid), { nome: novoNome });
+                
+                // 3. Modifica a interface dinamicamente na mesma hora
+                document.getElementById('user-greeting').innerText = `Olá, ${novoNome}! 👋`;
+                document.getElementById('modal-perfil').classList.remove('active');
+                
+                alert("✅ Seu nome de cadastro foi alterado com sucesso!");
+            } catch(e) {
+                alert("Ocorreu um erro ao atualizar o perfil. Verifique sua conexão.");
+            }
         }
 
         async function efetuarCancelamentoComMotivo() {
@@ -291,7 +339,6 @@
             const pVal = document.getElementById('servico').value, dVal = document.getElementById('data').value;
             if(!pVal || !dVal || !horaSelecionada) return alert("Preencha todas as etapas.");
             
-            // Busca o nome do banco de dados na hora de salvar o agendamento também
             const uSnap = await getDoc(doc(db, "usuarios", pacienteLogado.uid));
             let nomeReal = pacienteLogado.displayName || "Paciente Web";
             let wpp = "";
