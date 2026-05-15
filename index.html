@@ -1,82 +1,61 @@
 <!DOCTYPE html>
-<html lang="pt-PT">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Marcar Consulta</title>
+    <title>Yod - Agendamento</title>
     <style>
-        :root { --primary-accent: #3b82f6; --bg-color: #f8fafc; --card-bg: #ffffff; --text-main: #0f172a; --border-color: #e2e8f0; }
+        :root { --primary-accent: #4f46e5; --bg-color: #f8fafc; --card-bg: #ffffff; --text-main: #0f172a; --border-color: #e2e8f0; }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
         body { background-color: var(--bg-color); padding: 20px; display: flex; flex-direction: column; align-items: center; color: var(--text-main);}
-        .navbar { width: 100%; max-width: 500px; background: var(--card-bg); padding: 15px 25px; border-radius: 12px; border: 1px solid var(--border-color); display: flex; align-items: center; gap: 15px; margin-bottom: 20px; justify-content: space-between;}
-        .logo { width: 40px; height: 40px; background: var(--primary-accent); border-radius: 8px; overflow: hidden; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;}
+        .navbar { width: 100%; max-width: 500px; background: var(--card-bg); padding: 15px 25px; border-radius: 12px; border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;}
+        .logo { width: 40px; height: 40px; background: var(--primary-accent); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; overflow: hidden;}
         .logo img { width: 100%; height: 100%; object-fit: cover; }
         .container { width: 100%; max-width: 500px; background: var(--card-bg); border-radius: 16px; border: 1px solid var(--border-color); padding: 30px; }
-        
         .screen { display: none; } .screen.active { display: block; }
-        
-        .time-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); gap: 10px; margin-top: 15px; }
-        .time-btn { padding: 12px; border: 1px solid var(--border-color); border-radius: 8px; cursor: pointer; text-align: center; font-weight: bold; background: #f8fafc;}
-        .time-btn.selected { background: var(--primary-accent); color: white; border-color: var(--primary-accent); }
+        .time-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 10px; margin-top: 15px; }
+        .time-btn { padding: 10px; border: 1px solid var(--border-color); border-radius: 8px; cursor: pointer; text-align: center; font-weight: bold; }
+        .time-btn.selected { background: var(--primary-accent); color: white; }
         .btn { background: var(--primary-accent); color: #fff; border: none; padding: 15px; border-radius: 10px; width: 100%; font-weight: bold; cursor: pointer; margin-top: 20px; }
-        .btn.outline { background: transparent; color: var(--primary-accent); border: 2px solid var(--primary-accent); margin-top: 10px;}
-        label { display: block; margin-top: 15px; font-weight: bold; font-size: 0.9rem; }
-        input, select { width: 100%; padding: 14px; margin-top: 5px; border-radius: 8px; border: 1px solid var(--border-color); outline: none;}
-        .msg-erro { color: #ef4444; font-size: 0.9rem; margin-top: 10px; text-align: center; font-weight: bold;}
+        input, select { width: 100%; padding: 14px; margin-top: 10px; border-radius: 8px; border: 1px solid var(--border-color); }
+        .btn-link { background: none; border: none; color: var(--primary-accent); font-weight: bold; cursor: pointer; margin-top: 15px; }
     </style>
 </head>
 <body>
     <nav class="navbar">
-        <div style="display: flex; align-items: center; gap: 10px;">
-            <div class="logo" id="ui-logo">CL</div>
-            <h2 id="ui-nome" style="font-size: 1.1rem;">Carregando...</h2>
-        </div>
-        <button id="btn-sair" style="display:none; background:none; border:none; color:red; font-weight:bold; cursor:pointer;" onclick="sairApp()">Sair</button>
+        <div style="display:flex; align-items:center; gap:10px;"><div class="logo" id="ui-logo">Y</div><h2 id="ui-nome" style="font-size:1rem;">Yod</h2></div>
+        <button id="btn-sair" style="display:none; color:red; border:none; background:none; font-weight:bold; cursor:pointer;" onclick="sairApp()">Sair</button>
     </nav>
 
     <div class="container">
-        
-        <!-- TELA DE LOGIN -->
         <div id="tela-login" class="screen active">
-            <h1 style="margin-bottom: 20px;">Acesso ao Portal</h1>
+            <h1>Acesse sua conta</h1>
             <input type="email" id="log-email" placeholder="Seu E-mail">
             <input type="password" id="log-senha" placeholder="Sua Senha">
             <button class="btn" onclick="fazerLogin()">Entrar</button>
-            <button class="btn outline" onclick="alternarTela('tela-cadastro')">Criar Conta Nova</button>
-            <div id="login-erro" class="msg-erro"></div>
+            <button class="btn-link" onclick="alternarTela('tela-cadastro')">Criar uma conta gratuita</button>
         </div>
 
-        <!-- TELA DE CADASTRO -->
         <div id="tela-cadastro" class="screen">
-            <h1 style="margin-bottom: 20px;">Nova Conta</h1>
-            <input type="text" id="cad-nome" placeholder="Nome Completo">
-            <input type="tel" id="cad-whatsapp" placeholder="WhatsApp (com DDD)">
+            <h1>Crie seu perfil</h1>
+            <input type="text" id="cad-nome" placeholder="Seu Nome Completo">
+            <input type="tel" id="cad-whatsapp" placeholder="WhatsApp com DDD">
             <input type="email" id="cad-email" placeholder="E-mail">
-            <input type="password" id="cad-senha" placeholder="Crie uma Senha (mínimo 6 letras)">
-            <button class="btn" onclick="fazerCadastro()">Criar e Entrar</button>
-            <button class="btn outline" onclick="alternarTela('tela-login')">Voltar para Login</button>
-            <div id="cad-erro" class="msg-erro"></div>
+            <input type="password" id="cad-senha" placeholder="Senha (mín. 6 dígitos)">
+            <button class="btn" onclick="fazerCadastro()">Criar e Acessar</button>
+            <button class="btn-link" onclick="alternarTela('tela-login')">Já tenho conta</button>
         </div>
 
-        <!-- TELA DE AGENDAMENTO -->
         <div id="tela-agendar" class="screen">
-            <h1 style="margin-bottom: 5px;">Nova Marcação</h1>
-            <p style="color: gray; font-size: 0.9rem;">Preencha os dados abaixo.</p>
-
-            <label>1. Procedimento</label>
-            <select id="servico"><option value="">Carregando procedimentos...</option></select>
-
-            <label>2. Data</label>
-            <input type="date" id="data" onchange="verificarDataEGerarHorarios()">
-            <div id="aviso-data" class="msg-erro"></div>
-
-            <div id="box-horarios" style="display: none;">
-                <label>3. Escolha o Horário</label>
+            <h1>Agendar horário</h1>
+            <select id="servico"><option value="">Carregando serviços...</option></select>
+            <input type="date" id="data" onchange="gerarHorarios()">
+            <div id="aviso-data" style="color:red; font-size:0.8rem; margin-top:10px;"></div>
+            <div id="box-horarios" style="display:none;">
                 <div class="time-grid" id="horarios"></div>
-                <button class="btn" onclick="confirmarAgendamento()">Confirmar Marcação</button>
+                <button class="btn" onclick="confirmarAgendamento()">Finalizar Marcação</button>
             </div>
         </div>
-
     </div>
 
     <script type="module">
@@ -87,131 +66,44 @@
         const firebaseConfig = { apiKey: "AIzaSyD4SElQHlfQjbN2NsHC0Z9_1Gobb6WHd8o", authDomain: "clinicabase-a85a7.firebaseapp.com", projectId: "clinicabase-a85a7", storageBucket: "clinicabase-a85a7.firebasestorage.app", messagingSenderId: "324071825277", appId: "1:324071825277:web:6a0d3c4413f7a7569fb614" };
         const app = initializeApp(firebaseConfig); const db = getFirestore(app); const auth = getAuth(app);
 
-        let usuarioLogado = null;
-        let configGrade = null;
-        let listaProcedimentos = [];
+        let userLogado = null, configG = null, selectedH = null;
 
-        // Controle de Autenticação
-        onAuthStateChanged(auth, async (user) => {
-            if (user) {
-                usuarioLogado = user;
-                document.getElementById('btn-sair').style.display = 'block';
-                alternarTela('tela-agendar');
-                carregarSetupInicial();
-            } else {
-                usuarioLogado = null;
-                document.getElementById('btn-sair').style.display = 'none';
-                alternarTela('tela-login');
-            }
+        onAuthStateChanged(auth, (u) => { 
+            if(u) { userLogado=u; document.getElementById('btn-sair').style.display='block'; alternarTela('tela-agendar'); carregarYod(); } 
+            else { alternarTela('tela-login'); document.getElementById('btn-sair').style.display='none'; }
         });
 
-        window.fazerLogin = () => {
-            const e = document.getElementById('log-email').value; const s = document.getElementById('log-senha').value;
-            signInWithEmailAndPassword(auth, e, s).catch(error => document.getElementById('login-erro').innerText = "E-mail ou senha incorretos.");
+        window.fazerLogin = () => signInWithEmailAndPassword(auth, document.getElementById('log-email').value, document.getElementById('log-senha').value).catch(e => alert("Erro no login."));
+        window.fazerCadastro = async () => {
+            const n = document.getElementById('cad-nome').value, w = document.getElementById('cad-whatsapp').value, e = document.getElementById('cad-email').value, s = document.getElementById('cad-senha').value;
+            try { const c = await createUserWithEmailAndPassword(auth, e, s); await updateProfile(c.user, {displayName: n}); await setDoc(doc(db, "usuarios", c.user.uid), { nome: n, whatsapp: w }); } catch(err){ alert("Erro no cadastro."); }
         }
-
-        window.fazerCadastro = () => {
-            const n = document.getElementById('cad-nome').value;
-            const w = document.getElementById('cad-whatsapp').value;
-            const e = document.getElementById('cad-email').value; 
-            const s = document.getElementById('cad-senha').value;
-            
-            if(!n || !w) return document.getElementById('cad-erro').innerText = "Preencha o nome e o WhatsApp.";
-            
-            createUserWithEmailAndPassword(auth, e, s)
-                .then(async (cred) => {
-                    await updateProfile(cred.user, { displayName: n });
-                    // Salva o WhatsApp do usuário no banco de dados
-                    await setDoc(doc(db, "usuarios", cred.user.uid), {
-                        nome: n, email: e, whatsapp: w
-                    });
-                })
-                .catch(error => document.getElementById('cad-erro').innerText = "Erro ao criar conta. A senha deve ter 6 caracteres.");
-        }
-
         window.sairApp = () => signOut(auth);
         window.alternarTela = (id) => { document.querySelectorAll('.screen').forEach(s => s.classList.remove('active')); document.getElementById(id).classList.add('active'); }
 
-        async function carregarSetupInicial() {
-            // 1. Identidade Visual
-            const confSnap = await getDoc(doc(db, "configuracoes", "geral"));
-            if(confSnap.exists()) {
-                const c = confSnap.data();
-                document.documentElement.style.setProperty('--primary-accent', c.cor);
-                document.getElementById('ui-nome').innerText = c.nome;
-                if(c.logo) document.getElementById('ui-logo').innerHTML = `<img src="${c.logo}">`;
-            }
-
-            // 2. Regra de Horários e Dias
-            const gradeSnap = await getDoc(doc(db, "configuracoes", "grade"));
-            if(gradeSnap.exists()) configGrade = gradeSnap.data();
-
-            // 3. Puxar Procedimentos
-            onSnapshot(collection(db, "procedimentos"), (snap) => {
-                const select = document.getElementById('servico');
-                select.innerHTML = "<option value=''>Selecione o serviço...</option>";
-                listaProcedimentos = [];
-                snap.forEach(d => {
-                    const p = d.data();
-                    listaProcedimentos.push(p);
-                    select.innerHTML += `<option value="${p.nome}|${p.valor}">${p.nome} - R$ ${p.valor.toFixed(2)}</option>`;
-                });
-            });
+        async function carregarYod() {
+            const gSnap = await getDoc(doc(db, "configuracoes", "geral"));
+            if(gSnap.exists()){ document.documentElement.style.setProperty('--primary-accent', gSnap.data().cor); document.getElementById('ui-nome').innerText = gSnap.data().nome; if(gSnap.data().logo) document.getElementById('ui-logo').innerHTML = `<img src="${gSnap.data().logo}">`; }
+            const grSnap = await getDoc(doc(db, "configuracoes", "grade")); if(grSnap.exists()) configG = grSnap.data();
+            onSnapshot(collection(db, "procedimentos"), (s) => { const sel = document.getElementById('servico'); sel.innerHTML="<option value=''>Escolha o serviço...</option>"; s.forEach(d => sel.innerHTML+=`<option value="${d.data().nome}|${d.data().valor}">${d.data().nome} - R$ ${d.data().valor.toFixed(2)}</option>`); });
         }
 
-        window.verificarDataEGerarHorarios = () => {
-            const dataInput = document.getElementById('data').value;
-            const aviso = document.getElementById('aviso-data');
-            const box = document.getElementById('box-horarios');
-            const grid = document.getElementById('horarios');
-            
-            box.style.display = 'none'; grid.innerHTML = ''; aviso.innerText = '';
-            if(!dataInput || !configGrade) return;
-
-            const diaDaSemana = new Date(dataInput + "T00:00:00").getDay();
-            if(!configGrade.dias.includes(diaDaSemana)) {
-                aviso.innerText = "A clínica não atende neste dia da semana. Escolha outra data.";
-                return;
-            }
-
-            box.style.display = 'block';
-            let s = parseInt(configGrade.start.split(':')[0])*60, e = parseInt(configGrade.end.split(':')[0])*60, i = parseInt(configGrade.int);
-            for(let m=s; m<e; m+=i){
-                let h = Math.floor(m/60).toString().padStart(2,'0')+":"+(m%60).toString().padStart(2,'0');
-                grid.innerHTML += `<div class="time-btn" onclick="selectTime(this, '${h}')">${h}</div>`;
-            }
+        window.gerarHorarios = () => {
+            const data = document.getElementById('data').value, grid = document.getElementById('horarios'), box = document.getElementById('box-horarios'), aviso = document.getElementById('aviso-data');
+            box.style.display='none'; grid.innerHTML=''; aviso.innerText=''; if(!data || !configG) return;
+            const dia = new Date(data + "T00:00:00").getDay();
+            if(!configG.dias.includes(dia)){ aviso.innerText="Yod fechada neste dia. Escolha outro."; return; }
+            box.style.display='block'; let s=parseInt(configG.start.split(':')[0])*60, e=parseInt(configG.end.split(':')[0])*60, i=parseInt(configG.int);
+            for(let m=s; m<e; m+=i){ let h = Math.floor(m/60).toString().padStart(2,'0')+":"+(m%60).toString().padStart(2,'0'); grid.innerHTML += `<div class="time-btn" onclick="selT(this, '${h}')">${h}</div>`; }
         }
+        window.selT = (el, h) => { document.querySelectorAll('.time-btn').forEach(b => b.classList.remove('selected')); el.classList.add('selected'); selectedH=h; }
 
-        let selectedH = null;
-        window.selectTime = (el, h) => { document.querySelectorAll('.time-btn').forEach(b => b.classList.remove('selected')); el.classList.add('selected'); selectedH = h; }
-        
         window.confirmarAgendamento = async () => {
-            const valSelect = document.getElementById('servico').value;
-            const data = document.getElementById('data').value;
-            if(!valSelect || !data || !selectedH) return alert("Preencha o serviço, a data e selecione o horário.");
-
-            // Puxa o número de WhatsApp que o paciente cadastrou
-            const userDoc = await getDoc(doc(db, "usuarios", usuarioLogado.uid));
-            let telefone = "";
-            if(userDoc.exists()) telefone = userDoc.data().whatsapp;
-
-            const servicoNome = valSelect.split('|')[0];
-            const servicoValor = parseFloat(valSelect.split('|')[1]);
-            const dataBr = data.split('-').reverse().join('/');
-
-            await addDoc(collection(db, "agendamentos"), { 
-                pacienteNome: usuarioLogado.displayName || "Paciente", 
-                pacienteEmail: usuarioLogado.email,
-                pacienteWhatsapp: telefone, // Salvando o número para a recepção ver
-                servico: servicoNome, 
-                valor: servicoValor,
-                data: dataBr, 
-                hora: selectedH, 
-                ts: Date.now() 
-            });
-            
-            alert("Agendamento enviado para a clínica com sucesso!"); 
-            location.reload();
+            const v = document.getElementById('servico').value, d = document.getElementById('data').value;
+            if(!v || !d || !selectedH) return alert("Preencha tudo.");
+            const uDoc = await getDoc(doc(db, "usuarios", userLogado.uid));
+            await addDoc(collection(db, "agendamentos"), { pacienteNome: userLogado.displayName, pacienteWhatsapp: uDoc.data().whatsapp, servico: v.split('|')[0], valor: parseFloat(v.split('|')[1]), data: d.split('-').reverse().join('/'), hora: selectedH, ts: Date.now() });
+            alert("Agendamento na Yod realizado!"); location.reload();
         }
     </script>
 </body>
