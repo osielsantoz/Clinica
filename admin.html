@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-PT">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Configurações Master - Sistema</title>
+    <title>Admin Master - Configurações</title>
     <style>
-        :root { --sidebar-bg: #09090b; --sidebar-hover: #18181b; --primary-accent: #4f46e5; --bg-color: #f4f4f5; --card-bg: #ffffff; --text-main: #09090b; --text-muted: #71717a; --border-color: #e4e4e7; --success: #10b981; }
+        :root { --sidebar-bg: #09090b; --primary-accent: #4f46e5; --bg-color: #f4f4f5; --card-bg: #ffffff; --text-main: #09090b; --text-muted: #71717a; --border-color: #e4e4e7; --success: #10b981; }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
         body { background-color: var(--bg-color); color: var(--text-main); display: flex; height: 100vh; overflow: hidden; }
-        .sidebar { width: 260px; background-color: var(--sidebar-bg); color: #fff; display: flex; flex-direction: column; box-shadow: 2px 0 10px rgba(0,0,0,0.1); }
+        .sidebar { width: 260px; background-color: var(--sidebar-bg); color: #fff; display: flex; flex-direction: column; }
         .sidebar-header { padding: 24px; font-size: 1.25rem; font-weight: 900; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; align-items: center; gap: 10px;}
         .icon-logo { width: 30px; height: 30px; background: var(--primary-accent); border-radius: 6px; display: flex; justify-content: center; align-items: center; font-size: 14px; font-weight: bold;}
         .nav-menu { padding: 20px 0; }
@@ -19,159 +19,78 @@
         .view-section.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .page-title { font-size: 1.8rem; margin-bottom: 5px; font-weight: 800; }
-        .page-subtitle { color: var(--text-muted); margin-bottom: 30px; font-size: 0.95rem; }
         .card-container { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 30px; margin-bottom: 24px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
-        input[type="text"], input[type="color"] { width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 1rem; outline: none; background: #fafafa; transition: 0.2s; }
-        input:focus { border-color: var(--primary-accent); background: #fff; }
-        label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.9rem; color: var(--text-main); }
-        .btn { background: var(--primary-accent); color: #fff; border: none; padding: 12px 20px; border-radius: 8px; font-weight: bold; font-size: 1rem; cursor: pointer; transition: 0.2s; width: 100%; margin-top: 10px;}
-        .btn:hover { opacity: 0.9; }
-        .btn.outline { background: transparent; color: var(--text-main); border: 1px solid var(--border-color); }
-        .upload-box { border: 2px dashed var(--border-color); border-radius: 10px; background: #fafafa; padding: 30px; text-align: center; cursor: pointer; transition: 0.2s; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 150px; }
-        .upload-box:hover { border-color: var(--primary-accent); background: #eff6ff; color: var(--primary-accent); }
+        input[type="text"], input[type="color"] { width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 1rem; outline: none; background: #fafafa; }
+        label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.9rem; }
+        .btn { background: var(--primary-accent); color: #fff; border: none; padding: 12px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px;}
+        .upload-box { border: 2px dashed var(--border-color); border-radius: 10px; background: #fafafa; padding: 30px; text-align: center; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 150px; }
         .upload-box img { max-width: 150px; max-height: 100px; object-fit: contain; border-radius: 6px; margin-bottom: 10px; }
         .link-box { display: flex; align-items: center; background: #fafafa; border: 1px solid var(--border-color); border-radius: 8px; padding: 5px; margin-bottom: 15px; }
-        .link-box input { border: none; background: transparent; padding: 10px; font-family: monospace; font-size: 0.9rem; color: var(--text-muted); flex: 1; outline: none;}
-        .link-box .btn { width: auto; padding: 10px 20px; margin: 0; }
+        .link-box input { border: none; background: transparent; padding: 10px; flex: 1; outline: none; font-family: monospace; }
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(9, 9, 11, 0.7); backdrop-filter: blur(4px); z-index: 1000; display: none; align-items: center; justify-content: center; }
-        .modal-overlay.active { display: flex; animation: fadeInModal 0.2s ease; }
+        .modal-overlay.active { display: flex; }
         .modal-box { background: var(--card-bg); width: 100%; max-width: 400px; border-radius: 16px; padding: 30px; text-align: center; }
-        @media (max-width: 768px) { body { flex-direction: column; } .sidebar { width: 100%; height: auto; flex-direction: row; overflow-x: auto; } .nav-menu { flex-direction: row; } .main-content { padding: 20px; } }
     </style>
 </head>
 <body>
-
     <aside class="sidebar">
-        <div class="sidebar-header"><div class="icon-logo">⚙️</div>Admin Master</div>
+        <div class="sidebar-header"><div class="icon-logo">⚙️</div>Admin</div>
         <div class="nav-menu">
-            <div class="nav-item active" onclick="switchView('identidade', this)">🎨 Identidade Visual</div>
-            <div class="nav-item" onclick="switchView('links', this)">🔗 Links do Sistema</div>
+            <div class="nav-item active" onclick="switchView('identidade', this)">🎨 Marca</div>
+            <div class="nav-item" onclick="switchView('links', this)">🔗 Links</div>
         </div>
     </aside>
-
     <main class="main-content">
-        <!-- TELA 1: IDENTIDADE -->
         <section id="identidade" class="view-section active">
-            <h1 class="page-title">Configurações Globais</h1>
-            <p class="page-subtitle">O que você salvar aqui mudará o design do Portal do Cliente e do Painel da Clínica.</p>
-
+            <h1 class="page-title">Identidade do Sistema</h1>
             <div class="card-container">
-                <div style="margin-bottom: 20px;">
-                    <label>Nome da Clínica / Sistema</label>
-                    <input type="text" id="cfg-nome" placeholder="Ex: Clínica Alpha">
+                <label>Nome da Clínica</label>
+                <input type="text" id="cfg-nome" placeholder="Ex: Clínica Alpha">
+                <label style="margin-top:20px;">Logomarca</label>
+                <div class="upload-box" onclick="document.getElementById('file-logo').click()">
+                    <input type="file" id="file-logo" accept="image/*" style="display: none;" onchange="previewUpload(event)">
+                    <div id="upload-preview"><span>📁 Clique para carregar logo</span></div>
                 </div>
-
-                <div style="margin-bottom: 25px;">
-                    <label>Logomarca (Opcional)</label>
-                    <div class="upload-box" id="upload-box" onclick="document.getElementById('file-logo').click()">
-                        <input type="file" id="file-logo" accept="image/png, image/jpeg, image/svg+xml" style="display: none;" onchange="previewUpload(event)">
-                        <div id="upload-preview" style="display: flex; flex-direction: column; align-items: center;">
-                            <span style="font-size: 2rem; margin-bottom: 5px;">📁</span>
-                            <span>Clique para enviar logo</span>
-                            <small style="color: var(--text-muted); margin-top: 5px;">Apenas imagens. Deixe em branco para usar formato de texto.</small>
-                        </div>
-                    </div>
-                </div>
-
-                <div style="margin-bottom: 30px;">
-                    <label>Cor Principal do Sistema (Painéis e Botões)</label>
-                    <input type="color" id="cfg-cor" value="#3b82f6" style="padding: 5px; height: 50px; cursor: pointer;">
-                </div>
-
-                <button class="btn" onclick="salvarConfiguracoesGlobais()">Aplicar e Salvar no Sistema</button>
+                <label style="margin-top:20px;">Cor Principal</label>
+                <input type="color" id="cfg-cor" value="#4f46e5">
+                <button class="btn" onclick="salvarConfig()">Salvar Alterações</button>
             </div>
         </section>
-
-        <!-- TELA 2: LINKS -->
         <section id="links" class="view-section">
-            <h1 class="page-title">Links de Acesso</h1>
-            <p class="page-subtitle">Copie os links abaixo para acessar as outras partes do sistema.</p>
-            
+            <h1 class="page-title">Links Atuais</h1>
             <div class="card-container">
-                <label style="color: var(--success); font-weight: bold; margin-bottom: 10px;">1. Link de Agendamento (Pacientes)</label>
-                <div class="link-box"><input type="text" id="link-cliente" readonly><button class="btn" onclick="copiarLink('link-cliente')">Copiar</button></div>
-
-                <label style="color: var(--primary-accent); font-weight: bold; margin-bottom: 10px; margin-top: 25px;">2. Painel da Clínica (Recepção)</label>
-                <div class="link-box"><input type="text" id="link-admin" readonly><button class="btn" onclick="copiarLink('link-admin')">Copiar</button></div>
+                <label>Portal do Paciente</label>
+                <div class="link-box"><input type="text" id="link-cliente" readonly><button class="btn" style="width:auto;margin:0;" onclick="copiarLink('link-cliente')">Copiar</button></div>
+                <label>Painel da Recepção</label>
+                <div class="link-box"><input type="text" id="link-admin" readonly><button class="btn" style="width:auto;margin:0;" onclick="copiarLink('link-admin')">Copiar</button></div>
             </div>
         </section>
     </main>
-
-    <!-- Modal Sucesso -->
-    <div id="modal-sucesso" class="modal-overlay">
-        <div class="modal-box">
-            <div style="font-size: 3rem; margin-bottom: 10px;">✅</div><h2 id="sucesso-titulo">Salvo!</h2><p id="sucesso-msg">As alterações foram aplicadas.</p>
-            <button class="btn" onclick="fecharModais()">OK</button>
-        </div>
-    </div>
-
+    <div id="modal-sucesso" class="modal-overlay"><div class="modal-box"><h2>✅ Guardado!</h2><p>As alterações foram aplicadas.</p><button class="btn" onclick="document.getElementById('modal-sucesso').classList.remove('active')">OK</button></div></div>
     <script>
-        let logoBase64Temp = null;
-
-        // Ao carregar, verifica se já existe uma configuração salva e preenche os campos
+        let logoBase64 = null;
         window.onload = function() {
-            let configSalva = JSON.parse(localStorage.getItem('sys_config'));
-            if(configSalva) {
-                document.getElementById('cfg-nome').value = configSalva.nome;
-                document.getElementById('cfg-cor').value = configSalva.cor;
-                if(configSalva.logo) {
-                    logoBase64Temp = configSalva.logo;
-                    document.getElementById('upload-preview').innerHTML = `<img src="${logoBase64Temp}" alt="Logo"><span style="color: var(--success);">Logo Carregada</span>`;
-                }
+            let c = JSON.parse(localStorage.getItem('sys_config'));
+            if(c){ 
+                document.getElementById('cfg-nome').value = c.nome; 
+                document.getElementById('cfg-cor').value = c.cor;
+                if(c.logo){ logoBase64 = c.logo; document.getElementById('upload-preview').innerHTML = `<img src="${c.logo}">`; }
             }
-            gerarLinksAtuais();
+            document.getElementById('link-cliente').value = window.location.origin + "/";
+            document.getElementById('link-admin').value = window.location.origin + "/painel";
         }
-
-        function switchView(viewId, element) {
-            document.querySelectorAll('.view-section').forEach(sec => sec.classList.remove('active'));
-            document.getElementById(viewId).classList.add('active');
-            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
-            element.classList.add('active');
+        function previewUpload(e) {
+            const file = e.target.files[0];
+            const reader = new FileReader();
+            reader.onload = (event) => { logoBase64 = event.target.result; document.getElementById('upload-preview').innerHTML = `<img src="${logoBase64}">`; };
+            reader.readAsDataURL(file);
         }
-
-        function fecharModais() { document.getElementById('modal-sucesso').classList.remove('active'); }
-        
-        function previewUpload(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    logoBase64Temp = e.target.result; 
-                    document.getElementById('upload-preview').innerHTML = `<img src="${logoBase64Temp}" alt="Logo Preview"><span style="color: var(--success);">✔️ Imagem Pronta</span>`;
-                }
-                reader.readAsDataURL(file);
-            }
-        }
-
-        function salvarConfiguracoesGlobais() {
-            let config = {
-                nome: document.getElementById('cfg-nome').value || "Clínica Padrão",
-                cor: document.getElementById('cfg-cor').value || "#3b82f6",
-                logo: logoBase64Temp
-            };
-            
-            // Salva no banco de dados do navegador
-            localStorage.setItem('sys_config', JSON.stringify(config));
-            
-            // Aplica a cor nesta própria tela imediatamente
-            document.documentElement.style.setProperty('--primary-accent', config.cor);
-            
+        function salvarConfig() {
+            localStorage.setItem('sys_config', JSON.stringify({ nome: document.getElementById('cfg-nome').value, cor: document.getElementById('cfg-cor').value, logo: logoBase64 }));
             document.getElementById('modal-sucesso').classList.add('active');
         }
-
-        function gerarLinksAtuais() {
-            let urlOrigin = window.location.origin;
-            document.getElementById('link-cliente').value = `${urlOrigin}/`;
-            document.getElementById('link-admin').value = `${urlOrigin}/painel`;
-        }
-
-        function copiarLink(inputId) {
-            let copyText = document.getElementById(inputId);
-            copyText.select(); navigator.clipboard.writeText(copyText.value);
-            let btn = copyText.nextElementSibling; let original = btn.innerText;
-            btn.innerText = "Copiado!"; btn.style.background = "var(--success)";
-            setTimeout(() => { btn.innerText = original; btn.style.background = "var(--primary-accent)"; }, 2000);
-        }
+        function switchView(id, el) { document.querySelectorAll('.view-section').forEach(s => s.classList.remove('active')); document.getElementById(id).classList.add('active'); document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active')); el.classList.add('active'); }
+        function copiarLink(id) { let i = document.getElementById(id); i.select(); navigator.clipboard.writeText(i.value); alert("Link copiado!"); }
     </script>
 </body>
 </html>
