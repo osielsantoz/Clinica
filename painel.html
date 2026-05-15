@@ -5,11 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Yod - Gestão da Clínica</title>
     <style>
-        :root { --primary: #4f46e5; --bg: #f3f4f6; --card: #ffffff; --text: #1f2937; --text-light: #6b7280; --border: #e5e7eb; --success: #10b981; --danger: #ef4444; --sidebar: #111827; }
+        :root { --primary: #4f46e5; --bg: #f3f4f6; --card: #ffffff; --text: #1f2937; --text-light: #6b7280; --border: #e5e7eb; --success: #10b981; --danger: #ef4444; --warning: #f59e0b; --sidebar: #111827; }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
         body { background: var(--bg); color: var(--text); display: flex; height: 100vh; overflow: hidden; }
-        
-        /* Sidebar */
         .sidebar { width: 260px; background: var(--sidebar); color: #fff; display: flex; flex-direction: column; }
         .brand { padding: 25px 20px; font-size: 1.2rem; font-weight: bold; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; align-items: center; gap: 10px; }
         .logo-box { width: 35px; height: 35px; background: var(--primary); border-radius: 8px; display: flex; justify-content: center; align-items: center; overflow: hidden; font-size: 1.2rem;}
@@ -17,63 +15,47 @@
         .nav-item { padding: 16px 20px; color: #9ca3af; cursor: pointer; display: flex; align-items: center; gap: 12px; transition: 0.2s; border-left: 4px solid transparent; }
         .nav-item:hover { background: rgba(255,255,255,0.05); color: #fff; }
         .nav-item.active { background: rgba(255,255,255,0.1); color: #fff; border-left-color: var(--primary); font-weight: 600; }
-        
-        /* Layout Principal */
         .main { flex: 1; padding: 40px; overflow-y: auto; }
         .view { display: none; max-width: 1100px; margin: 0 auto; animation: fadeIn 0.3s; }
         .view.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        
         .header-flex { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
         h1 { font-size: 1.8rem; color: #111827; margin-bottom: 5px;}
         p.sub { color: var(--text-light); margin-bottom: 25px; }
-        
         .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 25px; margin-bottom: 25px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
         .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
-        
         label { display: block; font-weight: 600; margin-bottom: 8px; font-size: 0.9rem; margin-top: 10px;}
-        input, select { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; outline: none; transition: 0.2s; background: #f9fafb; font-size: 1rem;}
-        input:focus, select:focus { border-color: var(--primary); background: #fff; box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1); }
-        
+        input, select { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; outline: none; background: #f9fafb; font-size: 1rem;}
         .btn { background: var(--primary); color: #fff; border: none; padding: 14px 20px; border-radius: 8px; font-weight: bold; font-size: 0.95rem; cursor: pointer; transition: 0.2s; display: inline-flex; justify-content: center; align-items: center; gap: 8px;}
         .btn:hover { opacity: 0.9; transform: translateY(-1px); }
         .btn.danger { background: var(--danger); }
         .btn.success { background: var(--success); }
+        .btn.warning { background: var(--warning); color: #fff; }
         .btn.outline { background: transparent; border: 2px solid var(--primary); color: var(--primary); }
-        
         table { width: 100%; border-collapse: collapse; margin-top: 10px; }
         th, td { padding: 15px; border-bottom: 1px solid var(--border); text-align: left; }
         th { background: #f9fafb; color: var(--text-light); font-weight: 600; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 0.5px; }
-        
-        /* Seletores de Dias (Checkbox) */
         .days-box { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 10px; }
         .day-cb { display: none; }
         .day-lbl { padding: 10px 15px; border: 1px solid var(--border); border-radius: 8px; cursor: pointer; font-weight: 600; background: #fff; transition: 0.2s; }
         .day-cb:checked + .day-lbl { background: var(--primary); color: #fff; border-color: var(--primary); }
-
-        /* Aba Bloqueios - Colunas da Semana */
         .week-grid { display: flex; gap: 15px; overflow-x: auto; padding-bottom: 15px; }
         .day-col { min-width: 140px; background: #f9fafb; border: 1px solid var(--border); border-radius: 12px; display: flex; flex-direction: column;}
-        .day-col-header { padding: 12px; text-align: center; font-weight: bold; border-bottom: 1px solid var(--border); background: #fff; border-radius: 12px 12px 0 0; color: var(--text);}
+        .day-col-header { padding: 12px; text-align: center; font-weight: bold; border-bottom: 1px solid var(--border); background: #fff; border-radius: 12px 12px 0 0;}
         .day-col-body { padding: 10px; display: flex; flex-direction: column; gap: 8px; max-height: 400px; overflow-y: auto;}
-        
-        .slot-btn { padding: 8px; border-radius: 6px; border: 1px solid var(--success); background: #ecfdf5; color: #065f46; font-weight: bold; cursor: pointer; text-align: center; transition: 0.2s; font-size: 0.9rem;}
+        .slot-btn { padding: 8px; border-radius: 6px; border: 1px solid var(--success); background: #ecfdf5; color: #065f46; font-weight: bold; cursor: pointer; text-align: center; font-size: 0.9rem;}
         .slot-btn.blocked { border-color: var(--danger); background: #fef2f2; color: #991b1b; text-decoration: line-through; }
-
-        /* NOVO LAYOUT DA AGENDA PRINCIPAL: LINHAS DE GRADE UNIFICADAS */
         .agenda-list { display: flex; flex-direction: column; gap: 12px; }
         .time-row { display: flex; align-items: stretch; border: 1px solid var(--border); border-radius: 12px; background: #fff; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.02); }
         .time-badge { width: 90px; background: #f9fafb; border-right: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.1rem; color: var(--primary); padding: 15px; text-align: center;}
         .time-body-content { flex: 1; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; }
-        
         .time-row.free .time-body-content { background: #ffffff; color: var(--text-light); }
         .time-row.booked .time-body-content { background: #f0fdf4; border-left: 4px solid var(--success); }
+        .time-row.canceled-client .time-body-content { background: #fffbeb; border-left: 4px solid var(--warning); } /* Amarelo de Alerta */
         .paciente-title { font-weight: bold; color: var(--text); font-size: 1.1rem; }
         .proced-subtitle { color: var(--text-light); font-size: 0.9rem; margin-top: 3px; }
         .empty-agenda { text-align: center; padding: 40px; background: #fff; border: 1px dashed var(--border); border-radius: 12px; color: var(--text-light); }
-
-        /* Modais */
         .modal-overlay { position: fixed; inset: 0; background: rgba(17, 24, 39, 0.8); display: none; align-items: center; justify-content: center; z-index: 9999; }
         .modal-overlay.active { display: flex; }
         .modal-box { background: white; padding: 35px; border-radius: 16px; width: 100%; max-width: 500px; max-height: 90vh; overflow-y: auto;}
@@ -82,177 +64,73 @@
 </head>
 <body>
 
-    <!-- TELA DE LOGIN -->
     <div id="login-overlay" class="modal-overlay">
         <div class="modal-box" style="text-align: center; max-width: 400px;">
             <h2 style="margin-bottom: 20px;">Acesso Restrito Yod</h2>
-            <input type="email" id="log-email" placeholder="E-mail da Recepção">
-            <input type="password" id="log-senha" placeholder="Senha">
+            <input type="email" id="log-email" placeholder="E-mail da Recepção"><input type="password" id="log-senha" placeholder="Senha">
             <button class="btn" style="width: 100%; margin-top: 15px;" id="btn-login-action">Entrar no Painel</button>
         </div>
     </div>
 
-    <!-- MODAL DE NOVO AGENDAMENTO (MANUAL) -->
     <div id="modal-agendar" class="modal-overlay">
         <div class="modal-box">
-            <h2 style="margin-bottom: 5px;">Adicionar Paciente</h2>
-            <p style="color: gray; font-size: 0.9rem; margin-bottom: 20px;">Crie um agendamento rápido na grade da Yod.</p>
-            
+            <h2>Adicionar Paciente</h2><p style="color: gray; font-size: 0.9rem; margin-bottom: 20px;">Crie um agendamento rápido na grade.</p>
             <div class="grid-2">
                 <div><label>Nome do Paciente</label><input type="text" id="man-nome" placeholder="Nome Completo"></div>
                 <div><label>WhatsApp</label><input type="tel" id="man-wpp" placeholder="(DDD) 99999-9999"></div>
             </div>
-
-            <label>Procedimento</label>
-            <select id="man-servico"><option value="">Carregando...</option></select>
-
+            <label>Procedimento</label><select id="man-servico"><option value="">Carregando...</option></select>
             <div class="grid-2">
-                <div>
-                    <label>Data Escolhida</label>
-                    <input type="date" id="man-data" readonly style="background:#e5e7eb; cursor:not-allowed;">
-                </div>
-                <div>
-                    <label>Horário Escolhido</label>
-                    <input type="text" id="man-hora" readonly style="background:#e5e7eb; cursor:not-allowed; font-weight:bold; color:var(--primary);">
-                </div>
+                <div><label>Data Escolhida</label><input type="date" id="man-data" readonly style="background:#e5e7eb;"></div>
+                <div><label>Horário Escolhido</label><input type="text" id="man-hora" readonly style="background:#e5e7eb; font-weight:bold; color:var(--primary);"></div>
             </div>
-
-            <div class="grid-2" style="margin-top: 30px;">
-                <button class="btn outline" id="btn-fechar-modal">Cancelar</button>
-                <button class="btn success" id="btn-salvar-manual">Confirmar Agendamento</button>
-            </div>
+            <div class="grid-2" style="margin-top: 30px;"><button class="btn outline" id="btn-fechar-modal">Cancelar</button><button class="btn success" id="btn-salvar-manual">Confirmar</button></div>
         </div>
     </div>
 
     <aside class="sidebar">
-        <div class="brand">
-            <div class="logo-box" id="ui-logo">Y</div>
-            <span id="ui-nome">Yod Clínica</span>
-        </div>
-        <div class="nav-item active" id="menu-agenda">📅 Agenda Principal</div>
-        <div class="nav-item" id="menu-criar">🕒 Criar Horários</div>
-        <div class="nav-item" id="menu-bloqueio">🚫 Gerar Bloqueios</div>
-        <div class="nav-item" id="menu-proced">💉 Procedimentos</div>
-        <div class="nav-item" id="menu-finan">💰 Financeiro</div>
-        <div style="flex: 1;"></div>
-        <div class="nav-item" style="color: #ef4444;" id="menu-sair">Sair do Sistema</div>
+        <div class="brand"><div class="logo-box" id="ui-logo">Y</div><span id="ui-nome">Yod Clínica</span></div>
+        <div class="nav-item active" id="menu-agenda">📅 Agenda Principal</div><div class="nav-item" id="menu-criar">🕒 Criar Horários</div><div class="nav-item" id="menu-bloqueio">🚫 Gerar Bloqueios</div><div class="nav-item" id="menu-proced">💉 Procedimentos</div><div class="nav-item" id="menu-finan">💰 Financeiro</div>
+        <div style="flex: 1;"></div><div class="nav-item" style="color: #ef4444;" id="menu-sair">Sair</div>
     </aside>
 
     <main class="main">
-        <!-- 1. AGENDA PRINCIPAL (COM HORÁRIOS LIVRES E OCUPADOS) -->
         <section id="v-agenda" class="view active">
-            <div class="header-flex">
-                <div>
-                    <h1>Agenda Principal</h1>
-                    <p class="sub">Controle completo da grade diária da Yod.</p>
-                </div>
-            </div>
-            
-            <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 25px; background: var(--card); padding: 15px 20px; border-radius: 12px; border: 1px solid var(--border);">
-                <label style="margin: 0; font-size: 1rem;">Selecione o Dia de Atendimento:</label>
-                <input type="date" id="filtro-data-agenda" style="width: 250px; margin: 0; padding: 10px;">
-            </div>
-            
+            <div class="header-flex"><div><h1>Agenda Principal</h1><p class="sub">Controle completo da grade diária da Yod.</p></div></div>
+            <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 25px; background: var(--card); padding: 15px 20px; border-radius: 12px; border: 1px solid var(--border);"><label style="margin: 0; font-size: 1rem;">Selecione o Dia:</label><input type="date" id="filtro-data-agenda" style="width: 250px; margin: 0; padding: 10px;"></div>
             <div id="man-aviso-agenda-principal" style="color:var(--danger); font-weight:bold; margin-bottom:15px;"></div>
-
-            <div class="agenda-list" id="lista-agenda">
-                <!-- Lista Completa Gerada Dinamicamente por JavaScript -->
-            </div>
+            <div class="agenda-list" id="lista-agenda"></div>
         </section>
 
-        <!-- 2. CRIAR HORÁRIOS -->
         <section id="v-criar" class="view">
-            <h1>Criar Horários de Atendimento</h1>
-            <p class="sub">Configure a regra padrão da semana ou adicione uma data personalizada.</p>
-            
-            <!-- REGRA SEMANAL -->
+            <h1>Criar Horários de Atendimento</h1><p class="sub">Configure a regra padrão da semana ou adicione uma data personalizada.</p>
             <div class="card">
-                <h3 style="color: var(--primary); margin-bottom: 15px;">A) Regra Padrão Semanal</h3>
-                <label>Dias da Semana Abertos</label>
-                <div class="days-box">
-                    <input type="checkbox" id="d1" class="day-cb" value="1"><label for="d1" class="day-lbl">Seg</label>
-                    <input type="checkbox" id="d2" class="day-cb" value="2"><label for="d2" class="day-lbl">Ter</label>
-                    <input type="checkbox" id="d3" class="day-cb" value="3"><label for="d3" class="day-lbl">Qua</label>
-                    <input type="checkbox" id="d4" class="day-cb" value="4"><label for="d4" class="day-lbl">Qui</label>
-                    <input type="checkbox" id="d5" class="day-cb" value="5"><label for="d5" class="day-lbl">Sex</label>
-                    <input type="checkbox" id="d6" class="day-cb" value="6"><label for="d6" class="day-lbl">Sáb</label>
-                    <input type="checkbox" id="d0" class="day-cb" value="0"><label for="d0" class="day-lbl">Dom</label>
-                </div>
-
-                <div class="grid-3" style="margin-top: 15px;">
-                    <div><label>Hora de Abertura</label><input type="time" id="g-start" value="08:00"></div>
-                    <div><label>Hora de Fechamento</label><input type="time" id="g-end" value="18:00"></div>
-                    <div><label>Minutos por Atendimento</label>
-                        <select id="g-int">
-                            <option value="15">15 minutos</option>
-                            <option value="30">30 minutos</option>
-                            <option value="60" selected>60 minutos</option>
-                        </select>
-                    </div>
-                </div>
+                <h3>A) Regra Padrão Semanal</h3><label>Dias da Semana Abertos</label>
+                <div class="days-box"><input type="checkbox" id="d1" class="day-cb" value="1"><label for="d1" class="day-lbl">Seg</label><input type="checkbox" id="d2" class="day-cb" value="2"><label for="d2" class="day-lbl">Ter</label><input type="checkbox" id="d3" class="day-cb" value="3"><label for="d3" class="day-lbl">Qua</label><input type="checkbox" id="d4" class="day-cb" value="4"><label for="d4" class="day-lbl">Qui</label><input type="checkbox" id="d5" class="day-cb" value="5"><label for="d5" class="day-lbl">Sex</label><input type="checkbox" id="d6" class="day-cb" value="6"><label for="d6" class="day-lbl">Sáb</label><input type="checkbox" id="d0" class="day-cb" value="0"><label for="d0" class="day-lbl">Dom</label></div>
+                <div class="grid-3" style="margin-top: 15px;"><div><label>Hora de Abertura</label><input type="time" id="g-start" value="08:00"></div><div><label>Hora de Fechamento</label><input type="time" id="g-end" value="18:00"></div><div><label>Minutos por Atendimento</label><select id="g-int"><option value="15">15 minutos</option><option value="30">30 minutos</option><option value="60" selected>60 minutos</option></select></div></div>
                 <button class="btn success" style="margin-top: 20px; width:100%;" id="btn-salvar-grade">💾 Salvar Regra Semanal</button>
             </div>
-
-            <!-- REGRA PERSONALIZADA -->
             <div class="card">
-                <h3 style="color: var(--primary); margin-bottom: 15px;">B) Adicionar Dia Personalizado (Exceção)</h3>
-                <p style="font-size: 0.85rem; color: gray; margin-bottom: 15px;">Útil para feriados, dias extras ou expedientes reduzidos.</p>
-                <div class="grid-2">
-                    <div><label>Data Específica</label><input type="date" id="c-data"></div>
-                    <div><label>Minutos por Atendimento</label>
-                        <select id="c-int"><option value="15">15 min</option><option value="30">30 min</option><option value="60">60 min</option></select>
-                    </div>
-                    <div><label>Abertura</label><input type="time" id="c-start" value="08:00"></div>
-                    <div><label>Fechamento</label><input type="time" id="c-end" value="12:00"></div>
-                </div>
+                <h3>B) Adicionar Dia Personalizado (Exceção)</h3>
+                <div class="grid-2"><div><label>Data Específica</label><input type="date" id="c-data"></div><div><label>Minutos por Atendimento</label><select id="c-int"><option value="15">15 min</option><option value="30">30 min</option><option value="60">60 min</option></select></div><div><label>Abertura</label><input type="time" id="c-start" value="08:00"></div><div><label>Fechamento</label><input type="time" id="c-end" value="12:00"></div></div>
                 <button class="btn outline" style="margin-top: 20px; width:100%;" id="btn-salvar-excecao">+ Adicionar Exceção para esta Data</button>
                 <div id="lista-excecoes" style="margin-top: 15px; font-size: 0.9rem; color: var(--text);"></div>
             </div>
         </section>
 
-        <!-- 3. BLOQUEIOS DE HORÁRIO -->
         <section id="v-bloqueio" class="view">
-            <div class="header-flex">
-                <div>
-                    <h1>Gerar Bloqueios Semanais</h1>
-                    <p class="sub">Selecione os horários padrão de pausa que se repetem durante os dias abertos.</p>
-                </div>
-                <button class="btn success" id="btn-salvar-bloqueios">💾 Salvar Bloqueios</button>
-            </div>
-            
-            <div class="card" style="background: transparent; border: none; padding: 0; box-shadow: none;">
-                <div class="week-grid" id="container-bloqueios">
-                    <p style="color: gray;">Configure e salve a aba "Criar Horários" para exibir os blocos.</p>
-                </div>
-            </div>
+            <div class="header-flex"><div><h1>Gerar Bloqueios Semanais</h1><p class="sub">Selecione os horários padrão de pausa.</p></div><button class="btn success" id="btn-salvar-bloqueios">💾 Salvar Bloqueios</button></div>
+            <div class="card" style="background: transparent; border: none; padding: 0; box-shadow: none;"><div class="week-grid" id="container-bloqueios"></div></div>
         </section>
 
-        <!-- 4. PROCEDIMENTOS -->
         <section id="v-proced" class="view">
             <h1>Gerenciamento de Procedimentos</h1>
-            <p class="sub">Cadastre os serviços e seus respectivos valores.</p>
-            
-            <div class="card grid-3" style="align-items: end;">
-                <div style="grid-column: span 2;"><label>Nome do Procedimento</label><input type="text" id="p-nome" placeholder="Ex: Micropigmentação Fio a Fio"></div>
-                <div><label>Valor (R$)</label><input type="number" id="p-valor" placeholder="450"></div>
-                <div style="grid-column: 1 / -1;"><button class="btn" style="width: auto;" id="btn-add-proced">+ Adicionar Procedimento</button></div>
-            </div>
-
-            <div class="card" style="padding: 0; overflow: hidden;">
-                <table>
-                    <thead><tr><th>Serviço Cadastrado</th><th>Preço</th><th style="width: 100px;">Ação</th></tr></thead>
-                    <tbody id="lista-procedimentos"></tbody>
-                </table>
-            </div>
+            <div class="card grid-3" style="align-items: end;"><div style="grid-column: span 2;"><label>Nome do Procedimento</label><input type="text" id="p-nome" placeholder="Ex: Micropigmentação Fio a Fio"></div><div><label>Valor (R$)</label><input type="number" id="p-valor" placeholder="450"></div><div style="grid-column: 1 / -1;"><button class="btn" style="width: auto;" id="btn-add-proced">+ Adicionar Procedimento</button></div></div>
+            <div class="card" style="padding: 0; overflow: hidden;"><table><thead><tr><th>Serviço Cadastrado</th><th>Preço</th><th style="width: 100px;">Ação</th></tr></thead><tbody id="lista-procedimentos"></tbody></table></div>
         </section>
 
-        <!-- 5. FINANCEIRO -->
         <section id="v-finan" class="view">
-            <h1>Controle Financeiro</h1>
-            <p class="sub">Ganhos registrados de consultas concluídas.</p>
-            <div class="card" style="padding: 0; overflow: hidden;">
-                <table><thead><tr><th>Data</th><th>Descrição do Serviço</th><th style="width: 150px;">Entrada</th></tr></thead><tbody id="lista-finan"></tbody></table>
-            </div>
+            <h1>Controle Financeiro</h1><div class="card" style="padding: 0; overflow: hidden;"><table><thead><tr><th>Data</th><th>Descrição do Serviço</th><th style="width: 150px;">Entrada</th></tr></thead><tbody id="lista-finan"></tbody></table></div>
         </section>
     </main>
 
@@ -264,302 +142,151 @@
         const firebaseConfig = { apiKey: "AIzaSyD4SElQHlfQjbN2NsHC0Z9_1Gobb6WHd8o", authDomain: "clinicabase-a85a7.firebaseapp.com", projectId: "clinicabase-a85a7", storageBucket: "clinicabase-a85a7.firebasestorage.app", messagingSenderId: "324071825277", appId: "1:324071825277:web:6a0d3c4413f7a7569fb614" };
         const app = initializeApp(firebaseConfig); const db = getFirestore(app); const auth = getAuth(app);
 
-        let gradeConfig = { dias: [], start: "08:00", end: "18:00", int: "60", excecoes: {}, bloqueios: [] };
-        let agendamentosDB = [];
+        let gradeConfig = { dias: [], start: "08:00", end: "18:00", int: "60", excecoes: {}, bloqueios: [] }, agendamentosDB = [];
 
         document.getElementById('filtro-data-agenda').value = new Date().toISOString().split('T')[0];
 
-        onAuthStateChanged(auth, (user) => { 
-            if(user) { 
-                document.getElementById('login-overlay').style.display = 'none'; 
-                iniciarSistema(); 
-            } else { 
-                document.getElementById('login-overlay').style.display = 'flex'; 
-            }
-        });
+        onAuthStateChanged(auth, (user) => { if(user) { document.getElementById('login-overlay').style.display = 'none'; iniciarSistema(); } else { document.getElementById('login-overlay').style.display = 'flex'; } });
 
-        // Eventos Globais Conectados
-        document.getElementById('btn-login-action').addEventListener('click', () => {
-            signInWithEmailAndPassword(auth, document.getElementById('log-email').value, document.getElementById('log-senha').value).catch(e => alert("Dados Incorretos."));
-        });
+        document.getElementById('btn-login-action').addEventListener('click', () => { signInWithEmailAndPassword(auth, document.getElementById('log-email').value, document.getElementById('log-senha').value).catch(e => alert("Dados Incorretos.")); });
         document.getElementById('menu-sair').addEventListener('click', () => signOut(auth));
-        
         document.getElementById('menu-agenda').addEventListener('click', function() { MudarAba('v-agenda', this); });
         document.getElementById('menu-criar').addEventListener('click', function() { MudarAba('v-criar', this); });
         document.getElementById('menu-bloqueio').addEventListener('click', function() { MudarAba('v-bloqueio', this); });
         document.getElementById('menu-proced').addEventListener('click', function() { MudarAba('v-proced', this); });
         document.getElementById('menu-finan').addEventListener('click', function() { MudarAba('v-finan', this); });
-
         document.getElementById('filtro-data-agenda').addEventListener('change', () => renderizarAgendaPrincipal());
-
         document.getElementById('btn-fechar-modal').addEventListener('click', () => fecharModais());
         document.getElementById('btn-salvar-manual').addEventListener('click', () => salvarAgendamentoManual());
-        
         document.getElementById('btn-salvar-grade').addEventListener('click', () => salvarGradeSemanal());
         document.getElementById('btn-salvar-excecao').addEventListener('click', () => salvarDiaPersonalizado());
         document.getElementById('btn-salvar-bloqueios').addEventListener('click', () => salvarBloqueiosNaNuveem());
         document.getElementById('btn-add-proced').addEventListener('click', () => cadastrarProcedimento());
 
-        function MudarAba(viewId, menuEl) {
-            document.querySelectorAll('.view').forEach(s => s.classList.remove('active'));
-            document.getElementById(viewId).classList.add('active');
-            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-            menuEl.classList.add('active');
-        }
+        function MudarAba(viewId, menuEl) { document.querySelectorAll('.view').forEach(s => s.classList.remove('active')); document.getElementById(viewId).classList.add('active'); document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active')); menuEl.classList.add('active'); }
         function fecharModais() { document.getElementById('modal-agendar').classList.remove('active'); }
 
         async function iniciarSistema() {
             const gSnap = await getDoc(doc(db, "configuracoes", "geral"));
-            if(gSnap.exists()){ 
-                document.documentElement.style.setProperty('--primary', gSnap.data().cor); 
-                document.getElementById('ui-nome').innerText = gSnap.data().nome; 
-                if(gSnap.data().logo) document.getElementById('ui-logo').innerHTML = `<img src="${gSnap.data().logo}">`;
-            }
-            await lerGradeDoBanco(); 
-            lerProcedimentos(); 
-            escutarAgenda(); 
-            lerFinanceiro();
+            if(gSnap.exists()){ document.documentElement.style.setProperty('--primary', gSnap.data().cor); document.getElementById('ui-nome').innerText = gSnap.data().nome; if(gSnap.data().logo) document.getElementById('ui-logo').innerHTML = `<img src="${gSnap.data().logo}">`; }
+            await lerGradeDoBanco(); lerProcedimentos(); escutarAgenda(); lerFinanceiro();
         }
 
-        /* ================= PROCEDIMENTOS ================= */
         async function cadastrarProcedimento() {
             const n = document.getElementById('p-nome').value, v = document.getElementById('p-valor').value;
             if(!n || !v) return alert("Preencha nome e valor.");
             await addDoc(collection(db, "procedimentos"), { nome: n, valor: parseFloat(v) });
             document.getElementById('p-nome').value=''; document.getElementById('p-valor').value='';
         }
+
         function lerProcedimentos() {
             onSnapshot(collection(db, "procedimentos"), (snap) => {
                 let html = "", selMan = "<option value=''>Selecione um serviço...</option>";
                 if(snap.empty) html = "<tr><td colspan='3' style='text-align:center;'>Nenhum procedimento cadastrado.</td></tr>";
-                snap.forEach(d => {
-                    const p = d.data();
-                    html += `<tr><td><b>${p.nome}</b></td><td style="color:var(--success); font-weight:bold;">R$ ${p.valor.toFixed(2)}</td><td><button class="btn danger" style="padding: 6px; font-size: 0.8rem;" id="btn-del-${d.id}">Excluir</button></td></tr>`;
-                    selMan += `<option value="${p.nome}|${p.valor}">${p.nome} - R$ ${p.valor.toFixed(2)}</option>`;
-                });
-                document.getElementById('lista-procedimentos').innerHTML = html;
-                document.getElementById('man-servico').innerHTML = selMan; 
-                
-                snap.forEach(d => {
-                    const btn = document.getElementById(`btn-del-${d.id}`);
-                    if(btn) {
-                        btn.addEventListener('click', async () => {
-                            if(confirm("Apagar procedimento?")) await deleteDoc(doc(db, "procedimentos", d.id));
-                        });
-                    }
-                });
+                snap.forEach(d => { const p = d.data(); html += `<tr><td><b>${p.nome}</b></td><td style="color:var(--success); font-weight:bold;">R$ ${p.valor.toFixed(2)}</td><td><button class="btn danger" style="padding: 6px; font-size: 0.8rem;" id="btn-del-${d.id}">Excluir</button></td></tr>`; selMan += `<option value="${p.nome}|${p.valor}">${p.nome} - R$ ${p.valor.toFixed(2)}</option>`; });
+                document.getElementById('lista-procedimentos').innerHTML = html; document.getElementById('man-servico').innerHTML = selMan; 
+                snap.forEach(d => { const btn = document.getElementById(`btn-del-${d.id}`); if(btn) { btn.addEventListener('click', async () => { if(confirm("Apagar procedimento?")) await deleteDoc(doc(db, "procedimentos", d.id)); }); } });
             });
         }
 
-        /* ================= CRIAR HORÁRIOS & GRADE ================= */
         async function lerGradeDoBanco() {
             const snap = await getDoc(doc(db, "configuracoes", "grade"));
             if(snap.exists()) {
-                gradeConfig = snap.data();
-                if(!gradeConfig.excecoes) gradeConfig.excecoes = {};
-                if(!gradeConfig.bloqueios) gradeConfig.bloqueios = [];
-                
-                document.getElementById('g-start').value = gradeConfig.start; 
-                document.getElementById('g-end').value = gradeConfig.end; 
-                document.getElementById('g-int').value = gradeConfig.int;
-                
-                document.querySelectorAll('.day-cb').forEach(cb => cb.checked = false);
-                gradeConfig.dias.forEach(d => {
-                    const el = document.getElementById('d'+d);
-                    if(el) el.checked = true;
-                });
-                
-                renderizarListaExcecoes();
-                renderizarAbaBloqueios();
+                gradeConfig = snap.data(); if(!gradeConfig.excecoes) gradeConfig.excecoes = {}; if(!gradeConfig.bloqueios) gradeConfig.bloqueios = [];
+                document.getElementById('g-start').value = gradeConfig.start; document.getElementById('g-end').value = gradeConfig.end; document.getElementById('g-int').value = gradeConfig.int;
+                document.querySelectorAll('.day-cb').forEach(cb => cb.checked = false); gradeConfig.dias.forEach(d => { const el = document.getElementById('d'+d); if(el) el.checked = true; });
+                renderizarListaExcecoes(); renderizarAbaBloqueios();
             }
         }
 
         window.salvarGradeSemanal = async () => {
-            let d = []; 
-            document.querySelectorAll('.day-cb:checked').forEach(c => d.push(parseInt(c.value)));
-            if(d.length === 0) return alert("Selecione pelo menos um dia da semana.");
-            
-            gradeConfig.dias = d;
-            gradeConfig.start = document.getElementById('g-start').value;
-            gradeConfig.end = document.getElementById('g-end').value;
-            gradeConfig.int = document.getElementById('g-int').value;
-
-            await setDoc(doc(db, "configuracoes", "grade"), gradeConfig);
-            alert("Regra semanal salva com sucesso!");
-            renderizarAbaBloqueios();
-            renderizarAgendaPrincipal();
+            let d = []; document.querySelectorAll('.day-cb:checked').forEach(c => d.push(parseInt(c.value))); if(d.length === 0) return alert("Selecione pelo menos um dia.");
+            gradeConfig.dias = d; gradeConfig.start = document.getElementById('g-start').value; gradeConfig.end = document.getElementById('g-end').value; gradeConfig.int = document.getElementById('g-int').value;
+            await setDoc(doc(db, "configuracoes", "grade"), gradeConfig); alert("Regra semanal salva!"); renderizarAbaBloqueios(); renderizarAgendaPrincipal();
         }
 
         window.salvarDiaPersonalizado = async () => {
-            const dataInput = document.getElementById('c-data').value;
-            if(!dataInput) return alert("Escolha uma data no calendário de exceções.");
-            const dataBr = dataInput.split('-').reverse().join('/');
-            
-            gradeConfig.excecoes[dataBr] = {
-                start: document.getElementById('c-start').value,
-                end: document.getElementById('c-end').value,
-                int: document.getElementById('c-int').value
-            };
-
-            await setDoc(doc(db, "configuracoes", "grade"), gradeConfig);
-            alert("Dia excepcional adicionado!");
-            renderizarListaExcecoes();
-            renderizarAgendaPrincipal();
+            const dataInput = document.getElementById('c-data').value; if(!dataInput) return alert("Escolha uma data."); const dataBr = dataInput.split('-').reverse().join('/');
+            gradeConfig.excecoes[dataBr] = { start: document.getElementById('c-start').value, end: document.getElementById('c-end').value, int: document.getElementById('c-int').value };
+            await setDoc(doc(db, "configuracoes", "grade"), gradeConfig); alert("Dia excepcional adicionado!"); renderizarListaExcecoes(); renderizarAgendaPrincipal();
         }
 
         function renderizarListaExcecoes() {
-            let html = "<b>Exceções / Datas Específicas Ativas:</b><br>";
-            if(Object.keys(gradeConfig.excecoes).length === 0) html += "<i style='color:gray'>Nenhuma data criada.</i>";
-            for (const [data, config] of Object.entries(gradeConfig.excecoes)) {
-                html += `<div style="background:#fef3c7; padding:10px; border-radius:6px; margin-top:8px; border:1px solid #fde68a;">
-                            <b>${data}</b>: ${config.start} às ${config.end} (${config.int}m)
-                            <button id="btn-del-exc-${data.replace(/\//g,'')}" style="float:right; color:red; border:none; background:none; cursor:pointer; font-weight:bold;">X</button>
-                         </div>`;
-            }
+            let html = "<b>Exceções Ativas:</b><br>"; if(Object.keys(gradeConfig.excecoes).length === 0) html += "<i style='color:gray'>Nenhuma data criada.</i>";
+            for (const [data, config] of Object.entries(gradeConfig.excecoes)) { html += `<div style="background:#fef3c7; padding:10px; border-radius:6px; margin-top:8px; border:1px solid #fde68a;"><b>${data}</b>: ${config.start} às ${config.end} (${config.int}m)<button id="btn-del-exc-${data.replace(/\//g,'')}" style="float:right; color:red; border:none; background:none; cursor:pointer; font-weight:bold;">X</button></div>`; }
             document.getElementById('lista-excecoes').innerHTML = html;
-
-            for (const data of Object.keys(gradeConfig.excecoes)) {
-                const idLimpa = data.replace(/\//g,'');
-                const btn = document.getElementById(`btn-del-exc-${idLimpa}`);
-                if(btn){
-                    btn.addEventListener('click', async () => {
-                        delete gradeConfig.excecoes[data];
-                        await setDoc(doc(db, "configuracoes", "grade"), gradeConfig);
-                        renderizarListaExcecoes();
-                        renderizarAgendaPrincipal();
-                    });
-                }
-            }
+            for (const data of Object.keys(gradeConfig.excecoes)) { const idLimpa = data.replace(/\//g,''); const btn = document.getElementById(`btn-del-exc-${idLimpa}`); if(btn){ btn.addEventListener('click', async () => { delete gradeConfig.excecoes[data]; await setDoc(doc(db, "configuracoes", "grade"), gradeConfig); renderizarListaExcecoes(); renderizarAgendaPrincipal(); }); } }
         }
 
-        /* ================= GERAR BLOQUEIOS SEMANAIS ================= */
         function renderizarAbaBloqueios() {
-            const cont = document.getElementById('container-bloqueios');
-            cont.innerHTML = "";
-            if(!gradeConfig.dias || gradeConfig.dias.length === 0) return;
-
+            const cont = document.getElementById('container-bloqueios'); cont.innerHTML = ""; if(!gradeConfig.dias || gradeConfig.dias.length === 0) return;
             const nomesDias = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
-            
             gradeConfig.dias.forEach(diaNum => {
-                let startM = parseInt(gradeConfig.start.split(':')[0])*60;
-                let endM = parseInt(gradeConfig.end.split(':')[0])*60;
-                let interv = parseInt(gradeConfig.int);
-
-                let slotsHTML = "";
-                for(let m = startM; m < endM; m += interv){
-                    let h = Math.floor(m/60).toString().padStart(2,'0')+":"+(m%60).toString().padStart(2,'0');
-                    let keyUnica = `${diaNum}-${h}`;
-                    let bloqueado = gradeConfig.bloqueios.includes(keyUnica);
-                    
-                    let cls = bloqueado ? "slot-btn blocked" : "slot-btn";
-                    slotsHTML += `<div class="${cls}" id="bl-slot-${diaNum}-${h.replace(':','')}">${h}</div>`;
-                }
-
-                cont.innerHTML += `
-                    <div class="day-col">
-                        <div class="day-col-header">${nomesDias[diaNum]}</div>
-                        <div class="day-col-body">${slotsHTML}</div>
-                    </div>
-                `;
+                let startM = parseInt(gradeConfig.start.split(':')[0])*60, endM = parseInt(gradeConfig.end.split(':')[0])*60, interv = parseInt(gradeConfig.int), slotsHTML = "";
+                for(let m = startM; m < endM; m += interv){ let h = Math.floor(m/60).toString().padStart(2,'0')+":"+(m%60).toString().padStart(2,'0'), keyUnica = `${diaNum}-${h}`, bloqueado = gradeConfig.bloqueios.includes(keyUnica), cls = bloqueado ? "slot-btn blocked" : "slot-btn"; slotsHTML += `<div class="${cls}" id="bl-slot-${diaNum}-${h.replace(':','')}">${h}</div>`; }
+                cont.innerHTML += `<div class="day-col"><div class="day-col-header">${nomesDias[diaNum]}</div><div class="day-col-body">${slotsHTML}</div></div>`;
             });
-
             gradeConfig.dias.forEach(diaNum => {
-                let startM = parseInt(gradeConfig.start.split(':')[0])*60;
-                let endM = parseInt(gradeConfig.end.split(':')[0])*60;
-                let interv = parseInt(gradeConfig.int);
-
-                for(let m = startM; m < endM; m += interv){
-                    let h = Math.floor(m/60).toString().padStart(2,'0')+":"+(m%60).toString().padStart(2,'0');
-                    let keyUnica = `${diaNum}-${h}`;
-                    const targetBtn = document.getElementById(`bl-slot-${diaNum}-${h.replace(':','')}`);
-                    if(targetBtn) {
-                        targetBtn.addEventListener('click', function() {
-                            if(gradeConfig.bloqueios.includes(keyUnica)) {
-                                gradeConfig.bloqueios = gradeConfig.bloqueios.filter(i => i !== keyUnica);
-                                this.className = "slot-btn";
-                            } else {
-                                gradeConfig.bloqueios.push(keyUnica);
-                                this.className = "slot-btn blocked";
-                            }
-                        });
-                    }
-                }
+                let startM = parseInt(gradeConfig.start.split(':')[0])*60, endM = parseInt(gradeConfig.end.split(':')[0])*60, interv = parseInt(gradeConfig.int);
+                for(let m = startM; m < endM; m += interv){ let h = Math.floor(m/60).toString().padStart(2,'0')+":"+(m%60).toString().padStart(2,'0'), keyUnica = `${diaNum}-${h}`; const targetBtn = document.getElementById(`bl-slot-${diaNum}-${h.replace(':','')}`); if(targetBtn) { targetBtn.addEventListener('click', function() { if(gradeConfig.bloqueios.includes(keyUnica)) { gradeConfig.bloqueios = gradeConfig.bloqueios.filter(i => i !== keyUnica); this.className = "slot-btn"; } else { gradeConfig.bloqueios.push(keyUnica); this.className = "slot-btn blocked"; } }); } }
             });
         }
 
-        window.salvarBloqueiosNaNuveem = async () => {
-            await setDoc(doc(db, "configuracoes", "grade"), gradeConfig);
-            alert("Bloqueios padrão salvos com sucesso!");
-            renderizarAgendaPrincipal();
-        }
+        window.salvarBloqueiosNaNuveem = async () => { await setDoc(doc(db, "configuracoes", "grade"), gradeConfig); alert("Bloqueios padrão salvos!"); renderizarAgendaPrincipal(); }
 
-        /* ================= NOVIDADE: AGENDA PRINCIPAL (LINHAS E BOTÕES DE AÇÃO) ================= */
-        function escutarAgenda() {
-            onSnapshot(query(collection(db, "agendamentos"), orderBy("ts", "asc")), (snap) => {
-                agendamentosDB = []; 
-                snap.forEach(d => { let obj = d.data(); obj.id = d.id; agendamentosDB.push(obj); });
-                renderizarAgendaPrincipal();
-            });
-        }
+        function escutarAgenda() { onSnapshot(query(collection(db, "agendamentos"), orderBy("ts", "asc")), (snap) => { agendamentosDB = []; snap.forEach(d => { let obj = d.data(); obj.id = d.id; agendamentosDB.push(obj); }); renderizarAgendaPrincipal(); }); }
 
+        /* ================= ATUALIZAÇÃO DA RENDERIZAÇÃO NO PAINEL ================= */
         window.renderizarAgendaPrincipal = () => {
-            const dataInput = document.getElementById('filtro-data-agenda').value;
-            const box = document.getElementById('lista-agenda');
-            const aviso = document.getElementById('man-aviso-agenda-principal');
-            
-            box.innerHTML = ""; aviso.innerText = "";
-            if(!dataInput) return box.innerHTML = "<div class='empty-agenda'>Selecione uma data acima para carregar a grade.</div>";
-            
-            const dataBr = dataInput.split('-').reverse().join('/');
-            const diaDaSemana = new Date(dataInput + "T00:00:00").getDay();
+            const dataInput = document.getElementById('filtro-data-agenda').value; const box = document.getElementById('lista-agenda'); const aviso = document.getElementById('man-aviso-agenda-principal');
+            box.innerHTML = ""; aviso.innerText = ""; if(!dataInput) return box.innerHTML = "<div class='empty-agenda'>Selecione uma data acima.</div>";
+            const dataBr = dataInput.split('-').reverse().join('/'), diaDaSemana = new Date(dataInput + "T00:00:00").getDay();
 
-            // 1. Determina as regras de horário para o dia filtrado
-            let paramsDia = null;
-            if(gradeConfig.excecoes && gradeConfig.excecoes[dataBr]) {
-                paramsDia = gradeConfig.excecoes[dataBr];
-            } else if (gradeConfig.dias.includes(diaDaSemana)) {
-                paramsDia = gradeConfig;
-            }
+            let paramsDia = (gradeConfig.excecoes && gradeConfig.excecoes[dataBr]) ? gradeConfig.excecoes[dataBr] : (gradeConfig.dias.includes(diaDaSemana) ? gradeConfig : null);
+            if(!paramsDia) { aviso.innerText = "Clínica fechada neste dia."; return; }
 
-            if(!paramsDia) {
-                aviso.innerText = "A clínica não abriu agenda de atendimento para este dia da semana.";
-                return;
-            }
+            let startM = parseInt(paramsDia.start.split(':')[0])*60, endM = parseInt(paramsDia.end.split(':')[0])*60, interv = parseInt(paramsDia.int);
 
-            let startM = parseInt(paramsDia.start.split(':')[0])*60;
-            let endM = parseInt(paramsDia.end.split(':')[0])*60;
-            let interv = parseInt(paramsDia.int);
-
-            // 2. Monta a grade linha por linha na tela
             for(let m = startM; m < endM; m += interv){
-                let h = Math.floor(m/60).toString().padStart(2,'0')+":"+(m%60).toString().padStart(2,'0');
-                let keyBloqueio = `${diaDaSemana}-${h}`;
-                
-                // Se o horário estiver bloqueado na aba Bloqueios, ele não desenha nada na tela
+                let h = Math.floor(m/60).toString().padStart(2,'0')+":"+(m%60).toString().padStart(2,'0'), keyBloqueio = `${diaDaSemana}-${h}`;
                 if(gradeConfig.bloqueios.includes(keyBloqueio)) continue;
 
-                // Procura se tem algum paciente agendado nesse dia e hora
+                // Captura agendamentos da data e hora
                 let appt = agendamentosDB.find(a => a.data === dataBr && a.hora === h);
 
                 if(appt) {
-                    // HORÁRIO OCUPADO / AGENDADO
-                    const num = appt.pacienteWhatsapp ? appt.pacienteWhatsapp.replace(/\D/g,'') : '';
-                    let wppBtn = num ? `<a href="https://wa.me/55${num}" target="_blank" style="color:var(--success); font-weight:bold; text-decoration:none; margin-left:15px;">📲 Conversar</a>` : '';
-                    
-                    box.innerHTML += `
-                        <div class="time-row booked">
-                            <div class="time-badge">${h}</div>
-                            <div class="time-body-content">
-                                <div>
-                                    <div class="paciente-title">${appt.pacienteNome} ${wppBtn}</div>
-                                    <div class="proced-subtitle">Procedimento: <b>${appt.servico}</b></div>
+                    if(appt.status === "cancelado") {
+                        // CASO NOVO: AGENDAMENTO CANCELADO AGUARDANDO LIBERAÇÃO
+                        box.innerHTML += `
+                            <div class="time-row canceled-client">
+                                <div class="time-badge">${h}</div>
+                                <div class="time-body-content">
+                                    <div>
+                                        <div class="paciente-title" style="color:var(--warning);">⚠️ Cancelado por: ${appt.pacienteNome}</div>
+                                        <div class="proced-subtitle">Motivo: <b style="color:var(--text);">${appt.motivoCancelamento}</b></div>
+                                    </div>
+                                    <button class="btn warning" style="padding:8px 15px; font-size:0.85rem;" id="btn-liberar-${appt.id}">🔓 Liberar Horário</button>
                                 </div>
-                                <div style="display:flex; gap:10px;">
-                                    <button class="btn success" style="padding:8px 15px; font-size:0.85rem;" id="btn-done-${appt.id}">✅ Concluir</button>
-                                    <button class="btn outline" style="padding:8px 15px; font-size:0.85rem; border-color:var(--danger); color:var(--danger);" id="btn-del-${appt.id}">❌ Cancelar</button>
+                            </div>`;
+                    } else {
+                        // AGENDAMENTO ATIVO NORMAL
+                        const num = appt.pacienteWhatsapp ? appt.pacienteWhatsapp.replace(/\D/g,'') : '';
+                        let wppBtn = num ? `<a href="https://wa.me/55${num}" target="_blank" style="color:var(--success); font-weight:bold; text-decoration:none; margin-left:15px;">📲 Conversar</a>` : '';
+                        box.innerHTML += `
+                            <div class="time-row booked">
+                                <div class="time-badge">${h}</div>
+                                <div class="time-body-content">
+                                    <div>
+                                        <div class="paciente-title">${appt.pacienteNome} ${wppBtn}</div>
+                                        <div class="proced-subtitle">Procedimento: <b>${appt.servico}</b></div>
+                                    </div>
+                                    <div style="display:flex; gap:10px;">
+                                        <button class="btn success" style="padding:8px 15px; font-size:0.85rem;" id="btn-done-${appt.id}">✅ Concluir</button>
+                                        <button class="btn outline" style="padding:8px 15px; font-size:0.85rem; border-color:var(--danger); color:var(--danger);" id="btn-del-${appt.id}">❌ Remover</button>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>`;
+                            </div>`;
+                    }
                 } else {
                     // HORÁRIO LIVRE DISPONÍVEL
                     box.innerHTML += `
@@ -573,75 +300,40 @@
                 }
             }
 
-            // 3. Associa dinamicamente as funções aos botões gerados na tela
+            // Atribui listeners dinâmicos
             for(let m = startM; m < endM; m += interv){
                 let h = Math.floor(m/60).toString().padStart(2,'0')+":"+(m%60).toString().padStart(2,'0');
                 let appt = agendamentosDB.find(a => a.data === dataBr && a.hora === h);
 
                 if(appt) {
-                    document.getElementById(`btn-done-${appt.id}`).addEventListener('click', async () => {
-                        if(confirm(`Deseja finalizar o atendimento de ${appt.pacienteNome} e lançar no caixa?`)) {
-                            await addDoc(collection(db, "financeiro"), { data: new Date().toLocaleDateString('pt-BR'), descricao: "Consulta: "+appt.servico, valor: appt.valor, ts: Date.now() });
-                            await deleteDoc(doc(db, "agendamentos", appt.id));
-                        }
-                    });
-                    document.getElementById(`btn-del-${appt.id}`).addEventListener('click', async () => {
-                        if(confirm("Deseja realmente remover e cancelar este agendamento?")) await deleteDoc(doc(db, "agendamentos", appt.id));
-                    });
+                    if(appt.status === "cancelado") {
+                        document.getElementById(`btn-liberar-${appt.id}`).addEventListener('click', async () => {
+                            if(confirm("Deseja expurgar o registro e abrir esta vaga na grade novamente?")) await deleteDoc(doc(db, "agendamentos", appt.id));
+                        });
+                    } else {
+                        document.getElementById(`btn-done-${appt.id}`).addEventListener('click', async () => {
+                            if(confirm("Concluir atendimento e lançar no caixa?")) { await addDoc(collection(db, "financeiro"), { data: new Date().toLocaleDateString('pt-BR'), descricao: "Consulta: "+appt.servico, valor: appt.valor, ts: Date.now() }); await deleteDoc(doc(db, "agendamentos", appt.id)); }
+                        });
+                        document.getElementById(`btn-del-${appt.id}`).addEventListener('click', async () => {
+                            if(confirm("Deseja apagar esse agendamento?")) await deleteDoc(doc(db, "agendamentos", appt.id));
+                        });
+                    }
                 } else {
-                    document.getElementById(`btn-quick-add-${h.replace(':','')}`).addEventListener('click', () => {
-                        abrirModalAgendarRapido(dataInput, h);
-                    });
+                    document.getElementById(`btn-quick-add-${h.replace(':','')}`).addEventListener('click', () => abrirModalAgendarRapido(dataInput, h));
                 }
             }
         }
 
-        /* ================= AGENDAMENTO MANUAL (AÇÃO DO MODAL) ================= */
-        function abrirModalAgendarRapido(dataIso, horaStr) {
-            document.getElementById('modal-agendar').classList.add('active');
-            document.getElementById('man-nome').value = ''; 
-            document.getElementById('man-wpp').value = '';
-            document.getElementById('man-servico').value = '';
-            
-            // Preenche e trava a Data e Hora clicados na linha da Agenda
-            document.getElementById('man-data').value = dataIso;
-            document.getElementById('man-hora').value = horaStr;
-        }
+        function abrirModalAgendarRapido(dataIso, horaStr) { document.getElementById('modal-agendar').classList.add('active'); document.getElementById('man-nome').value = ''; document.getElementById('man-wpp').value = ''; document.getElementById('man-servico').value = ''; document.getElementById('man-data').value = dataIso; document.getElementById('man-hora').value = horaStr; }
 
         async function salvarAgendamentoManual() {
-            const n = document.getElementById('man-nome').value; 
-            const w = document.getElementById('man-wpp').value;
-            const sVal = document.getElementById('man-servico').value; 
-            const d = document.getElementById('man-data').value;
-            const h = document.getElementById('man-hora').value;
-            
-            if(!n || !sVal || !d || !h) return alert("Por favor, preencha o nome do paciente e selecione o procedimento.");
-
-            const servNome = sVal.split('|')[0]; 
-            const servValor = parseFloat(sVal.split('|')[1]);
-            const dataBr = d.split('-').reverse().join('/');
-
-            await addDoc(collection(db, "agendamentos"), { 
-                pacienteNome: n + " (Balcão)", pacienteWhatsapp: w, 
-                servico: servNome, valor: servValor, data: dataBr, hora: h, ts: Date.now() 
-            });
-
-            fecharModais();
-            renderizarAgendaPrincipal();
-            alert("✅ Agendamento inserido com sucesso!");
+            const n = document.getElementById('man-nome').value, w = document.getElementById('man-wpp').value, sVal = document.getElementById('man-servico').value, d = document.getElementById('man-data').value, h = document.getElementById('man-hora').value;
+            if(!n || !sVal || !d || !h) return alert("Preencha os campos obrigatórios.");
+            await addDoc(collection(db, "agendamentos"), { pacienteNome: n + " (Balcão)", pacienteWhatsapp: w, servico: sVal.split('|')[0], valor: parseFloat(sVal.split('|')[1]), data: d.split('-').reverse().join('/'), hora: h, status: "ativo", ts: Date.now() });
+            fecharModais(); renderizarAgendaPrincipal(); alert("Agendamento efetuado!");
         }
 
-        /* ================= FINANCEIRO ================= */
-        function lerFinanceiro() {
-            onSnapshot(query(collection(db, "financeiro"), orderBy("ts", "desc")), (snap) => {
-                let html = "";
-                if(snap.empty) html = "<tr><td colspan='3' style='text-align:center;'>Nenhum ganho registrado.</td></tr>";
-                snap.forEach(d => {
-                    html += `<tr><td>${d.data().data}</td><td><b>${d.data().descricao}</b></td><td style="color:var(--success); font-weight:bold;">+ R$ ${d.data().valor.toFixed(2)}</td></tr>`;
-                });
-                document.getElementById('lista-finan').innerHTML = html;
-            });
-        }
+        function lerFinanceiro() { onSnapshot(query(collection(db, "financeiro"), orderBy("ts", "desc")), (snap) => { let html = ""; if(snap.empty) html = "<tr><td colspan='3' style='text-align:center;'>Nenhum ganho registrado.</td></tr>"; snap.forEach(d => html += `<tr><td>${d.data().data}</td><td><b>${d.data().descricao}</b></td><td style="color:var(--success); font-weight:bold;">+ R$ ${d.data().valor.toFixed(2)}</td></tr>`); document.getElementById('lista-finan').innerHTML = html; }); }
     </script>
 </body>
 </html>
