@@ -180,9 +180,8 @@
     <script type="module">
         import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
 
-        // 🔑 COLOQUE SUAS CREDENCIAIS DO SUPABASE AQUI
-        const SUPABASE_URL = 'SUA_URL_DO_SUPABASE';
-        const SUPABASE_ANON_KEY = 'SUA_CHAVE_ANON_DO_SUPABASE';
+        const SUPABASE_URL = 'https://jjekkkvezunxquvsyqek.supabase.co'; 
+        const SUPABASE_ANON_KEY = 'sb_publishable_mcH9rB1LkliFvxoplIhAdQ_uPl0B0BO';
 
         const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
         
@@ -304,7 +303,6 @@
                 const { data, error } = await supabase.storage.from('produtos').upload(fileName, blob, { contentType: 'image/jpeg' });
                 if (error) throw error;
                 
-                // Pega a URL pública
                 const { data: publicUrlData } = supabase.storage.from('produtos').getPublicUrl(fileName);
                 return publicUrlData.publicUrl;
             }
