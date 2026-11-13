@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel Admin - YOD Estética</title>
+    <title>Painel Admin - YOD Estética (Supabase)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Cropper.js (Para cortar e dar zoom nas imagens) -->
+    <!-- Cropper.js -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
 
@@ -19,7 +19,6 @@
         .form-input:focus { border-color: #D4A3A3; box-shadow: 0 0 0 2px rgba(212, 163, 163, 0.2); }
         .form-label { display: block; font-size: 0.875rem; font-weight: 500; color: #374151; margin-bottom: 0.25rem; }
         
-        /* Estilos do Upload */
         .upload-box { position: relative; width: 100%; aspect-ratio: 4/3; border: 2px dashed #d1d5db; border-radius: 0.75rem; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; overflow: hidden; background-color: #f9fafb; transition: 0.2s; }
         .upload-box:hover { border-color: #D4A3A3; background-color: #fff; }
         .upload-preview { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: none; }
@@ -29,11 +28,10 @@
 </head>
 <body class="flex h-screen overflow-hidden text-gray-800 relative">
 
-    <!-- Sidebar -->
     <aside class="w-64 bg-gray-900 text-white flex flex-col hidden md:flex z-10">
         <div class="p-6 border-b border-gray-800">
             <h1 class="text-2xl font-serif tracking-wider text-[#D4A3A3]">YOD</h1>
-            <p class="text-xs text-gray-400 uppercase tracking-widest mt-1">Painel Gestor</p>
+            <p class="text-xs text-gray-400 uppercase tracking-widest mt-1">Supabase Gestor</p>
         </div>
         <nav class="flex-1 p-4">
             <a href="#" class="flex items-center gap-3 bg-[#D4A3A3] text-gray-900 px-4 py-3 rounded-lg font-medium">
@@ -42,20 +40,17 @@
         </nav>
     </aside>
 
-    <!-- Main Content -->
     <main class="flex-1 flex flex-col h-screen overflow-y-auto bg-gray-50">
-        
-        <!-- Topbar -->
         <header class="bg-white shadow-sm px-6 py-4 flex justify-between items-center z-10">
-            <h2 class="text-xl font-semibold text-gray-700" id="headerTitle">Gerenciar Catálogo</h2>
+            <h2 class="text-xl font-semibold text-gray-700">Painel Administrativo</h2>
             <div class="flex items-center gap-3">
-                <span class="text-sm text-gray-500 hidden sm:block">Logado como Admin</span>
+                <span class="text-sm text-gray-500 hidden sm:block">Admin</span>
                 <div class="w-8 h-8 rounded-full bg-[#D4A3A3] text-white flex items-center justify-center"><i class="fas fa-user"></i></div>
             </div>
         </header>
 
         <div class="p-4 md:p-8">
-            <!-- VIEW: LISTAGEM -->
+            <!-- Listagem -->
             <div id="listView" class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden transition-all">
                 <div class="p-4 md:p-6 border-b border-gray-100 flex flex-col sm:flex-row justify-between items-center gap-4">
                     <h3 class="text-lg font-semibold text-gray-800">Todos os Serviços</h3>
@@ -82,7 +77,7 @@
                 </div>
             </div>
 
-            <!-- VIEW: FORMULÁRIO -->
+            <!-- Formulário -->
             <div id="formView" class="hidden-view">
                 <button onclick="showList()" class="mb-6 text-gray-500 hover:text-gray-800 flex items-center gap-2 font-medium transition-colors">
                     <i class="fas fa-arrow-left"></i> Voltar para a lista
@@ -94,17 +89,15 @@
                     <form id="productForm" class="flex flex-col gap-8">
                         <input type="hidden" id="productId">
                         
-                        <!-- Linha 1: Informações -->
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div class="space-y-5">
                                 <div>
                                     <label class="form-label">Nome do Serviço</label>
                                     <input type="text" id="name" class="form-input" required placeholder="Ex: Micropigmentação Fio a Fio">
                                 </div>
-                                
                                 <div>
-                                    <label class="form-label">Descrição Curta (Aparece no card pequeno)</label>
-                                    <input type="text" id="shortDesc" class="form-input" required placeholder="Ex: Efeito natural e preenchimento perfeito." maxlength="100">
+                                    <label class="form-label">Descrição Curta</label>
+                                    <input type="text" id="shortDesc" class="form-input" required placeholder="Resumo do card" maxlength="100">
                                 </div>
                             </div>
                             
@@ -119,83 +112,41 @@
                                         <input type="number" step="0.01" id="promoPrice" class="form-input" placeholder="Opcional">
                                     </div>
                                 </div>
-
                                 <div>
-                                    <label class="form-label">Descrição Longa (Detalhes completos)</label>
-                                    <textarea id="fullDesc" rows="3" class="form-input" required placeholder="Explique os detalhes e benefícios..."></textarea>
+                                    <label class="form-label">Descrição Longa</label>
+                                    <textarea id="fullDesc" rows="3" class="form-input" required placeholder="Detalhes completos..."></textarea>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Linha 2: Upload de Imagens -->
+                        <!-- Upload de Imagens -->
                         <div class="bg-gray-50 p-6 rounded-xl border border-gray-200">
-                            <div class="flex justify-between items-center mb-4 border-b pb-2">
-                                <h4 class="font-medium text-gray-700">Fotos do Serviço</h4>
-                                <span class="text-xs text-gray-500 hidden sm:block">Você poderá ajustar/cortar após selecionar</span>
-                            </div>
-                            
+                            <h4 class="font-medium text-gray-700 mb-4 border-b pb-2">Fotos do Serviço (Até 5 fotos)</h4>
                             <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
-                                <!-- Upload Box 1 (Capa) -->
-                                <div>
-                                    <label class="text-xs font-bold text-[#D4A3A3] block text-center mb-1">FOTO 1 (CAPA)*</label>
-                                    <div class="upload-box" id="box1" onclick="document.getElementById('file1').click()">
-                                        <input type="file" id="file1" accept="image/*" class="hidden" onchange="openCropper(event, 1)">
-                                        <input type="hidden" id="url1"> 
-                                        <img id="preview1" class="upload-preview">
-                                        <div class="upload-placeholder text-center text-gray-400">
-                                            <i class="fas fa-camera text-2xl mb-1"></i><p class="text-[10px] uppercase">Upload</p>
-                                        </div>
-                                    </div>
-                                    <button type="button" onclick="removeImage(1)" id="btnRemove1" class="hidden w-full text-xs text-red-500 mt-1 hover:underline">Remover</button>
-                                </div>
-
-                                <!-- Repetição para as demais 4 fotos -->
-                                <div>
-                                    <label class="text-xs font-medium text-gray-500 block text-center mb-1">FOTO 2</label>
-                                    <div class="upload-box" id="box2" onclick="document.getElementById('file2').click()">
-                                        <input type="file" id="file2" accept="image/*" class="hidden" onchange="openCropper(event, 2)">
-                                        <input type="hidden" id="url2">
-                                        <img id="preview2" class="upload-preview">
-                                        <div class="upload-placeholder text-center text-gray-400"><i class="fas fa-plus text-xl mb-1"></i><p class="text-[10px] uppercase">Opcional</p></div>
-                                    </div>
-                                    <button type="button" onclick="removeImage(2)" id="btnRemove2" class="hidden w-full text-xs text-red-500 mt-1 hover:underline">Remover</button>
-                                </div>
-                                <div>
-                                    <label class="text-xs font-medium text-gray-500 block text-center mb-1">FOTO 3</label>
-                                    <div class="upload-box" id="box3" onclick="document.getElementById('file3').click()">
-                                        <input type="file" id="file3" accept="image/*" class="hidden" onchange="openCropper(event, 3)">
-                                        <input type="hidden" id="url3">
-                                        <img id="preview3" class="upload-preview">
-                                        <div class="upload-placeholder text-center text-gray-400"><i class="fas fa-plus text-xl mb-1"></i><p class="text-[10px] uppercase">Opcional</p></div>
-                                    </div>
-                                    <button type="button" onclick="removeImage(3)" id="btnRemove3" class="hidden w-full text-xs text-red-500 mt-1 hover:underline">Remover</button>
-                                </div>
-                                <div>
-                                    <label class="text-xs font-medium text-gray-500 block text-center mb-1">FOTO 4</label>
-                                    <div class="upload-box" id="box4" onclick="document.getElementById('file4').click()">
-                                        <input type="file" id="file4" accept="image/*" class="hidden" onchange="openCropper(event, 4)">
-                                        <input type="hidden" id="url4">
-                                        <img id="preview4" class="upload-preview">
-                                        <div class="upload-placeholder text-center text-gray-400"><i class="fas fa-plus text-xl mb-1"></i><p class="text-[10px] uppercase">Opcional</p></div>
-                                    </div>
-                                    <button type="button" onclick="removeImage(4)" id="btnRemove4" class="hidden w-full text-xs text-red-500 mt-1 hover:underline">Remover</button>
-                                </div>
-                                <div>
-                                    <label class="text-xs font-medium text-gray-500 block text-center mb-1">FOTO 5</label>
-                                    <div class="upload-box" id="box5" onclick="document.getElementById('file5').click()">
-                                        <input type="file" id="file5" accept="image/*" class="hidden" onchange="openCropper(event, 5)">
-                                        <input type="hidden" id="url5">
-                                        <img id="preview5" class="upload-preview">
-                                        <div class="upload-placeholder text-center text-gray-400"><i class="fas fa-plus text-xl mb-1"></i><p class="text-[10px] uppercase">Opcional</p></div>
-                                    </div>
-                                    <button type="button" onclick="removeImage(5)" id="btnRemove5" class="hidden w-full text-xs text-red-500 mt-1 hover:underline">Remover</button>
-                                </div>
+                                <script>
+                                    for(let i=1; i<=5; i++) {
+                                        document.write(`
+                                            <div>
+                                                <label class="text-xs font-bold ${i===1?'text-[#D4A3A3]':'text-gray-500'} block text-center mb-1">FOTO ${i} ${i===1?'(CAPA)*':''}</label>
+                                                <div class="upload-box" id="box${i}" onclick="document.getElementById('file${i}').click()">
+                                                    <input type="file" id="file${i}" accept="image/*" class="hidden" onchange="openCropper(event, ${i})">
+                                                    <input type="hidden" id="url${i}">
+                                                    <img id="preview${i}" class="upload-preview">
+                                                    <div class="upload-placeholder text-center text-gray-400">
+                                                        <i class="fas fa-${i===1?'camera':'plus'} text-2xl mb-1"></i><p class="text-[10px] uppercase">${i===1?'Upload':'Opcional'}</p>
+                                                    </div>
+                                                </div>
+                                                <button type="button" onclick="removeImage(${i})" id="btnRemove${i}" class="hidden w-full text-xs text-red-500 mt-1 hover:underline">Remover</button>
+                                            </div>
+                                        `);
+                                    }
+                                </script>
                             </div>
                         </div>
 
                         <div class="pt-4 flex justify-end gap-3 border-t">
-                            <button type="button" onclick="showList()" class="px-6 py-2.5 rounded-lg font-medium text-gray-600 hover:bg-gray-100 transition-colors">Cancelar</button>
-                            <button type="submit" id="submitBtn" class="bg-gray-900 hover:bg-black text-white px-8 py-2.5 rounded-lg font-medium transition-colors shadow-lg flex items-center gap-2">
+                            <button type="button" onclick="showList()" class="px-6 py-2.5 rounded-lg font-medium text-gray-600 hover:bg-gray-100">Cancelar</button>
+                            <button type="submit" id="submitBtn" class="bg-gray-900 hover:bg-black text-white px-8 py-2.5 rounded-lg font-medium shadow-lg flex items-center gap-2">
                                 <i class="fas fa-save"></i> <span>Salvar Serviço</span>
                             </button>
                         </div>
@@ -205,48 +156,37 @@
         </div>
     </main>
 
-    <!-- MODAL DE CORTE DE IMAGEM -->
+    <!-- Modal de Corte -->
     <div id="cropModal" class="fixed inset-0 bg-black/90 z-[100] hidden flex-col items-center justify-center p-4 backdrop-blur-sm">
         <div class="bg-white rounded-xl overflow-hidden w-full max-w-3xl flex flex-col max-h-[90vh] shadow-2xl">
             <div class="p-4 border-b flex justify-between items-center bg-gray-50">
                 <h3 class="font-semibold text-gray-800"><i class="fas fa-crop-alt mr-2"></i>Ajustar Imagem</h3>
                 <button onclick="closeCropper()" class="text-gray-400 hover:text-red-500 text-xl"><i class="fas fa-times"></i></button>
             </div>
-            <!-- Área do Cropper -->
             <div class="flex-1 bg-gray-900 p-2 min-h-[40vh] sm:min-h-[60vh] flex items-center justify-center">
                 <img id="imageToCrop" class="max-w-full max-h-full block">
             </div>
-            <div class="p-4 border-t flex flex-col sm:flex-row justify-between items-center gap-4 bg-gray-50">
-                <span class="text-xs text-gray-500"><i class="fas fa-info-circle"></i> Use os dedos ou o scroll para dar zoom e arraste para enquadrar.</span>
-                <div class="flex gap-3 w-full sm:w-auto">
-                    <button type="button" onclick="closeCropper()" class="w-full sm:w-auto px-5 py-2.5 text-gray-600 bg-gray-200 hover:bg-gray-300 rounded-lg font-medium transition-colors">Cancelar</button>
-                    <button type="button" onclick="confirmCrop()" class="w-full sm:w-auto px-6 py-2.5 bg-[#D4A3A3] hover:bg-[#C08F8F] text-white rounded-lg font-medium transition-colors shadow-md">Confirmar Corte</button>
+            <div class="p-4 border-t flex justify-between items-center gap-4 bg-gray-50">
+                <span class="text-xs text-gray-500"><i class="fas fa-info-circle"></i> Ajuste o enquadramento.</span>
+                <div class="flex gap-3">
+                    <button type="button" onclick="closeCropper()" class="px-5 py-2.5 text-gray-600 bg-gray-200 rounded-lg font-medium">Cancelar</button>
+                    <button type="button" onclick="confirmCrop()" class="px-6 py-2.5 bg-[#D4A3A3] text-white rounded-lg font-medium shadow-md">Confirmar</button>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- Script Supabase Admin -->
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
-        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-storage.js";
+        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
 
-        const firebaseConfig = { 
-            apiKey: "AIzaSyD4SElQHlfQjbN2NsHC0Z9_1Gobb6WHd8o", 
-            authDomain: "clinicabase-a85a7.firebaseapp.com", 
-            projectId: "clinicabase-a85a7", 
-            storageBucket: "clinicabase-a85a7.firebasestorage.app", 
-            messagingSenderId: "324071825277", 
-            appId: "1:324071825277:web:6a0d3c4413f7a7569fb614" 
-        };
+        // 🔑 COLOQUE SUAS CREDENCIAIS DO SUPABASE AQUI
+        const SUPABASE_URL = 'SUA_URL_DO_SUPABASE';
+        const SUPABASE_ANON_KEY = 'SUA_CHAVE_ANON_DO_SUPABASE';
 
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-        const storage = getStorage(app); 
+        const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
         
         let allProducts = [];
-
-        // --- SISTEMA DE CORTE (CROPPER.JS) ---
         let cropper = null;
         let currentCropBox = null;
         let finalBlobs = { 1: null, 2: null, 3: null, 4: null, 5: null };
@@ -261,25 +201,14 @@
                     imageElement.src = e.target.result;
                     document.getElementById('cropModal').classList.remove('hidden');
                     document.getElementById('cropModal').classList.add('flex');
-                    
                     if (cropper) { cropper.destroy(); }
-                    
-                    // Pequeno atraso para a animação do modal não quebrar o cálculo do cropper
                     setTimeout(() => {
-                        cropper = new Cropper(imageElement, {
-                            aspectRatio: 4 / 3, // Força o formato retangular ideal do seu catálogo
-                            viewMode: 1,        // Restringe a caixa de corte para não sair da imagem
-                            dragMode: 'move',   // O cursor arrasta a imagem
-                            autoCropArea: 1,
-                            guides: true,
-                            center: true,
-                            background: false,
-                        });
+                        cropper = new Cropper(imageElement, { aspectRatio: 4 / 3, viewMode: 1, dragMode: 'move', autoCropArea: 1 });
                     }, 100);
                 }
                 reader.readAsDataURL(file);
             }
-            event.target.value = ''; // Reseta o input file para permitir selecionar o mesmo arquivo caso cancele
+            event.target.value = '';
         };
 
         window.closeCropper = () => {
@@ -291,25 +220,15 @@
 
         window.confirmCrop = () => {
             if (!cropper) return;
-            
-            // Pega o pedaço cortado e transforma em um arquivo binário (Blob)
-            cropper.getCroppedCanvas({
-                width: 800, // Tamanho máximo que será salvo
-                height: 600,
-                imageSmoothingEnabled: true,
-                imageSmoothingQuality: 'high',
-            }).toBlob((blob) => {
+            cropper.getCroppedCanvas({ width: 800, height: 600, imageSmoothingQuality: 'high' }).toBlob((blob) => {
                 const num = currentCropBox;
-                finalBlobs[num] = blob; // Salva para o upload futuro
-                
-                // Cria um link temporário apenas para visualização no painel
+                finalBlobs[num] = blob;
                 const previewUrl = URL.createObjectURL(blob);
                 document.getElementById(`preview${num}`).src = previewUrl;
                 document.getElementById(`box${num}`).classList.add('has-image');
                 document.getElementById(`btnRemove${num}`).classList.remove('hidden');
-                
                 closeCropper();
-            }, 'image/jpeg', 0.85); // Salva em JPG com 85% de qualidade (ótimo para web)
+            }, 'image/jpeg', 0.85);
         };
 
         window.removeImage = (num) => {
@@ -317,16 +236,13 @@
             document.getElementById(`preview${num}`).src = ''; 
             document.getElementById(`box${num}`).classList.remove('has-image'); 
             document.getElementById(`btnRemove${num}`).classList.add('hidden'); 
-            finalBlobs[num] = null; // Remove a imagem final pendente
+            finalBlobs[num] = null;
         };
-        // ------------------------------------
 
-        // Controle de Views (Formulário e Listagem)
         window.showForm = (isEdit = false) => {
             document.getElementById('listView').classList.add('hidden-view');
             document.getElementById('formView').classList.remove('hidden-view');
             document.getElementById('formTitle').innerText = isEdit ? 'Editar Serviço' : 'Adicionar Novo Serviço';
-            
             if(!isEdit) {
                 document.getElementById('productForm').reset();
                 for(let i=1; i<=5; i++) removeImage(i); 
@@ -341,76 +257,74 @@
 
         const formatMoney = (val) => val ? `R$ ${parseFloat(val).toFixed(2).replace('.', ',')}` : '-';
 
-        async function loadAdminProducts() {
+        async function loadProducts() {
             const listDiv = document.getElementById('productList');
             try {
-                const querySnapshot = await getDocs(collection(db, "products"));
+                const { data: products, error } = await supabase.from('products').select('*');
+                if (error) throw error;
+
                 listDiv.innerHTML = '';
-                allProducts = [];
+                allProducts = products || [];
                 
-                if(querySnapshot.empty) {
+                if(allProducts.length === 0) {
                     listDiv.innerHTML = '<tr><td colspan="5" class="px-6 py-8 text-center text-gray-500">Nenhum serviço cadastrado.</td></tr>';
                     return;
                 }
 
-                querySnapshot.forEach((documento) => {
-                    const data = documento.data();
-                    data.id = documento.id;
-                    allProducts.push(data);
-
+                allProducts.forEach(data => {
                     const coverImg = (data.images && data.images.length > 0) ? data.images[0] : 'https://placehold.co/100?text=Sem+Foto';
-                    const hasPromo = data.promoPrice && parseFloat(data.promoPrice) > 0;
+                    const hasPromo = data.promo_price && parseFloat(data.promo_price) > 0;
 
                     const tr = document.createElement('tr');
                     tr.className = 'hover:bg-gray-50 transition-colors border-b border-gray-100';
                     tr.innerHTML = `
                         <td class="px-6 py-4"><img src="${coverImg}" class="w-14 h-14 object-cover rounded-lg shadow-sm"></td>
-                        <td class="px-6 py-4 font-medium text-gray-800">${data.name}<br><span class="text-xs text-gray-400 font-normal">${data.shortDesc ? data.shortDesc.substring(0,40)+'...' : ''}</span></td>
+                        <td class="px-6 py-4 font-medium text-gray-800">${data.name}<br><span class="text-xs text-gray-400 font-normal">${data.short_desc ? data.short_desc.substring(0,40)+'...' : ''}</span></td>
                         <td class="px-6 py-4 text-gray-600 ${hasPromo ? 'line-through text-xs' : 'font-semibold'}">${formatMoney(data.price)}</td>
-                        <td class="px-6 py-4 font-semibold text-green-600">${hasPromo ? formatMoney(data.promoPrice) : '-'}</td>
+                        <td class="px-6 py-4 font-semibold text-green-600">${hasPromo ? formatMoney(data.promo_price) : '-'}</td>
                         <td class="px-6 py-4 text-right">
-                            <button type="button" onclick="editProduct('${data.id}')" class="text-indigo-600 hover:text-indigo-900 bg-indigo-50 px-3 py-1.5 rounded-md mr-2 transition-colors"><i class="fas fa-edit"></i></button>
-                            <button type="button" onclick="deleteProduct('${data.id}')" class="text-red-600 hover:text-red-900 bg-red-50 px-3 py-1.5 rounded-md transition-colors"><i class="fas fa-trash"></i></button>
+                            <button type="button" onclick="editProduct('${data.id}')" class="text-indigo-600 hover:text-indigo-900 bg-indigo-50 px-3 py-1.5 rounded-md mr-2"><i class="fas fa-edit"></i></button>
+                            <button type="button" onclick="deleteProduct('${data.id}')" class="text-red-600 hover:text-red-900 bg-red-50 px-3 py-1.5 rounded-md"><i class="fas fa-trash"></i></button>
                         </td>
                     `;
                     listDiv.appendChild(tr);
                 });
-            } catch (error) {
+            } catch (err) {
                 listDiv.innerHTML = '<tr><td colspan="5" class="px-6 py-8 text-center text-red-500">Erro ao carregar dados.</td></tr>';
-                console.error(error);
+                console.error(err);
             }
         }
 
-        async function processImageUpload(num) {
+        async function uploadImageToSupabase(num) {
             const blob = finalBlobs[num];
             const hiddenUrl = document.getElementById(`url${num}`).value;
 
-            // Se o usuário recortou e confirmou uma nova foto...
             if (blob) {
-                const storageRef = ref(storage, `produtos/${Date.now()}_img${num}.jpg`);
-                await uploadBytes(storageRef, blob);
-                return await getDownloadURL(storageRef);
+                const fileName = `produto_${Date.now()}_${num}.jpg`;
+                const { data, error } = await supabase.storage.from('produtos').upload(fileName, blob, { contentType: 'image/jpeg' });
+                if (error) throw error;
+                
+                // Pega a URL pública
+                const { data: publicUrlData } = supabase.storage.from('produtos').getPublicUrl(fileName);
+                return publicUrlData.publicUrl;
             }
-            // Se ele não enviou foto nova, manter a que já estava (caso de edição)
             return hiddenUrl;
         }
 
         document.getElementById('productForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const submitBtn = document.getElementById('submitBtn');
-            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> <span>Salvando e Fazendo Upload...</span>';
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> <span>Salvando...</span>';
             submitBtn.disabled = true;
-            submitBtn.classList.replace('bg-gray-900', 'bg-gray-400');
             
             const id = document.getElementById('productId').value;
             
             try {
-                // Upload das imagens modificadas
-                const img1 = await processImageUpload(1);
-                const img2 = await processImageUpload(2);
-                const img3 = await processImageUpload(3);
-                const img4 = await processImageUpload(4);
-                const img5 = await processImageUpload(5);
+                const img1 = await uploadImageToSupabase(1);
+                const img2 = await uploadImageToSupabase(2);
+                const img3 = await uploadImageToSupabase(3);
+                const img4 = await uploadImageToSupabase(4);
+                const img5 = await uploadImageToSupabase(5);
 
                 const imagesArray = [img1, img2, img3, img4, img5].filter(url => url && url.trim() !== "");
 
@@ -421,37 +335,37 @@
 
                 const productData = { 
                     name: document.getElementById('name').value, 
-                    shortDesc: document.getElementById('shortDesc').value,
-                    fullDesc: document.getElementById('fullDesc').value,
+                    short_desc: document.getElementById('shortDesc').value,
+                    full_desc: document.getElementById('fullDesc').value,
                     price: parseFloat(document.getElementById('price').value) || 0,
-                    promoPrice: parseFloat(document.getElementById('promoPrice').value) || null,
+                    promo_price: parseFloat(document.getElementById('promoPrice').value) || null,
                     images: imagesArray 
                 };
 
                 if(id) {
-                    await updateDoc(doc(db, "products", id), productData);
+                    const { error } = await supabase.from('products').update(productData).eq('id', id);
+                    if (error) throw error;
                 } else {
-                    await addDoc(collection(db, "products"), productData);
+                    const { error } = await supabase.from('products').insert([productData]);
+                    if (error) throw error;
                 }
                 
                 showList();
-                loadAdminProducts();
-            } catch (error) {
-                if(error.message !== "Sem imagens") {
-                    alert("Erro ao salvar. Verifique se o Firebase Storage está com as regras de leitura/escrita ativadas.");
-                    console.error(error);
-                }
+                loadProducts();
+            } catch (err) {
+                alert("Erro ao salvar o produto.");
+                console.error(err);
             } finally {
                 submitBtn.innerHTML = '<i class="fas fa-save"></i> <span>Salvar Serviço</span>';
                 submitBtn.disabled = false;
-                submitBtn.classList.replace('bg-gray-400', 'bg-gray-900');
             }
         });
 
         window.deleteProduct = async (id) => {
             if(confirm("Excluir permanentemente este serviço?")) {
-                await deleteDoc(doc(db, "products", id));
-                loadAdminProducts();
+                const { error } = await supabase.from('products').delete().eq('id', id);
+                if (error) alert("Erro ao excluir.");
+                loadProducts();
             }
         };
 
@@ -461,27 +375,25 @@
 
             document.getElementById('productId').value = product.id;
             document.getElementById('name').value = product.name;
-            document.getElementById('shortDesc').value = product.shortDesc || '';
-            document.getElementById('fullDesc').value = product.fullDesc || product.description || '';
+            document.getElementById('shortDesc').value = product.short_desc || '';
+            document.getElementById('fullDesc').value = product.full_desc || '';
             document.getElementById('price').value = product.price;
-            document.getElementById('promoPrice').value = product.promoPrice || '';
+            document.getElementById('promoPrice').value = product.promo_price || '';
 
             for(let i=1; i<=5; i++) {
-                removeImage(i); // Limpa resquícios
+                removeImage(i);
                 const imgUrl = product.images && product.images[i-1] ? product.images[i-1] : '';
                 document.getElementById(`url${i}`).value = imgUrl;
-                
                 if(imgUrl) {
                     document.getElementById(`preview${i}`).src = imgUrl;
                     document.getElementById(`box${i}`).classList.add('has-image');
                     document.getElementById(`btnRemove${i}`).classList.remove('hidden');
                 }
             }
-
             showForm(true);
         };
 
-        loadAdminProducts();
+        loadProducts();
     </script>
 </body>
 </html>
