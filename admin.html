@@ -3,186 +3,327 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Master - Yod Micropigmentação</title>
+    <title>Admin - YOD Estética</title>
     <style>
-        :root { --sidebar-bg: #09090b; --primary-accent: #4f46e5; --bg-color: #f4f4f5; --card-bg: #ffffff; --text-main: #09090b; --border-color: #e4e4e7; --success: #10b981; --danger: #ef4444; }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
-        body { background-color: var(--bg-color); color: var(--text-main); display: flex; height: 100vh; overflow: hidden; }
-        .sidebar { width: 260px; background-color: var(--sidebar-bg); color: #fff; display: flex; flex-direction: column; }
-        .sidebar-header { padding: 24px; font-size: 1.1rem; font-weight: 900; border-bottom: 1px solid rgba(255,255,255,0.05); }
-        .nav-menu { padding: 20px 0; }
-        .nav-item { padding: 15px 24px; color: #a1a1aa; cursor: pointer; font-weight: 500; display: flex; align-items: center; gap: 12px; transition: 0.2s; }
-        .nav-item:hover, .nav-item.active { background-color: var(--primary-accent); color: #fff; }
-        .main-content { flex: 1; padding: 40px; overflow-y: auto; }
-        .view-section { display: none; max-width: 900px; margin: 0 auto; animation: fadeIn 0.3s ease; }
-        .view-section.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .card-container { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 30px; margin-bottom: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.02); }
-        input { width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 1rem; margin-bottom: 15px; outline: none; background: #fafafa; }
-        input:focus { border-color: var(--primary-accent); background: #fff; }
-        label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.9rem; }
-        .btn { background: var(--primary-accent); color: #fff; border: none; padding: 14px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; transition: 0.2s; }
-        .btn:hover { opacity: 0.9; }
-        .btn.danger { background: var(--danger); padding: 6px 12px; font-size: 0.85rem; width: auto; }
-        .upload-box { border: 2px dashed var(--border-color); border-radius: 10px; background: #fafafa; padding: 25px; text-align: center; cursor: pointer; margin-bottom: 20px; transition: 0.2s; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 180px; }
-        .upload-box:hover { background: #f0f0f5; border-color: var(--primary-accent); }
-        .upload-box img { max-width: 140px; max-height: 140px; border-radius: 8px; object-fit: cover; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
-        table { width: 100%; border-collapse: collapse; margin-top: 15px; background: #fff; border-radius: 8px; overflow: hidden; border: 1px solid var(--border-color); }
-        th, td { padding: 14px; text-align: left; border-bottom: 1px solid var(--border-color); font-size: 0.95rem; }
-        th { background: #fafafa; font-weight: 600; color: #71717a; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 0.5px; }
+        @import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap');
+
+        :root {
+            --primary: #D4B5B0;
+            --background: #F4F0EF;
+            --white: #FFFFFF;
+            --text-dark: #333;
+            --border: #DDD;
+        }
+
+        body {
+            font-family: 'Lato', sans-serif;
+            background-color: var(--background);
+            color: var(--text-dark);
+            margin: 0;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        h1, h2 {
+            color: #4A4A4A;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        input, textarea {
+            padding: 10px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-family: inherit;
+        }
+
+        .helper-text {
+            font-size: 0.8rem;
+            color: #888;
+            margin-top: 5px;
+        }
+
+        button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1rem;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background-color: #C1A29D;
+        }
+
+        .btn-danger {
+            background-color: #FF5A5F;
+        }
+
+        .btn-danger:hover {
+            background-color: #E0484D;
+        }
+
+        .admin-list {
+            margin-top: 3rem;
+            border-top: 2px solid var(--border);
+            padding-top: 2rem;
+        }
+
+        .list-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .list-item img {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 6px;
+            margin-right: 15px;
+        }
+
+        .item-info {
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+        }
+        
+        .header-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
     </style>
 </head>
 <body>
-    <aside class="sidebar">
-        <div class="sidebar-header">⚙️ Yod - Admin Master</div>
-        <div class="nav-menu">
-            <div class="nav-item active" id="menu-marca">🎨 Marca e Cores</div>
-            <div class="nav-item" id="menu-logins">🔑 Gerenciar Logins</div>
+
+    <div class="container">
+        <div class="header-actions">
+            <h1>Painel Administrativo de Produtos</h1>
+            <button id="btnGenerateTests" style="background-color: #4A4A4A;">Gerar Produtos de Teste</button>
         </div>
-    </aside>
+        <p>Crie e edite os serviços do catálogo YOD.</p>
 
-    <main class="main-content">
-        <!-- ABA 1: IDENTIDADE VISUAL -->
-        <section id="identidade" class="view-section active">
-            <h1>Configuração do Sistema</h1>
-            <p style="color:gray; margin-bottom: 20px;">Personalize a identidade visual e salve a logomarca da clínica direto no banco.</p>
-            <div class="card-container">
-                <label>Nome do Estabelecimento</label>
-                <input type="text" id="cfg-nome" value="Yod Micropigmentação e Estética">
-                
-                <label>Logomarca da Clínica</label>
-                <div class="upload-box" id="upload-trigger">
-                    <input type="file" id="file-logo" accept="image/*" style="display: none;">
-                    <div id="upload-preview"><span style="font-size: 2rem;">📁</span><br><span style="font-weight: 600; color: gray;">Clique para carregar e salvar a logomarca</span></div>
+        <form id="productForm">
+            <input type="hidden" id="productId">
+            
+            <div class="form-group">
+                <label>Nome do Serviço</label>
+                <input type="text" id="name" required placeholder="Ex: Micropigmentação de Sobrancelhas">
+            </div>
+
+            <div class="form-group">
+                <label>Descrição</label>
+                <textarea id="description" rows="4" required placeholder="Detalhes sobre o procedimento..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Valor (R$)</label>
+                <input type="number" step="0.01" id="price" required placeholder="0.00">
+            </div>
+
+            <div class="form-group">
+                <label>Imagens (Até 5 fotos)</label>
+                <textarea id="images" rows="3" required placeholder="Cole as URLs das imagens separadas por vírgula. A primeira será a capa."></textarea>
+                <div class="helper-text">
+                    <strong>Atenção ao tamanho:</strong> Para os banners de capa (primeira foto), o tamanho ideal é <strong>800x600 pixels (formato paisagem)</strong> ou quadrado (1080x1080). Limite de 5 imagens.
                 </div>
-                
-                <label>Cor Identidade (Botões e Destaques)</label>
-                <input type="color" id="cfg-cor" value="#4f46e5" style="height: 50px; padding:5px; cursor: pointer;">
-                <button class="btn" id="btn-salvar-cfg" style="margin-top: 10px;">💾 Salvar Identidade Visual no Banco</button>
-            </div>
-        </section>
-
-        <!-- ABA 2: GERENCIAMENTO DE LOGINS -->
-        <section id="acessos" class="view-section">
-            <h1>Gerenciar Logins da Recepção</h1>
-            <p style="color:gray; margin-bottom: 20px;">Crie novos acessos para o painel ou audite as senhas ativas na tabela abaixo.</p>
-            <div class="card-container">
-                <h3 style="margin-bottom: 15px; color: var(--primary-accent);">➕ Criar Novo Operador</h3>
-                <div class="grid-2">
-                    <div><label>E-mail da Recepção</label><input type="email" id="new-email" placeholder="recepcao@yod.com"></div>
-                    <div><label>Senha de Acesso</label><input type="text" id="new-pass" placeholder="Mínimo 6 caracteres"></div>
-                </div>
-                <button class="btn" style="background: var(--success);" id="btn-cadastrar-operador">Criar Acesso ao Painel</button>
             </div>
 
-            <div class="card-container" style="padding: 20px 0 0 0; overflow: hidden;">
-                <h3 style="margin-bottom: 15px; padding-left: 20px;">🔑 Logins com Acesso ao Painel</h3>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>E-mail de Login</th>
-                            <th>Senha Ativa</th>
-                            <th>Criado em</th>
-                            <th style="width: 100px;">Ação</th>
-                        </tr>
-                    </thead>
-                    <tbody id="lista-logins-tabela">
-                        <tr><td colspan="4" style="text-align: center; color: gray;">Carregando acessos...</td></tr>
-                    </tbody>
-                </table>
-            </div>
-        </section>
-    </main>
+            <button type="submit" id="submitBtn">Salvar Serviço</button>
+            <button type="button" id="cancelBtn" style="display:none; background:#888;">Cancelar Edição</button>
+        </form>
+
+        <div class="admin-list">
+            <h2>Serviços Cadastrados</h2>
+            <div id="productList">Carregando...</div>
+        </div>
+    </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-        import { getFirestore, doc, setDoc, getDoc, collection, onSnapshot, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
-        import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
-        const firebaseConfig = { apiKey: "AIzaSyD4SElQHlfQjbN2NsHC0Z9_1Gobb6WHd8o", authDomain: "clinicabase-a85a7.firebaseapp.com", projectId: "clinicabase-a85a7", storageBucket: "clinicabase-a85a7.firebasestorage.app", messagingSenderId: "324071825277", appId: "1:324071825277:web:6a0d3c4413f7a7569fb614" };
-        const app = initializeApp(firebaseConfig); const db = getFirestore(app); const auth = getAuth(app);
+        // CREDENCIAIS DO FIREBASE ATUALIZADAS
+        const firebaseConfig = { 
+            apiKey: "AIzaSyD4SElQHlfQjbN2NsHC0Z9_1Gobb6WHd8o", 
+            authDomain: "clinicabase-a85a7.firebaseapp.com", 
+            projectId: "clinicabase-a85a7", 
+            storageBucket: "clinicabase-a85a7.firebasestorage.app", 
+            messagingSenderId: "324071825277", 
+            appId: "1:324071825277:web:6a0d3c4413f7a7569fb614" 
+        };
 
-        let imagemLogoBase64String = null;
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        
+        const form = document.getElementById('productForm');
+        const listDiv = document.getElementById('productList');
 
-        window.addEventListener('DOMContentLoaded', async () => {
-            const docSnap = await getDoc(doc(db, "configuracoes", "geral"));
-            if(docSnap.exists()) {
-                const c = docSnap.data();
-                document.getElementById('cfg-nome').value = c.nome; 
-                document.getElementById('cfg-cor').value = c.cor;
-                document.documentElement.style.setProperty('--primary-accent', c.cor);
-                if(c.logo){ 
-                    imagemLogoBase64String = c.logo; // Puxa string do banco
-                    document.getElementById('upload-preview').innerHTML = `<img src="${c.logo}">`; 
+        async function loadAdminProducts() {
+            listDiv.innerHTML = 'Carregando...';
+            try {
+                const querySnapshot = await getDocs(collection(db, "products"));
+                listDiv.innerHTML = '';
+                
+                if(querySnapshot.empty) {
+                    listDiv.innerHTML = '<p>Nenhum serviço cadastrado.</p>';
+                    return;
                 }
+
+                querySnapshot.forEach((documento) => {
+                    const data = documento.data();
+                    const id = documento.id;
+                    const coverImg = (data.images && data.images.length > 0) ? data.images[0] : 'https://via.placeholder.com/150';
+
+                    const item = document.createElement('div');
+                    item.className = 'list-item';
+                    item.innerHTML = `
+                        <div class="item-info">
+                            <img src="${coverImg}" alt="${data.name}">
+                            <div>
+                                <strong>${data.name}</strong><br>
+                                R$ ${parseFloat(data.price).toFixed(2).replace('.', ',')}
+                            </div>
+                        </div>
+                        <div>
+                            <button onclick="editProduct('${id}', '${data.name.replace(/'/g, "\\'")}', '${data.description.replace(/'/g, "\\'")}', '${data.price}', '${data.images.join(',')}')">Editar</button>
+                            <button class="btn-danger" onclick="deleteProduct('${id}')">Excluir</button>
+                        </div>
+                    `;
+                    listDiv.appendChild(item);
+                });
+            } catch (error) {
+                listDiv.innerHTML = '<p style="color:red">Erro ao carregar dados. Verifique a conexão com o Firebase.</p>';
+                console.error(error);
             }
-            escutarEListarLoginsDoBanco();
+        }
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const id = document.getElementById('productId').value;
+            const name = document.getElementById('name').value;
+            const description = document.getElementById('description').value;
+            const price = parseFloat(document.getElementById('price').value);
+            
+            let imgArray = document.getElementById('images').value.split(',').map(u => u.trim()).filter(u => u);
+            if (imgArray.length > 5) {
+                imgArray = imgArray.slice(0, 5);
+                alert("Aviso: Apenas as 5 primeiras imagens foram salvas.");
+            }
+
+            const productData = { name, description, price, images: imgArray };
+
+            try {
+                if(id) {
+                    await updateDoc(doc(db, "products", id), productData);
+                    alert("Serviço atualizado!");
+                } else {
+                    await addDoc(collection(db, "products"), productData);
+                    alert("Serviço criado com sucesso!");
+                }
+                form.reset();
+                document.getElementById('productId').value = '';
+                document.getElementById('cancelBtn').style.display = 'none';
+                document.getElementById('submitBtn').innerText = 'Salvar Serviço';
+                loadAdminProducts();
+            } catch (error) {
+                alert("Erro ao salvar. Verifique o console.");
+                console.error(error);
+            }
         });
 
-        document.getElementById('menu-marca').addEventListener('click', function() { switchAba('identidade', this); });
-        document.getElementById('menu-logins').addEventListener('click', function() { switchAba('acessos', this); });
-        document.getElementById('upload-trigger').addEventListener('click', () => document.getElementById('file-logo').click());
-        document.getElementById('file-logo').addEventListener('change', (e) => processarConversaoDeImagem(e));
-        document.getElementById('btn-salvar-cfg').addEventListener('click', () => salvarConfiguracoesGlobais());
-        document.getElementById('btn-cadastrar-operador').addEventListener('click', () => criarUsuarioPainel());
+        window.deleteProduct = async (id) => {
+            if(confirm("Tem certeza que deseja excluir este serviço?")) {
+                await deleteDoc(doc(db, "products", id));
+                loadAdminProducts();
+            }
+        };
 
-        function switchAba(viewId, menuEl) {
-            document.querySelectorAll('.view-section').forEach(s => s.classList.remove('active'));
-            document.getElementById(viewId).classList.add('active');
-            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-            menuEl.classList.add('active');
-        }
-
-        // Transforma o arquivo físico da imagem em string de texto compacta para gravação direta no Firestore
-        function processarConversaoDeImagem(e) {
-            const arquivo = e.target.files[0];
-            if (!arquivo) return;
+        window.editProduct = (id, name, desc, price, imgs) => {
+            document.getElementById('productId').value = id;
+            document.getElementById('name').value = name;
+            document.getElementById('description').value = desc;
+            document.getElementById('price').value = price;
+            document.getElementById('images').value = imgs;
             
-            const reader = new FileReader();
-            reader.onload = (event) => { 
-                imagemLogoBase64String = event.target.result; // String binária Base64 criada
-                document.getElementById('upload-preview').innerHTML = `<img src="${imagemLogoBase64String}">`; 
-            };
-            reader.readAsDataURL(arquivo);
-        }
+            document.getElementById('submitBtn').innerText = 'Atualizar Serviço';
+            document.getElementById('cancelBtn').style.display = 'inline-block';
+            window.scrollTo(0, 0);
+        };
 
-        async function salvarConfiguracoesGlobais() {
-            await setDoc(doc(db, "configuracoes", "geral"), { 
-                nome: document.getElementById('cfg-nome').value, 
-                cor: document.getElementById('cfg-cor').value, 
-                logo: imagemLogoBase64String // Grava de forma persistente no Firestore
-            });
-            alert("✨ Identidade e imagem da Logomarca guardadas de forma segura no Banco de Dados!");
-            location.reload();
-        }
+        document.getElementById('cancelBtn').addEventListener('click', () => {
+            form.reset();
+            document.getElementById('productId').value = '';
+            document.getElementById('submitBtn').innerText = 'Salvar Serviço';
+            document.getElementById('cancelBtn').style.display = 'none';
+        });
 
-        async function criarUsuarioPainel() {
-            const email = document.getElementById('new-email').value; const pass = document.getElementById('new-pass').value;
-            if(!email || pass.length < 6) return alert("Preencha os campos.");
+        document.getElementById('btnGenerateTests').addEventListener('click', async () => {
+            const testData = [
+                {
+                    name: "Micropigmentação Fio a Fio",
+                    description: "Técnica que desenha fios realistas acompanhando o formato natural da sobrancelha, preenchendo falhas e garantindo um olhar expressivo com naturalidade.",
+                    price: 450.00,
+                    images: ["https://images.unsplash.com/photo-1596704017254-9b121068fb31?w=800", "https://images.unsplash.com/photo-1620052329718-701f41334fcd?w=800"]
+                },
+                {
+                    name: "Limpeza de Pele Profunda",
+                    description: "Procedimento completo para remoção de cravos, miliuns e impurezas. Acompanha máscara de argila rosa para acalmar a pele e revitalizar a derme.",
+                    price: 120.00,
+                    images: ["https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=800"]
+                },
+                {
+                    name: "Revitalização Labial",
+                    description: "Técnica que traz cor e vida aos lábios pálidos ou arroxeados. Efeito natural semelhante a um lip tint permanente.",
+                    price: 350.00,
+                    images: ["https://images.unsplash.com/photo-1617300305885-300eec2614b6?w=800"]
+                }
+            ];
+
             try {
-                await createUserWithEmailAndPassword(auth, email, pass);
-                const idLimpa = email.replace(/[^a-zA-Z0-9]/g, "_");
-                await setDoc(doc(db, "logins_autorizados", idLimpa), { email: email, senha: pass, criadoEm: new Date().toLocaleDateString('pt-BR') });
-                document.getElementById('new-email').value = ''; document.getElementById('new-pass').value = '';
-                alert("Operador criado!");
-            } catch (e) { alert("Erro ao criar."); }
-        }
+                document.getElementById('btnGenerateTests').innerText = 'Gerando...';
+                for (const item of testData) {
+                    await addDoc(collection(db, "products"), item);
+                }
+                alert("Produtos de teste inseridos no banco com sucesso!");
+                document.getElementById('btnGenerateTests').innerText = 'Gerar Produtos de Teste';
+                loadAdminProducts();
+            } catch (error) {
+                alert("Erro ao inserir testes. Verifique as configurações do Firebase.");
+                console.error(error);
+                document.getElementById('btnGenerateTests').innerText = 'Gerar Produtos de Teste';
+            }
+        });
 
-        function escutarEListarLoginsDoBanco() {
-            onSnapshot(collection(db, "logins_autorizados"), (snap) => {
-                const tabelaBody = document.getElementById('lista-logins-tabela'); tabelaBody.innerHTML = "";
-                if(snap.empty) { tabelaBody.innerHTML = `<tr><td colspan="4" style="text-align:center;">Nenhum operador cadastrado.</td></tr>`; return; }
-                snap.forEach(d => {
-                    const login = d.data();
-                    tabelaBody.innerHTML += `<tr><td><b>${login.email}</b></td><td style="font-family: monospace; font-size:1.05rem; color:var(--primary-accent); font-weight:bold;">${login.senha}</td><td>${login.criadoEm || 'N/A'}</td><td><button class="btn danger" id="btn-excluir-log-${d.id}">Remover</button></td></tr>`;
-                });
-                snap.forEach(d => {
-                    document.getElementById(`btn-excluir-log-${d.id}`).addEventListener('click', async () => {
-                        if(confirm("Revogar acesso?")) { await deleteDoc(doc(db, "logins_autorizados", d.id)); }
-                    });
-                });
-            });
-        }
+        loadAdminProducts();
     </script>
 </body>
 </html>
