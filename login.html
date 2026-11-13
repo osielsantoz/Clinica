@@ -66,18 +66,18 @@
             errDiv.classList.add('hidden');
 
             try {
-                // Procura o usuário no banco
+                // Busca o usuário corrigindo o erro 406 com .maybeSingle()
                 const { data, error } = await supabase
                     .from('admin_users')
                     .select('*')
                     .eq('username', userIn)
-                    .single();
+                    .maybeSingle();
 
                 if (error || !data || data.password !== passIn) {
                     throw new Error("Usuário ou senha incorretos.");
                 }
 
-                // Login bem-sucedido: Salva um token na sessão e redireciona
+                // Sucesso
                 sessionStorage.setItem('yod_logged', 'true');
                 window.location.href = 'admin.html';
 
