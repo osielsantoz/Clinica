@@ -6,6 +6,11 @@
     <title>Painel Admin - YOD Estética</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Cropper.js (Para cortar e dar zoom nas imagens) -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
         body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; }
@@ -15,17 +20,17 @@
         .form-label { display: block; font-size: 0.875rem; font-weight: 500; color: #374151; margin-bottom: 0.25rem; }
         
         /* Estilos do Upload */
-        .upload-box { position: relative; width: 100%; aspect-ratio: 1; border: 2px dashed #d1d5db; border-radius: 0.75rem; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; overflow: hidden; background-color: #f9fafb; transition: 0.2s; }
+        .upload-box { position: relative; width: 100%; aspect-ratio: 4/3; border: 2px dashed #d1d5db; border-radius: 0.75rem; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; overflow: hidden; background-color: #f9fafb; transition: 0.2s; }
         .upload-box:hover { border-color: #D4A3A3; background-color: #fff; }
         .upload-preview { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: none; }
         .upload-box.has-image .upload-preview { display: block; }
         .upload-box.has-image .upload-placeholder { display: none; }
     </style>
 </head>
-<body class="flex h-screen overflow-hidden text-gray-800">
+<body class="flex h-screen overflow-hidden text-gray-800 relative">
 
     <!-- Sidebar -->
-    <aside class="w-64 bg-gray-900 text-white flex flex-col hidden md:flex">
+    <aside class="w-64 bg-gray-900 text-white flex flex-col hidden md:flex z-10">
         <div class="p-6 border-b border-gray-800">
             <h1 class="text-2xl font-serif tracking-wider text-[#D4A3A3]">YOD</h1>
             <p class="text-xs text-gray-400 uppercase tracking-widest mt-1">Painel Gestor</p>
@@ -41,7 +46,7 @@
     <main class="flex-1 flex flex-col h-screen overflow-y-auto bg-gray-50">
         
         <!-- Topbar -->
-        <header class="bg-white shadow-sm px-6 py-4 flex justify-between items-center">
+        <header class="bg-white shadow-sm px-6 py-4 flex justify-between items-center z-10">
             <h2 class="text-xl font-semibold text-gray-700" id="headerTitle">Gerenciar Catálogo</h2>
             <div class="flex items-center gap-3">
                 <span class="text-sm text-gray-500 hidden sm:block">Logado como Admin</span>
@@ -83,13 +88,13 @@
                     <i class="fas fa-arrow-left"></i> Voltar para a lista
                 </button>
 
-                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4 md:p-8">
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4 md:p-8 mb-10">
                     <h3 class="text-xl font-semibold mb-6 border-b pb-4" id="formTitle">Adicionar Novo Serviço</h3>
                     
                     <form id="productForm" class="flex flex-col gap-8">
                         <input type="hidden" id="productId">
                         
-                        <!-- Linha 1: Informações de Texto e Valores -->
+                        <!-- Linha 1: Informações -->
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div class="space-y-5">
                                 <div>
@@ -124,15 +129,18 @@
 
                         <!-- Linha 2: Upload de Imagens -->
                         <div class="bg-gray-50 p-6 rounded-xl border border-gray-200">
-                            <h4 class="font-medium text-gray-700 mb-4 border-b pb-2">Fotos do Serviço (Clique para enviar do Celular/PC)</h4>
+                            <div class="flex justify-between items-center mb-4 border-b pb-2">
+                                <h4 class="font-medium text-gray-700">Fotos do Serviço</h4>
+                                <span class="text-xs text-gray-500 hidden sm:block">Você poderá ajustar/cortar após selecionar</span>
+                            </div>
                             
                             <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
                                 <!-- Upload Box 1 (Capa) -->
                                 <div>
                                     <label class="text-xs font-bold text-[#D4A3A3] block text-center mb-1">FOTO 1 (CAPA)*</label>
                                     <div class="upload-box" id="box1" onclick="document.getElementById('file1').click()">
-                                        <input type="file" id="file1" accept="image/*" class="hidden" onchange="previewImage(event, 1)">
-                                        <input type="hidden" id="url1"> <!-- Guarda URL existente -->
+                                        <input type="file" id="file1" accept="image/*" class="hidden" onchange="openCropper(event, 1)">
+                                        <input type="hidden" id="url1"> 
                                         <img id="preview1" class="upload-preview">
                                         <div class="upload-placeholder text-center text-gray-400">
                                             <i class="fas fa-camera text-2xl mb-1"></i><p class="text-[10px] uppercase">Upload</p>
@@ -141,58 +149,44 @@
                                     <button type="button" onclick="removeImage(1)" id="btnRemove1" class="hidden w-full text-xs text-red-500 mt-1 hover:underline">Remover</button>
                                 </div>
 
-                                <!-- Upload Box 2 -->
+                                <!-- Repetição para as demais 4 fotos -->
                                 <div>
                                     <label class="text-xs font-medium text-gray-500 block text-center mb-1">FOTO 2</label>
                                     <div class="upload-box" id="box2" onclick="document.getElementById('file2').click()">
-                                        <input type="file" id="file2" accept="image/*" class="hidden" onchange="previewImage(event, 2)">
+                                        <input type="file" id="file2" accept="image/*" class="hidden" onchange="openCropper(event, 2)">
                                         <input type="hidden" id="url2">
                                         <img id="preview2" class="upload-preview">
-                                        <div class="upload-placeholder text-center text-gray-400">
-                                            <i class="fas fa-plus text-xl mb-1"></i><p class="text-[10px] uppercase">Opcional</p>
-                                        </div>
+                                        <div class="upload-placeholder text-center text-gray-400"><i class="fas fa-plus text-xl mb-1"></i><p class="text-[10px] uppercase">Opcional</p></div>
                                     </div>
                                     <button type="button" onclick="removeImage(2)" id="btnRemove2" class="hidden w-full text-xs text-red-500 mt-1 hover:underline">Remover</button>
                                 </div>
-
-                                <!-- Upload Box 3 -->
                                 <div>
                                     <label class="text-xs font-medium text-gray-500 block text-center mb-1">FOTO 3</label>
                                     <div class="upload-box" id="box3" onclick="document.getElementById('file3').click()">
-                                        <input type="file" id="file3" accept="image/*" class="hidden" onchange="previewImage(event, 3)">
+                                        <input type="file" id="file3" accept="image/*" class="hidden" onchange="openCropper(event, 3)">
                                         <input type="hidden" id="url3">
                                         <img id="preview3" class="upload-preview">
-                                        <div class="upload-placeholder text-center text-gray-400">
-                                            <i class="fas fa-plus text-xl mb-1"></i><p class="text-[10px] uppercase">Opcional</p>
-                                        </div>
+                                        <div class="upload-placeholder text-center text-gray-400"><i class="fas fa-plus text-xl mb-1"></i><p class="text-[10px] uppercase">Opcional</p></div>
                                     </div>
                                     <button type="button" onclick="removeImage(3)" id="btnRemove3" class="hidden w-full text-xs text-red-500 mt-1 hover:underline">Remover</button>
                                 </div>
-
-                                <!-- Upload Box 4 -->
                                 <div>
                                     <label class="text-xs font-medium text-gray-500 block text-center mb-1">FOTO 4</label>
                                     <div class="upload-box" id="box4" onclick="document.getElementById('file4').click()">
-                                        <input type="file" id="file4" accept="image/*" class="hidden" onchange="previewImage(event, 4)">
+                                        <input type="file" id="file4" accept="image/*" class="hidden" onchange="openCropper(event, 4)">
                                         <input type="hidden" id="url4">
                                         <img id="preview4" class="upload-preview">
-                                        <div class="upload-placeholder text-center text-gray-400">
-                                            <i class="fas fa-plus text-xl mb-1"></i><p class="text-[10px] uppercase">Opcional</p>
-                                        </div>
+                                        <div class="upload-placeholder text-center text-gray-400"><i class="fas fa-plus text-xl mb-1"></i><p class="text-[10px] uppercase">Opcional</p></div>
                                     </div>
                                     <button type="button" onclick="removeImage(4)" id="btnRemove4" class="hidden w-full text-xs text-red-500 mt-1 hover:underline">Remover</button>
                                 </div>
-
-                                <!-- Upload Box 5 -->
                                 <div>
                                     <label class="text-xs font-medium text-gray-500 block text-center mb-1">FOTO 5</label>
                                     <div class="upload-box" id="box5" onclick="document.getElementById('file5').click()">
-                                        <input type="file" id="file5" accept="image/*" class="hidden" onchange="previewImage(event, 5)">
+                                        <input type="file" id="file5" accept="image/*" class="hidden" onchange="openCropper(event, 5)">
                                         <input type="hidden" id="url5">
                                         <img id="preview5" class="upload-preview">
-                                        <div class="upload-placeholder text-center text-gray-400">
-                                            <i class="fas fa-plus text-xl mb-1"></i><p class="text-[10px] uppercase">Opcional</p>
-                                        </div>
+                                        <div class="upload-placeholder text-center text-gray-400"><i class="fas fa-plus text-xl mb-1"></i><p class="text-[10px] uppercase">Opcional</p></div>
                                     </div>
                                     <button type="button" onclick="removeImage(5)" id="btnRemove5" class="hidden w-full text-xs text-red-500 mt-1 hover:underline">Remover</button>
                                 </div>
@@ -208,14 +202,34 @@
                     </form>
                 </div>
             </div>
-
         </div>
     </main>
+
+    <!-- MODAL DE CORTE DE IMAGEM -->
+    <div id="cropModal" class="fixed inset-0 bg-black/90 z-[100] hidden flex-col items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-white rounded-xl overflow-hidden w-full max-w-3xl flex flex-col max-h-[90vh] shadow-2xl">
+            <div class="p-4 border-b flex justify-between items-center bg-gray-50">
+                <h3 class="font-semibold text-gray-800"><i class="fas fa-crop-alt mr-2"></i>Ajustar Imagem</h3>
+                <button onclick="closeCropper()" class="text-gray-400 hover:text-red-500 text-xl"><i class="fas fa-times"></i></button>
+            </div>
+            <!-- Área do Cropper -->
+            <div class="flex-1 bg-gray-900 p-2 min-h-[40vh] sm:min-h-[60vh] flex items-center justify-center">
+                <img id="imageToCrop" class="max-w-full max-h-full block">
+            </div>
+            <div class="p-4 border-t flex flex-col sm:flex-row justify-between items-center gap-4 bg-gray-50">
+                <span class="text-xs text-gray-500"><i class="fas fa-info-circle"></i> Use os dedos ou o scroll para dar zoom e arraste para enquadrar.</span>
+                <div class="flex gap-3 w-full sm:w-auto">
+                    <button type="button" onclick="closeCropper()" class="w-full sm:w-auto px-5 py-2.5 text-gray-600 bg-gray-200 hover:bg-gray-300 rounded-lg font-medium transition-colors">Cancelar</button>
+                    <button type="button" onclick="confirmCrop()" class="w-full sm:w-auto px-6 py-2.5 bg-[#D4A3A3] hover:bg-[#C08F8F] text-white rounded-lg font-medium transition-colors shadow-md">Confirmar Corte</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
-        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-storage.js"; // NOVO: IMPORT DO STORAGE
+        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-storage.js";
 
         const firebaseConfig = { 
             apiKey: "AIzaSyD4SElQHlfQjbN2NsHC0Z9_1Gobb6WHd8o", 
@@ -228,34 +242,86 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
-        const storage = getStorage(app); // INICIALIZA O STORAGE
+        const storage = getStorage(app); 
         
         let allProducts = [];
 
-        // --- SISTEMA DE PREVIEW E REMOÇÃO DE IMAGEM LOCAL ---
-        window.previewImage = (event, num) => {
+        // --- SISTEMA DE CORTE (CROPPER.JS) ---
+        let cropper = null;
+        let currentCropBox = null;
+        let finalBlobs = { 1: null, 2: null, 3: null, 4: null, 5: null };
+
+        window.openCropper = (event, num) => {
             const file = event.target.files[0];
             if (file) {
+                currentCropBox = num;
                 const reader = new FileReader();
                 reader.onload = (e) => {
-                    document.getElementById(`preview${num}`).src = e.target.result;
-                    document.getElementById(`box${num}`).classList.add('has-image');
-                    document.getElementById(`btnRemove${num}`).classList.remove('hidden');
+                    const imageElement = document.getElementById('imageToCrop');
+                    imageElement.src = e.target.result;
+                    document.getElementById('cropModal').classList.remove('hidden');
+                    document.getElementById('cropModal').classList.add('flex');
+                    
+                    if (cropper) { cropper.destroy(); }
+                    
+                    // Pequeno atraso para a animação do modal não quebrar o cálculo do cropper
+                    setTimeout(() => {
+                        cropper = new Cropper(imageElement, {
+                            aspectRatio: 4 / 3, // Força o formato retangular ideal do seu catálogo
+                            viewMode: 1,        // Restringe a caixa de corte para não sair da imagem
+                            dragMode: 'move',   // O cursor arrasta a imagem
+                            autoCropArea: 1,
+                            guides: true,
+                            center: true,
+                            background: false,
+                        });
+                    }, 100);
                 }
                 reader.readAsDataURL(file);
             }
+            event.target.value = ''; // Reseta o input file para permitir selecionar o mesmo arquivo caso cancele
+        };
+
+        window.closeCropper = () => {
+            document.getElementById('cropModal').classList.add('hidden');
+            document.getElementById('cropModal').classList.remove('flex');
+            if (cropper) { cropper.destroy(); cropper = null; }
+            currentCropBox = null;
+        };
+
+        window.confirmCrop = () => {
+            if (!cropper) return;
+            
+            // Pega o pedaço cortado e transforma em um arquivo binário (Blob)
+            cropper.getCroppedCanvas({
+                width: 800, // Tamanho máximo que será salvo
+                height: 600,
+                imageSmoothingEnabled: true,
+                imageSmoothingQuality: 'high',
+            }).toBlob((blob) => {
+                const num = currentCropBox;
+                finalBlobs[num] = blob; // Salva para o upload futuro
+                
+                // Cria um link temporário apenas para visualização no painel
+                const previewUrl = URL.createObjectURL(blob);
+                document.getElementById(`preview${num}`).src = previewUrl;
+                document.getElementById(`box${num}`).classList.add('has-image');
+                document.getElementById(`btnRemove${num}`).classList.remove('hidden');
+                
+                closeCropper();
+            }, 'image/jpeg', 0.85); // Salva em JPG com 85% de qualidade (ótimo para web)
         };
 
         window.removeImage = (num) => {
-            document.getElementById(`file${num}`).value = ''; // Limpa o arquivo selecionado
-            document.getElementById(`url${num}`).value = '';   // Limpa a URL existente (se edição)
-            document.getElementById(`preview${num}`).src = ''; // Limpa a imagem visual
-            document.getElementById(`box${num}`).classList.remove('has-image'); // Mostra o ícone de upload
-            document.getElementById(`btnRemove${num}`).classList.add('hidden'); // Esconde o botão de remover
+            document.getElementById(`url${num}`).value = '';   
+            document.getElementById(`preview${num}`).src = ''; 
+            document.getElementById(`box${num}`).classList.remove('has-image'); 
+            document.getElementById(`btnRemove${num}`).classList.add('hidden'); 
+            finalBlobs[num] = null; // Remove a imagem final pendente
         };
-        // ----------------------------------------------------
+        // ------------------------------------
 
-        // Controle de Views
+        // Controle de Views (Formulário e Listagem)
         window.showForm = (isEdit = false) => {
             document.getElementById('listView').classList.add('hidden-view');
             document.getElementById('formView').classList.remove('hidden-view');
@@ -263,7 +329,7 @@
             
             if(!isEdit) {
                 document.getElementById('productForm').reset();
-                for(let i=1; i<=5; i++) removeImage(i); // Reseta as imagens
+                for(let i=1; i<=5; i++) removeImage(i); 
             }
             window.scrollTo(0,0);
         }
@@ -303,8 +369,8 @@
                         <td class="px-6 py-4 text-gray-600 ${hasPromo ? 'line-through text-xs' : 'font-semibold'}">${formatMoney(data.price)}</td>
                         <td class="px-6 py-4 font-semibold text-green-600">${hasPromo ? formatMoney(data.promoPrice) : '-'}</td>
                         <td class="px-6 py-4 text-right">
-                            <button onclick="editProduct('${data.id}')" class="text-indigo-600 hover:text-indigo-900 bg-indigo-50 px-3 py-1.5 rounded-md mr-2 transition-colors"><i class="fas fa-edit"></i></button>
-                            <button onclick="deleteProduct('${data.id}')" class="text-red-600 hover:text-red-900 bg-red-50 px-3 py-1.5 rounded-md transition-colors"><i class="fas fa-trash"></i></button>
+                            <button type="button" onclick="editProduct('${data.id}')" class="text-indigo-600 hover:text-indigo-900 bg-indigo-50 px-3 py-1.5 rounded-md mr-2 transition-colors"><i class="fas fa-edit"></i></button>
+                            <button type="button" onclick="deleteProduct('${data.id}')" class="text-red-600 hover:text-red-900 bg-red-50 px-3 py-1.5 rounded-md transition-colors"><i class="fas fa-trash"></i></button>
                         </td>
                     `;
                     listDiv.appendChild(tr);
@@ -315,49 +381,44 @@
             }
         }
 
-        // Função auxiliar para fazer o upload da imagem para o Firebase Storage
-        async function processImageUpload(fileInputId, hiddenUrlId) {
-            const fileInput = document.getElementById(fileInputId);
-            const hiddenUrl = document.getElementById(hiddenUrlId).value;
-            const file = fileInput.files[0];
+        async function processImageUpload(num) {
+            const blob = finalBlobs[num];
+            const hiddenUrl = document.getElementById(`url${num}`).value;
 
-            // Se o usuário selecionou um arquivo novo, faz o upload
-            if (file) {
-                const storageRef = ref(storage, `produtos/${Date.now()}_${file.name}`);
-                await uploadBytes(storageRef, file);
-                const downloadURL = await getDownloadURL(storageRef);
-                return downloadURL;
+            // Se o usuário recortou e confirmou uma nova foto...
+            if (blob) {
+                const storageRef = ref(storage, `produtos/${Date.now()}_img${num}.jpg`);
+                await uploadBytes(storageRef, blob);
+                return await getDownloadURL(storageRef);
             }
-            // Se não tem arquivo novo, mas tem URL salva (edição), mantém a URL antiga
+            // Se ele não enviou foto nova, manter a que já estava (caso de edição)
             return hiddenUrl;
         }
 
         document.getElementById('productForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const submitBtn = document.getElementById('submitBtn');
-            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> <span>Salvando Fotos...</span>';
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> <span>Salvando e Fazendo Upload...</span>';
             submitBtn.disabled = true;
             submitBtn.classList.replace('bg-gray-900', 'bg-gray-400');
             
             const id = document.getElementById('productId').value;
             
             try {
-                // 1. Processa o upload de todas as imagens que foram selecionadas
-                const img1 = await processImageUpload('file1', 'url1');
-                const img2 = await processImageUpload('file2', 'url2');
-                const img3 = await processImageUpload('file3', 'url3');
-                const img4 = await processImageUpload('file4', 'url4');
-                const img5 = await processImageUpload('file5', 'url5');
+                // Upload das imagens modificadas
+                const img1 = await processImageUpload(1);
+                const img2 = await processImageUpload(2);
+                const img3 = await processImageUpload(3);
+                const img4 = await processImageUpload(4);
+                const img5 = await processImageUpload(5);
 
-                // 2. Cria o array de imagens só com as que existem de fato
                 const imagesArray = [img1, img2, img3, img4, img5].filter(url => url && url.trim() !== "");
 
                 if(imagesArray.length === 0) {
-                    alert("Por favor, adicione pelo menos a foto de Capa (Foto 1).");
+                    alert("A Foto de Capa (Foto 1) é obrigatória.");
                     throw new Error("Sem imagens");
                 }
 
-                // 3. Monta o objeto do produto
                 const productData = { 
                     name: document.getElementById('name').value, 
                     shortDesc: document.getElementById('shortDesc').value,
@@ -367,7 +428,6 @@
                     images: imagesArray 
                 };
 
-                // 4. Salva no Banco de Dados
                 if(id) {
                     await updateDoc(doc(db, "products", id), productData);
                 } else {
@@ -378,11 +438,10 @@
                 loadAdminProducts();
             } catch (error) {
                 if(error.message !== "Sem imagens") {
-                    alert("Erro ao salvar serviço. Verifique as regras de segurança do seu Firebase Storage.");
+                    alert("Erro ao salvar. Verifique se o Firebase Storage está com as regras de leitura/escrita ativadas.");
                     console.error(error);
                 }
             } finally {
-                // Restaura o botão
                 submitBtn.innerHTML = '<i class="fas fa-save"></i> <span>Salvar Serviço</span>';
                 submitBtn.disabled = false;
                 submitBtn.classList.replace('bg-gray-400', 'bg-gray-900');
@@ -407,18 +466,15 @@
             document.getElementById('price').value = product.price;
             document.getElementById('promoPrice').value = product.promoPrice || '';
 
-            // Preenche as imagens existentes no formulário visual
             for(let i=1; i<=5; i++) {
+                removeImage(i); // Limpa resquícios
                 const imgUrl = product.images && product.images[i-1] ? product.images[i-1] : '';
                 document.getElementById(`url${i}`).value = imgUrl;
-                document.getElementById(`file${i}`).value = ''; // Reseta input de arquivo
                 
                 if(imgUrl) {
                     document.getElementById(`preview${i}`).src = imgUrl;
                     document.getElementById(`box${i}`).classList.add('has-image');
                     document.getElementById(`btnRemove${i}`).classList.remove('hidden');
-                } else {
-                    removeImage(i); // Reseta a caixa visual se não tiver imagem
                 }
             }
 
