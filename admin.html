@@ -28,16 +28,30 @@
 </head>
 <body class="flex h-screen overflow-hidden text-gray-800 relative">
 
+    <script type="module">
+        // PROTEÇÃO DE ROTA: Se não estiver logado, redireciona para o login
+        if (sessionStorage.getItem('yod_logged') !== 'true') {
+            window.location.href = 'login.html';
+        }
+    </script>
+
     <aside class="w-64 bg-gray-900 text-white flex flex-col hidden md:flex z-10">
-        <div class="p-6 border-b border-gray-800">
-            <h1 class="text-2xl font-serif tracking-wider text-[#D4A3A3]">YOD</h1>
-            <p class="text-xs text-gray-400 uppercase tracking-widest mt-1">Painel do Gestor</p>
+        <div class="p-6 border-b border-gray-800 flex justify-between items-center">
+            <div>
+                <h1 class="text-2xl font-serif tracking-wider text-[#D4A3A3]">YOD</h1>
+                <p class="text-xs text-gray-400 uppercase tracking-widest mt-1">Supabase Gestor</p>
+            </div>
         </div>
         <nav class="flex-1 p-4">
             <a href="#" class="flex items-center gap-3 bg-[#D4A3A3] text-gray-900 px-4 py-3 rounded-lg font-medium">
                 <i class="fas fa-box"></i> Produtos & Serviços
             </a>
         </nav>
+        <div class="p-4 border-t border-gray-800">
+            <button onclick="logout()" class="w-full flex items-center justify-center gap-2 bg-red-600/20 hover:bg-red-600 text-red-400 hover:text-white py-2.5 rounded-lg text-sm font-medium transition-colors">
+                <i class="fas fa-sign-out-alt"></i> Sair do Sistema
+            </button>
+        </div>
     </aside>
 
     <main class="flex-1 flex flex-col h-screen overflow-y-auto bg-gray-50">
@@ -99,7 +113,6 @@
                                     <label class="form-label">Descrição Curta</label>
                                     <input type="text" id="shortDesc" class="form-input" required placeholder="Resumo do card" maxlength="100">
                                 </div>
-                                <!-- CHECKBOX DE OFERTA ESPECIAL -->
                                 <div class="flex items-center gap-3 pt-2 bg-pink-50 p-4 rounded-xl border border-pink-100">
                                     <input type="checkbox" id="isPromo" class="w-5 h-5 text-[#D4A3A3] rounded focus:ring-[#D4A3A3] cursor-pointer">
                                     <label for="isPromo" class="text-sm font-semibold text-gray-700 cursor-pointer">
@@ -196,6 +209,25 @@
         let cropper = null;
         let currentCropBox = null;
         let finalBlobs = { 1: null, 2: null, 3: null, 4: null, 5: null };
+
+        // Função de Logout
+        window.logout = () => {
+            sessionStorage.removeItem('yod_logged');
+            window.location.href = 'login.html';
+        };
+
+        // Garante que o usuário admin / gestor1234 exista na tabela ao carregar o painel
+        async function setupDefaultAdmin() {
+            try {
+                const { data } = await supabase.from('admin_users').select('*').eq('username', 'admin').single();
+                if (!data) {
+                    await supabase.from('admin_users').insert([{ username: 'admin', password: 'gestor1234' }]);
+                }
+            } catch(e) {
+                // Caso a tabela venha vazia ou ocorra checagem inicial
+                await supabase.from('admin_users').insert([{ username: 'admin', password: 'gestor1234' }]).catch(()=>{});
+            }
+        }
 
         window.openCropper = (event, num) => {
             const file = event.target.files[0];
@@ -346,7 +378,7 @@
                     full_desc: document.getElementById('fullDesc').value,
                     price: parseFloat(document.getElementById('price').value) || 0,
                     promo_price: parseFloat(document.getElementById('promoPrice').value) || null,
-                    is_promo: document.getElementById('isPromo').checked, // Salva se é oferta especial
+                    is_promo: document.getElementById('isPromo').checked,
                     images: imagesArray 
                 };
 
@@ -387,7 +419,7 @@
             document.getElementById('fullDesc').value = product.full_desc || '';
             document.getElementById('price').value = product.price;
             document.getElementById('promoPrice').value = product.promo_price || '';
-            document.getElementById('isPromo').checked = product.is_promo || false; // Marca o checkbox se for promoção
+            document.getElementById('isPromo').checked = product.is_promo || false;
 
             for(let i=1; i<=5; i++) {
                 removeImage(i);
@@ -402,7 +434,8 @@
             showForm(true);
         };
 
-    loadProducts();
+        setupDefaultAdmin();
+        loadProducts();
     </script>
 </body>
 </html>
