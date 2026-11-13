@@ -38,6 +38,14 @@
                 </div>
             </div>
 
+            <!-- OPÇÃO MANTER CONECTADO -->
+            <div class="flex items-center justify-between">
+                <label class="flex items-center gap-2 cursor-pointer">
+                    <input type="checkbox" id="rememberMe" class="w-4 h-4 text-[#D4A3A3] rounded focus:ring-[#D4A3A3] cursor-pointer">
+                    <span class="text-sm text-gray-600">Manter conectado</span>
+                </label>
+            </div>
+
             <div id="errorMsg" class="hidden text-sm text-red-500 text-center font-medium bg-red-50 p-2 rounded-lg"></div>
 
             <button type="submit" id="loginBtn" class="w-full bg-[#D4A3A3] hover:bg-[#C08F8F] text-white py-3 rounded-xl font-medium transition-colors shadow-md">
@@ -53,6 +61,11 @@
         const SUPABASE_ANON_KEY = 'sb_publishable_mcH9rB1LkliFvxoplIhAdQ_uPl0B0BO';
         const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+        // Se já estiver logado anteriormente via localStorage, pula a tela de login direto
+        if (localStorage.getItem('yod_logged') === 'true' || sessionStorage.getItem('yod_logged') === 'true') {
+            window.location.href = 'admin.html';
+        }
+
         document.getElementById('loginForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('loginBtn');
@@ -60,13 +73,13 @@
             
             const userIn = document.getElementById('username').value.trim();
             const passIn = document.getElementById('password').value.trim();
+            const remember = document.getElementById('rememberMe').checked;
 
             btn.innerText = 'Verificando...';
             btn.disabled = true;
             errDiv.classList.add('hidden');
 
             try {
-                // Busca o usuário corrigindo o erro 406 com .maybeSingle()
                 const { data, error } = await supabase
                     .from('admin_users')
                     .select('*')
@@ -77,8 +90,13 @@
                     throw new Error("Usuário ou senha incorretos.");
                 }
 
-                // Sucesso
-                sessionStorage.setItem('yod_logged', 'true');
+                // Se "Manter conectado" estiver marcado, salva no localStorage. Senão, salva no sessionStorage.
+                if (remember) {
+                    localStorage.setItem('yod_logged', 'true');
+                } else {
+                    sessionStorage.setItem('yod_logged', 'true');
+                }
+
                 window.location.href = 'admin.html';
 
             } catch (err) {
