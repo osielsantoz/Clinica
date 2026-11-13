@@ -29,8 +29,8 @@
 <body class="flex h-screen overflow-hidden text-gray-800 relative">
 
     <script type="module">
-        // PROTEÇÃO DE ROTA: Se não estiver logado, redireciona para o login
-        if (sessionStorage.getItem('yod_logged') !== 'true') {
+        // PROTEÇÃO DE ROTA: Verifica se está logado (localStorage ou sessionStorage)
+        if (localStorage.getItem('yod_logged') !== 'true' && sessionStorage.getItem('yod_logged') !== 'true') {
             window.location.href = 'login.html';
         }
     </script>
@@ -210,24 +210,12 @@
         let currentCropBox = null;
         let finalBlobs = { 1: null, 2: null, 3: null, 4: null, 5: null };
 
-        // Função de Logout
+        // Função de Logout (limpa sessionStorage e localStorage)
         window.logout = () => {
             sessionStorage.removeItem('yod_logged');
+            localStorage.removeItem('yod_logged');
             window.location.href = 'login.html';
         };
-
-        // Garante que o usuário admin / gestor1234 exista na tabela ao carregar o painel
-        async function setupDefaultAdmin() {
-            try {
-                const { data } = await supabase.from('admin_users').select('*').eq('username', 'admin').single();
-                if (!data) {
-                    await supabase.from('admin_users').insert([{ username: 'admin', password: 'gestor1234' }]);
-                }
-            } catch(e) {
-                // Caso a tabela venha vazia ou ocorra checagem inicial
-                await supabase.from('admin_users').insert([{ username: 'admin', password: 'gestor1234' }]).catch(()=>{});
-            }
-        }
 
         window.openCropper = (event, num) => {
             const file = event.target.files[0];
@@ -434,7 +422,6 @@
             showForm(true);
         };
 
-        setupDefaultAdmin();
         loadProducts();
     </script>
 </body>
