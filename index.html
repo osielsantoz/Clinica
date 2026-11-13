@@ -3,344 +3,428 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Yod Micropigmentação e Estética - Portal do Cliente</title>
+    <title>YOD Micropigmentação e Estética | Catálogo</title>
+    
+    <!-- Google Fonts for Elegant Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'yod-bg': '#FCF9F9',        // Very soft nude/pink background
+                        'yod-primary': '#D4A3A3',   // Soft blush pink/rose
+                        'yod-primary-hover': '#C08F8F',
+                        'yod-secondary': '#E8D5D5', // Lighter pink for cards/accents
+                        'yod-text': '#5A4A4A',      // Soft dark brown/gray for text readability
+                        'yod-gold': '#C89F7D',      // Soft rose gold accent
+                    },
+                    fontFamily: {
+                        sans: ['Lato', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    },
+                    boxShadow: {
+                        'delicate': '0 10px 25px -5px rgba(212, 163, 163, 0.15), 0 8px 10px -6px rgba(212, 163, 163, 0.1)',
+                        'delicate-hover': '0 20px 25px -5px rgba(212, 163, 163, 0.25), 0 8px 10px -6px rgba(212, 163, 163, 0.1)',
+                    }
+                }
+            }
+        }
+    </script>
     <style>
-        :root { --primary: #4f46e5; --bg: #f8fafc; --card: #ffffff; --text: #1f2937; --text-light: #6b7280; --border: #e2e8f0; --success: #10b981; --danger: #ef4444; }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
-        body { background: var(--bg); padding: 20px; display: flex; flex-direction: column; align-items: center; color: var(--text); min-height: 100vh; position: relative; }
+        /* Custom Scrollbar for delicacy */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FCF9F9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #E8D5D5;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #D4A3A3;
+        }
         
-        /* Navbar */
-        .navbar { width: 100%; max-width: 480px; background: var(--card); padding: 16px 24px; border-radius: 14px; border: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.01); }
-        .brand { display: flex; align-items: center; gap: 12px; }
-        .logo { width: 42px; height: 42px; background: var(--primary); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; overflow: hidden; font-size: 1.3rem;}
-        .logo img { width: 100%; height: 100%; object-fit: cover; }
-        .clinic-title { font-size: 1.1rem; font-weight: 700; color: #111827; }
-        .btn-sair { color: var(--danger); border: none; background: none; font-weight: bold; cursor: pointer; font-size: 0.9rem; display: none; }
+        /* Hide scrollbar for carousel but keep functionality */
+        .hide-scroll::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scroll {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
         
-        /* Container do App */
-        .container { width: 100%; max-width: 480px; background: var(--card); border-radius: 20px; border: 1px solid var(--border); padding: 30px 20px; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.03); margin-bottom: 80px; }
-        .screen { display: none; animation: slideUp 0.3s ease-out; } 
-        .screen.active { display: block; }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
-        
-        /* Tipografia */
-        h1 { font-size: 1.6rem; font-weight: 800; color: #111827; margin-bottom: 8px; text-align: center; }
-        .welcome-user { text-align: left; font-size: 1.4rem; font-weight: 800; color: #111827; margin-bottom: 5px; }
-        .subtitle { text-align: center; color: var(--text-light); font-size: 0.95rem; margin-bottom: 25px; }
-        
-        /* Formulários */
-        label { display: block; font-weight: 600; margin-top: 18px; margin-bottom: 8px; font-size: 0.9rem; color: #374151; }
-        input, select, textarea { width: 100%; padding: 14px; border-radius: 10px; border: 1px solid var(--border); outline: none; background: #f9fafb; font-size: 1rem; transition: 0.2s;}
-        input:focus, select:focus, textarea:focus { border-color: var(--primary); background: #fff; box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.08); }
-        
-        /* Botões */
-        .btn { background: var(--primary); color: #fff; border: none; padding: 16px; border-radius: 12px; width: 100%; font-weight: bold; cursor: pointer; margin-top: 25px; font-size: 1rem; transition: 0.2s; display: inline-flex; justify-content: center; align-items: center; gap: 8px; box-shadow: 0 4px 12px rgba(79, 70, 229, 0.15);}
-        .btn:hover { opacity: 0.9; transform: translateY(-1px); }
-        .btn.success { background: var(--success); box-shadow: 0 4px 12px rgba(16, 185, 129, 0.15); }
-        .btn.danger { background: var(--danger); box-shadow: 0 4px 12px rgba(239, 68, 68, 0.15); }
-        .btn.outline { background: transparent; color: var(--text); border: 1px solid var(--border); box-shadow: none; margin-top: 15px;}
-        .btn-link { background: none; border: none; color: var(--primary); font-weight: 600; cursor: pointer; margin-top: 20px; width: 100%; font-size: 0.95rem; text-align: center; display: block;}
-        
-        /* Lista de Agendamentos */
-        .client-appointments-list { display: flex; flex-direction: column; gap: 12px; margin-top: 25px; }
-        .client-appt-card { border: 1px solid var(--border); border-left: 5px solid var(--primary); padding: 16px; border-radius: 12px; background: #f8fafc; display: flex; justify-content: space-between; align-items: center; }
-        .client-appt-time { font-weight: 800; color: var(--primary); font-size: 0.95rem; background: #e0e7ff; padding: 4px 8px; border-radius: 6px; display: inline-block; margin-bottom: 8px; }
-        .client-appt-name { font-weight: 700; font-size: 1.1rem; color: #111827; }
-        .client-appt-price { color: var(--success); font-weight: bold; font-size: 0.95rem; margin-top: 4px; }
-        .btn-cancelar-appt { background: none; border: 1px solid var(--border); color: var(--danger); padding: 8px 12px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 0.85rem; transition: 0.2s;}
-        .btn-cancelar-appt:hover { background: #fef2f2; border-color: var(--danger); }
-        .empty-dashboard { text-align: center; padding: 30px 10px; color: var(--text-light); font-style: italic; font-size: 0.95rem; }
-
-        /* Grade de Horários */
-        .grid-horarios { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 12px; }
-        .btn-hora { padding: 14px 10px; border: 1px solid var(--border); border-radius: 10px; background: #fff; cursor: pointer; font-weight: bold; color: var(--text); transition: 0.2s; text-align: center; font-size: 0.95rem; }
-        .btn-hora:hover { border-color: var(--primary); background: #f5f3ff; }
-        .btn-hora.selected { background: var(--primary); color: #fff; border-color: var(--primary); box-shadow: 0 4px 10px rgba(79, 70, 229, 0.25); }
-        
-        .erro { color: var(--danger); font-size: 0.9rem; text-align: center; margin-top: 15px; font-weight: 600; }
-
-        /* Modais */
-        .modal-overlay { position: fixed; inset: 0; background: rgba(17, 24, 39, 0.8); display: none; align-items: center; justify-content: center; z-index: 99999; padding: 20px; }
-        .modal-overlay.active { display: flex; }
-        .modal-box { background: white; padding: 30px 24px; border-radius: 16px; width: 100%; max-width: 400px; text-align: center; }
-
-        /* Botão Flutuante */
-        .wpp-floating-btn { position: fixed; width: 60px; height: 60px; bottom: 30px; right: 30px; background-color: #25d366; color: white; border-radius: 50px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.15); z-index: 9999; display: flex; align-items: center; justify-content: center; text-decoration: none; transition: 0.3s; }
-        .wpp-floating-btn:hover { transform: scale(1.08); box-shadow: 0 6px 20px rgba(37, 211, 102, 0.3); }
-        .wpp-floating-btn svg { width: 32px; height: 32px; fill: white; }
+        /* Smooth transitions */
+        .fade-in {
+            animation: fadeIn 0.4s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.98); }
+            to { opacity: 1; transform: scale(1); }
+        }
     </style>
 </head>
-<body>
+<body class="bg-yod-bg text-yod-text font-sans antialiased overflow-x-hidden">
 
-    <a href="https://wa.me/559186009455?text=Olá!%20Gostaria%20de%20tirar%20uma%20dúvida%20sobre%20meu%20agendamento%20na%20Yod." class="wpp-floating-btn" target="_blank" title="Falar com a Yod no WhatsApp">
-        <svg viewBox="0 0 32 32"><path d="M16 2a13 13 0 0 0-11.27 19.51L3 29l7.71-2A13 13 0 1 0 16 2zm6.79 17.61c-.3.84-1.52 1.54-2.5 1.66-.74.09-1.7.12-2.73-.21a12.87 12.87 0 0 1-5.34-3.53 11 11 0 0 1-2.22-3.83c-.47-1.32-.1-.23-1.07-1.52A4.27 4.27 0 0 1 9.21 10c.32-.66.86-.77 1.17-.77h.78c.24 0 .47 0 .67.43l1.15 2.78c.1.25.17.5.01.81l-.54 1.1c-.16.3-.33.61-.06 1.07a8.77 8.77 0 0 0 2 2.44 7.55 7.55 0 0 0 3 1.54c.46.2.73.17.94-.07l.86-1c.21-.24.47-.2.72-.1l2.84 1.42c.26.13.43.2.5.33.1.2.1.92-.21 1.76z"/></svg>
-    </a>
+    <!-- Navigation / Header -->
+    <header class="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-yod-secondary/50 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex flex-col items-center justify-center">
+            <h1 class="font-serif text-3xl md:text-4xl text-yod-primary tracking-wider text-center">
+                YOD
+            </h1>
+            <p class="text-xs md:text-sm tracking-[0.2em] text-yod-gold uppercase mt-1 text-center">
+                Micropigmentação & Estética
+            </p>
+        </div>
+    </header>
 
-    <!-- MODAL DE CANCELAMENTO -->
-    <div id="modal-cancelar" class="modal-overlay">
-        <div class="modal-box">
-            <h3 style="font-size: 1.3rem; color: #111827; margin-bottom: 8px;">Cancelar Agendamento?</h3>
-            <p style="color: var(--text-light); font-size: 0.9rem; margin-bottom: 15px;">Por favor, informe-nos o motivo do cancelamento:</p>
-            <textarea id="txt-motivo-cancelamento" rows="3" placeholder="Ex: Tive um imprevisto..." style="resize: none;"></textarea>
-            <div class="grid-2" style="margin-top: 20px;">
-                <button class="btn outline" style="margin:0; padding:12px;" id="btn-fechar-modal-cancelar">Voltar</button>
-                <button class="btn danger" style="margin:0; padding:12px;" id="btn-confirmar-cancelar-nuvem">Confirmar</button>
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+
+        <!-- Promotions Section (Rotating Square Cards) -->
+        <section class="mb-16">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="font-serif text-2xl md:text-3xl text-yod-text relative inline-block">
+                    Ofertas Especiais
+                    <span class="absolute -bottom-2 left-0 w-12 h-0.5 bg-yod-primary"></span>
+                </h2>
+                <div class="flex gap-2">
+                    <button id="prevPromo" class="w-8 h-8 rounded-full border border-yod-primary text-yod-primary flex items-center justify-center hover:bg-yod-primary hover:text-white transition-colors">
+                        <i class="fas fa-chevron-left text-xs"></i>
+                    </button>
+                    <button id="nextPromo" class="w-8 h-8 rounded-full border border-yod-primary text-yod-primary flex items-center justify-center hover:bg-yod-primary hover:text-white transition-colors">
+                        <i class="fas fa-chevron-right text-xs"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Carousel Container -->
+            <div class="relative w-full overflow-hidden rounded-2xl">
+                <div id="promoCarousel" class="flex gap-4 sm:gap-6 overflow-x-auto hide-scroll snap-x snap-mandatory scroll-smooth pb-4 pt-2 px-2">
+                    <!-- Promo cards injected via JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Services & Products Catalog (Rectangular Cards) -->
+        <section>
+            <div class="mb-8">
+                <h2 class="font-serif text-2xl md:text-3xl text-yod-text relative inline-block">
+                    Nossos Serviços e Produtos
+                    <span class="absolute -bottom-2 left-0 w-12 h-0.5 bg-yod-primary"></span>
+                </h2>
+                <p class="mt-4 text-yod-text/80 font-light max-w-2xl">
+                    Descubra nossos tratamentos cuidadosamente elaborados para realçar sua beleza natural com delicadeza e sofisticação.
+                </p>
+            </div>
+
+            <!-- Grid -->
+            <div id="servicesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8">
+                <p class="col-span-full text-center text-yod-text/70 py-10">Carregando serviços...</p>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-white border-t border-yod-secondary/50 py-10 mt-16">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <h2 class="font-serif text-2xl text-yod-primary mb-4">YOD</h2>
+            <p class="text-sm font-light text-yod-text/70 mb-4">Realçando sua essência com delicadeza.</p>
+            <div class="flex justify-center gap-4 text-yod-primary">
+                <a href="#" class="hover:text-yod-primary-hover transition-colors"><i class="fab fa-instagram text-xl"></i></a>
+                <a href="#" class="hover:text-yod-primary-hover transition-colors"><i class="fab fa-whatsapp text-xl"></i></a>
+            </div>
+            <p class="text-xs text-yod-text/50 mt-8">&copy; 2026 YOD Micropigmentação e Estética. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <!-- Service Detail Modal -->
+    <div id="serviceModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 sm:p-6 opacity-0 transition-opacity duration-300">
+        <!-- Backdrop -->
+        <div class="absolute inset-0 bg-yod-text/40 backdrop-blur-sm modal-close"></div>
+        
+        <!-- Modal Content -->
+        <div class="relative bg-white rounded-3xl w-full max-w-4xl max-h-[90vh] overflow-y-auto shadow-2xl flex flex-col md:flex-row fade-in">
+            <!-- Close Button -->
+            <button class="absolute top-4 right-4 z-10 w-8 h-8 bg-white/80 backdrop-blur rounded-full flex items-center justify-center text-yod-text hover:text-yod-primary transition-colors shadow-sm modal-close">
+                <i class="fas fa-times"></i>
+            </button>
+
+            <!-- Images Column -->
+            <div class="w-full md:w-1/2 p-4 sm:p-6 flex flex-col gap-3">
+                <div class="w-full aspect-[4/3] rounded-2xl overflow-hidden bg-yod-bg">
+                    <img id="modalMainImg" src="" alt="Serviço" class="w-full h-full object-cover">
+                </div>
+                <!-- Mini Gallery -->
+                <div id="modalGallery" class="grid grid-cols-3 gap-3">
+                    <!-- Thumbnails injected via JS -->
+                </div>
+            </div>
+
+            <!-- Details Column -->
+            <div class="w-full md:w-1/2 p-6 sm:p-8 flex flex-col justify-center bg-yod-bg/30">
+                <span id="modalCategory" class="text-xs font-bold tracking-widest uppercase text-yod-gold mb-2">Categoria</span>
+                <h3 id="modalTitle" class="font-serif text-2xl md:text-3xl text-yod-text mb-4 leading-tight"></h3>
+                
+                <p id="modalPrice" class="text-xl font-semibold text-yod-primary mb-6"></p>
+                
+                <div class="prose prose-sm text-yod-text/80 font-light mb-8 flex-grow">
+                    <p id="modalDesc" class="leading-relaxed"></p>
+                </div>
+
+                <a id="modalWhatsAppBtn" href="#" target="_blank" rel="noopener noreferrer" class="group relative w-full flex items-center justify-center gap-3 bg-yod-primary text-white py-4 px-6 rounded-xl overflow-hidden transition-transform active:scale-95 shadow-md hover:shadow-lg">
+                    <div class="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out"></div>
+                    <i class="fab fa-whatsapp text-xl relative z-10"></i>
+                    <span class="font-medium tracking-wide relative z-10">Fazer esse procedimento</span>
+                </a>
             </div>
         </div>
     </div>
 
-    <!-- MODAL: ALTERAR NOME DO PACIENTE -->
-    <div id="modal-perfil" class="modal-overlay">
-        <div class="modal-box">
-            <h3 style="font-size: 1.3rem; color: #111827; margin-bottom: 8px;">Editar Perfil</h3>
-            <p style="color: var(--text-light); font-size: 0.9rem; margin-bottom: 15px;">Atualize o seu nome de cadastro no sistema:</p>
-            <input type="text" id="edit-nome-input" placeholder="Seu Nome Completo">
-            <div class="grid-2" style="margin-top: 20px;">
-                <button class="btn outline" style="margin:0; padding:12px;" id="btn-fechar-modal-perfil">Cancelar</button>
-                <button class="btn success" style="margin:0; padding:12px;" id="btn-salvar-perfil-nuvem">Salvar Alteração</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- NAVBAR -->
-    <nav class="navbar">
-        <div class="brand"><div class="logo" id="ui-logo">Y</div><h2 id="ui-nome" class="clinic-title">Yod Micropigmentação e Estética</h2></div>
-        <button id="btn-sair" class="btn-sair">Sair</button>
-    </nav>
-
-    <div class="container">
-        <!-- LOGIN -->
-        <div id="t-login" class="screen active">
-            <h1>Acesso ao Portal</h1>
-            <p class="subtitle">Faça login para gerenciar seus horários.</p>
-            <input type="email" id="l-email" placeholder="Seu E-mail"><input type="password" id="l-senha" placeholder="Sua Senha" style="margin-top: 12px;">
-            <button class="btn" id="btn-entrar-action">Entrar</button><button class="btn-link" id="btn-ir-cadastro">Quero criar uma conta gratuita</button>
-            <div id="erro-l" class="erro"></div>
-        </div>
-
-        <!-- CADASTRO -->
-        <div id="t-cad" class="screen">
-            <h1>Criar Perfil de Paciente</h1>
-            <p class="subtitle">Cadastre-se rapidamente na plataforma.</p>
-            <input type="text" id="c-nome" placeholder="Nome Completo"><input type="tel" id="c-wpp" placeholder="WhatsApp (com DDD)" style="margin-top: 12px;"><input type="email" id="c-email" placeholder="E-mail" style="margin-top: 12px;"><input type="password" id="c-senha" placeholder="Crie uma Senha (mín. 6 dígitos)" style="margin-top: 12px;">
-            <button class="btn" id="btn-cadastrar-action">Concluir Cadastro</button><button class="btn-link" id="btn-ir-login">Já possuo uma conta</button>
-            <div id="erro-c" class="erro"></div>
-        </div>
-
-        <!-- DASHBOARD -->
-        <div id="t-dashboard" class="screen">
-            <div class="welcome-user" id="user-greeting">Olá! 👋</div>
-            <p style="color: var(--text-light); font-size: 0.95rem;">Seus procedimentos agendados na Yod:</p>
-            
-            <div class="client-appointments-list" id="meus-cards-agendados"><p style="color: gray; text-align: center;">Carregando...</p></div>
-            
-            <button class="btn success" id="btn-ir-marcar">+ Marcar Nova Consulta</button>
-            
-            <!-- Botão de Editar Perfil movido para a parte de baixo -->
-            <button class="btn outline" style="width: 100%; margin-top: 20px; font-size: 0.9rem;" id="btn-open-profile-box">⚙️ Editar Meu Perfil (Mudar Nome)</button>
-        </div>
-
-        <!-- NOVO AGENDAMENTO -->
-        <div id="t-agenda" class="screen">
-            <h1 style="text-align: left; font-size: 1.4rem; margin-bottom: 5px;">Nova Marcação</h1>
-            <p style="color: var(--text-light); font-size: 0.9rem; margin-bottom: 20px;">Escolha as opções para o seu procedimento.</p>
-            <label>1. Escolha o Procedimento Estético</label><select id="servico"><option value="">Carregando...</option></select>
-            <label>2. Escolha o Dia de Atendimento</label><input type="date" id="data"><div id="aviso-data" class="erro" style="text-align: left; margin-top: 6px; font-size: 0.85rem;"></div>
-            
-            <div id="area-horarios" style="display:none; margin-top: 10px;">
-                <label>3. Escolha o Horário Disponível</label><div class="grid-horarios" id="grid-h"></div>
-                <button class="btn" id="btn-finalizar-marca">Confirmar e Reservar Vaga</button>
-            </div>
-            <button class="btn outline" id="btn-voltar-dash">← Voltar pro Painel</button>
-        </div>
-    </div>
-
+    <!-- Application Logic Integrada com Firebase -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, getDoc, doc, setDoc, onSnapshot, query, orderBy, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
-        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
-        const firebaseConfig = { apiKey: "AIzaSyD4SElQHlfQjbN2NsHC0Z9_1Gobb6WHd8o", authDomain: "clinicabase-a85a7.firebaseapp.com", projectId: "clinicabase-a85a7", storageBucket: "clinicabase-a85a7.firebasestorage.app", messagingSenderId: "324071825277", appId: "1:324071825277:web:6a0d3c4413f7a7569fb614" };
-        const app = initializeApp(firebaseConfig); const db = getFirestore(app); const auth = getAuth(app);
+        // CREDENCIAIS DO FIREBASE ATUALIZADAS
+        const firebaseConfig = { 
+            apiKey: "AIzaSyD4SElQHlfQjbN2NsHC0Z9_1Gobb6WHd8o", 
+            authDomain: "clinicabase-a85a7.firebaseapp.com", 
+            projectId: "clinicabase-a85a7", 
+            storageBucket: "clinicabase-a85a7.firebasestorage.app", 
+            messagingSenderId: "324071825277", 
+            appId: "1:324071825277:web:6a0d3c4413f7a7569fb614" 
+        };
 
-        let pacienteLogado = null, gradeParametros = null, bloqueiosPorDatas = {}, agendamentosExistentes = [], horaSelecionada = null, idAgendamentoParaCancelar = null;
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
 
-        document.getElementById('data').min = new Date().toISOString().split('T')[0];
+        // Constants & Data
+        const WHATSAPP_NUMBER = "5599999999999"; // Coloque o número real da clínica
 
-        onAuthStateChanged(auth, async (user) => { 
-            if(user) { 
-                pacienteLogado = user; 
-                document.getElementById('btn-sair').style.display = 'block';
-                
-                const userDoc = await getDoc(doc(db, "usuarios", user.uid));
-                if(userDoc.exists() && userDoc.data().nome) {
-                    document.getElementById('user-greeting').innerText = `Olá, ${userDoc.data().nome}! 👋`;
-                    document.getElementById('edit-nome-input').value = userDoc.data().nome;
-                } else {
-                    document.getElementById('user-greeting').innerText = `Olá, ${user.displayName || 'Paciente'}! 👋`;
-                    document.getElementById('edit-nome-input').value = user.displayName || '';
-                }
-                
-                mudarTela('t-dashboard'); 
-                conectarBancoDados(); 
-            } else { 
-                pacienteLogado = null; 
-                document.getElementById('btn-sair').style.display = 'none';
-                mudarTela('t-login'); 
+        // Promoções fixas mantidas para o carrossel quadrado
+        const promotions = [
+            {
+                id: 'p1',
+                title: "Combo Sobrancelha + Buço",
+                shortDesc: "Design perfeito e pele lisa.",
+                price: "R$ 65,00",
+                img: "https://placehold.co/400x400/E8D5D5/5A4A4A?text=Combo+Design",
+                gallery: [
+                    "https://placehold.co/400x400/E8D5D5/5A4A4A?text=Foto+1",
+                    "https://placehold.co/400x400/D4A3A3/FFFFFF?text=Foto+2",
+                    "https://placehold.co/400x400/C89F7D/FFFFFF?text=Foto+3"
+                ],
+                category: "Combo Promocional",
+                fullDesc: "Um combo especial para realçar seu olhar e deixar seu rosto impecável. Inclui design de sobrancelhas personalizado e epilação de buço com linha orgânica, garantindo maciez e precisão."
+            },
+            {
+                id: 'p2',
+                title: "Revitalização Labial 20% OFF",
+                shortDesc: "Lábios corados e hidratados.",
+                price: "R$ 320,00",
+                img: "https://placehold.co/400x400/D4A3A3/FFFFFF?text=Lábios",
+                gallery: [
+                    "https://placehold.co/400x400/D4A3A3/FFFFFF?text=Foto+1",
+                    "https://placehold.co/400x400/E8D5D5/5A4A4A?text=Foto+2",
+                    "https://placehold.co/400x400/FCF9F9/5A4A4A?text=Foto+3"
+                ],
+                category: "Oferta",
+                fullDesc: "Procedimento que devolve a cor e o contorno natural dos lábios, proporcionando um aspecto saudável e jovial. Técnica indolor com durabilidade de até 1 ano. Aproveite nosso desconto especial!"
             }
-        });
+        ];
 
-        document.getElementById('btn-entrar-action').addEventListener('click', () => {
-            signInWithEmailAndPassword(auth, document.getElementById('l-email').value, document.getElementById('l-senha').value).catch(() => document.getElementById('erro-l').innerText = "E-mail ou senha incorretos.");
-        });
-
-        document.getElementById('btn-cadastrar-action').addEventListener('click', async () => {
-            const n = document.getElementById('c-nome').value, w = document.getElementById('c-wpp').value, e = document.getElementById('c-email').value, s = document.getElementById('c-senha').value;
-            if(!n || !w) return document.getElementById('erro-c').innerText = "Preencha nome completo e WhatsApp.";
-            try { 
-                const cr = await createUserWithEmailAndPassword(auth, e, s); 
-                await setDoc(doc(db, "usuarios", cr.user.uid), { nome: n, whatsapp: w }); 
-                await updateProfile(cr.user, { displayName: n }); 
-                document.getElementById('user-greeting').innerText = `Olá, ${n}! 👋`;
-            } catch(err) { 
-                document.getElementById('erro-c').innerText = "Erro ao cadastrar."; 
-            }
-        });
-
-        document.getElementById('btn-sair').addEventListener('click', () => signOut(auth));
-        document.getElementById('btn-ir-cadastro').addEventListener('click', () => mudarTela('t-cad'));
-        document.getElementById('btn-ir-login').addEventListener('click', () => mudarTela('t-login'));
-        document.getElementById('btn-ir-marcar').addEventListener('click', () => { document.getElementById('servico').value = ''; document.getElementById('data').value = ''; document.getElementById('area-horarios').style.display = 'none'; mudarTela('t-agenda'); });
-        document.getElementById('btn-voltar-dash').addEventListener('click', () => mudarTela('t-dashboard'));
-        document.getElementById('btn-finalizar-marca').addEventListener('click', () => submeterAgendamento());
-        document.getElementById('data').addEventListener('change', () => escutarMudancaDataCalendario());
-        document.getElementById('btn-fechar-modal-cancelar').addEventListener('click', () => document.getElementById('modal-cancelar').classList.remove('active'));
-        document.getElementById('btn-confirmar-cancelar-nuvem').addEventListener('click', () => efetuarCancelamentoComMotivo());
+        // DOM Elements
+        const promoCarousel = document.getElementById('promoCarousel');
+        const servicesGrid = document.getElementById('servicesGrid');
+        const serviceModal = document.getElementById('serviceModal');
+        const modalCloseBtns = document.querySelectorAll('.modal-close');
         
-        // Ajuste das amarrações para o botão na parte de baixo
-        document.getElementById('btn-open-profile-box').addEventListener('click', () => document.getElementById('modal-perfil').classList.add('active'));
-        document.getElementById('btn-fechar-modal-perfil').addEventListener('click', () => document.getElementById('modal-perfil').classList.remove('active'));
-        document.getElementById('btn-salvar-perfil-nuvem').addEventListener('click', () => atualizarNomePerfilCliente());
-
-        function mudarTela(id) { document.querySelectorAll('.screen').forEach(s => s.classList.remove('active')); document.getElementById(id).classList.add('active'); }
-
-        async function conectarBancoDados() {
-            const geralSnap = await getDoc(doc(db, "configuracoes", "geral"));
-            if(geralSnap.exists()) { const c = geralSnap.data(); document.documentElement.style.setProperty('--primary', c.cor); document.getElementById('ui-nome').innerText = c.nome; if(c.logo) document.getElementById('ui-logo').innerHTML = `<img src="${c.logo}">`; }
-
-            const gradeSnap = await getDoc(doc(db, "configuracoes", "parametros_grade"));
-            if(gradeSnap.exists()) gradeParametros = gradeSnap.data();
-
-            onSnapshot(doc(db, "configuracoes", "bloqueios_datas"), (snap) => { if(snap.exists()) bloqueiosPorDatas = snap.data(); escutarMudancaDataCalendario(); });
-
-            onSnapshot(collection(db, "procedimentos"), (snap) => {
-                const select = document.getElementById('servico'); select.innerHTML = "<option value=''>Clique para escolher...</option>";
-                snap.forEach(d => select.innerHTML += `<option value="${d.data().nome}|${d.data().valor}">${d.data().nome} - R$ ${d.data().valor.toFixed(2)}</option>`);
-            });
-
-            onSnapshot(collection(db, "agendamentos"), (snap) => {
-                agendamentosExistentes = [];
-                const boxDashboard = document.getElementById('meus-cards-agendados'); boxDashboard.innerHTML = "";
-                let meusAtendimentosContador = 0;
-
-                snap.forEach(d => {
-                    const a = d.data(); let obj = a; obj.id = d.id; agendamentosExistentes.push(obj);
-                    if(a.pacienteEmail === pacienteLogado.email && a.status !== "cancelado") {
-                        boxDashboard.innerHTML += `
-                            <div class="client-appt-card">
-                                <div>
-                                    <div class="client-appt-time">🗓️ ${a.data} às ${a.hora}</div>
-                                    <div class="client-appt-name">${a.servico}</div>
-                                    <div class="client-appt-price">R$ ${a.valor.toFixed(2)}</div>
-                                </div>
-                                <button class="btn-cancelar-appt" id="btn-gatilho-cancel-${d.id}">Cancelar</button>
-                            </div>`;
-                        meusAtendimentosContador++;
-                    }
-                });
-
-                snap.forEach(d => {
-                    const btn = document.getElementById(`btn-gatilho-cancel-${d.id}`);
-                    if(btn) btn.addEventListener('click', () => { idAgendamentoParaCancelar = d.id; document.getElementById('txt-motivo-cancelamento').value = ""; document.getElementById('modal-cancelar').classList.add('active'); });
-                });
-
-                if(meusAtendimentosContador === 0) boxDashboard.innerHTML = "<div class='empty-dashboard'>Você ainda não possui nenhum procedimento agendado na Yod.</div>";
-                escutarMudancaDataCalendario();
+        // Render Promotions (Square Cards - Fixos)
+        function renderPromotions() {
+            promoCarousel.innerHTML = '';
+            promotions.forEach(promo => {
+                const card = document.createElement('div');
+                card.className = "flex-none w-64 h-64 relative rounded-2xl overflow-hidden cursor-pointer group shadow-delicate hover:shadow-delicate-hover transition-all duration-300 snap-center";
+                card.onclick = () => openModal(promo);
+                
+                card.innerHTML = `
+                    <img src="${promo.img}" alt="${promo.title}" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
+                    <div class="absolute inset-0 p-5 flex flex-col justify-end">
+                        <span class="inline-block px-2 py-1 bg-yod-primary text-white text-[10px] uppercase font-bold tracking-wider rounded-md mb-2 w-max shadow-sm">${promo.category}</span>
+                        <h3 class="text-white font-serif text-lg leading-tight mb-1 group-hover:text-yod-secondary transition-colors">${promo.title}</h3>
+                        <p class="text-white/90 text-sm font-semibold">${promo.price}</p>
+                    </div>
+                `;
+                promoCarousel.appendChild(card);
             });
         }
 
-        async function atualizarNomePerfilCliente() {
-            const novoNome = document.getElementById('edit-nome-input').value;
-            if(!novoNome || novoNome.trim().length < 3) return alert("Por favor, digite um nome válido.");
+        // Fetch Services from Firebase e renderiza os Retangulares
+        async function loadAndRenderServices() {
             try {
-                await updateProfile(auth.currentUser, { displayName: novoNome });
-                await updateDoc(doc(db, "usuarios", pacienteLogado.uid), { nome: novoNome });
-                document.getElementById('user-greeting').innerText = `Olá, ${novoNome}! 👋`;
-                document.getElementById('modal-perfil').classList.remove('active');
-                alert("✅ Seu nome de cadastro foi alterado com sucesso!");
-            } catch(e) { alert("Ocorreu um erro ao atualizar."); }
-        }
-
-        async function efetuarCancelamentoComMotivo() {
-            if(!idAgendamentoParaCancelar) return;
-            const motivoText = document.getElementById('txt-motivo-cancelamento').value || "Não informado";
-            await updateDoc(doc(db, "agendamentos", idAgendamentoParaCancelar), { status: "cancelado", motivoCancelamento: motivoText });
-            document.getElementById('modal-cancelar').classList.remove('active');
-            alert("Solicitação de cancelamento enviada!");
-        }
-
-        function escutarMudancaDataCalendario() {
-            const dataInput = document.getElementById('data').value;
-            const grid = document.getElementById('grid-h'); const box = document.getElementById('area-horarios'); const aviso = document.getElementById('aviso-data');
-            box.style.display = 'none'; grid.innerHTML = ''; aviso.innerText = ''; horaSelecionada = null;
-            if(!dataInput || !gradeParametros) return;
-
-            const dataBr = dataInput.split('-').reverse().join('/'); box.style.display = 'block';
-            
-            const agora = new Date();
-            const hojeIso = agora.toISOString().split('T')[0];
-            const horaAtualEmMinutos = (agora.getHours() * 60) + agora.getMinutes();
-
-            let startM = parseInt(gradeParametros.start.split(':')[0])*60, endM = parseInt(gradeParametros.end.split(':')[0])*60, interv = parseInt(gradeParametros.int);
-            let bloqueadosDoDia = bloqueiosPorDatas[dataBr] || [], criados = 0;
-
-            for(let m = startM; m < endM; m += interv) {
-                let h = Math.floor(m/60).toString().padStart(2,'0')+":"+(m%60).toString().padStart(2,'0');
-                if (dataInput === hojeIso && m <= horaAtualEmMinutos) continue;
-
-                if(!bloqueadosDoDia.includes(h)) {
-                    let ocupado = agendamentosExistentes.some(a => a.data === dataBr && a.hora === h && a.status !== "cancelado");
-                    if(!ocupado) { grid.innerHTML += `<div class="btn-hora" id="hr-slot-${h.replace(':','')}">${h}</div>`; criados++; }
+                const querySnapshot = await getDocs(collection(db, "products"));
+                servicesGrid.innerHTML = '';
+                
+                if (querySnapshot.empty) {
+                    servicesGrid.innerHTML = '<p class="col-span-full text-center text-yod-text/70 py-10">Nenhum serviço cadastrado ainda.</p>';
+                    return;
                 }
-            }
 
-            for(let m = startM; m < endM; m += interv) {
-                let h = Math.floor(m/60).toString().padStart(2,'0')+":"+(m%60).toString().padStart(2,'0');
-                if (dataInput === hojeIso && m <= horaAtualEmMinutos) continue;
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    
+                    // Adaptando os dados do banco para o formato do seu design
+                    const service = {
+                        id: doc.id,
+                        title: data.name,
+                        shortDesc: data.description.substring(0, 70) + "...",
+                        fullDesc: data.description,
+                        price: `R$ ${parseFloat(data.price).toFixed(2).replace('.', ',')}`,
+                        img: (data.images && data.images.length > 0) ? data.images[0] : 'https://placehold.co/600x400/E8D5D5/5A4A4A?text=Sem+Imagem',
+                        gallery: data.images || [],
+                        category: "Serviço"
+                    };
 
-                const btn = document.getElementById(`hr-slot-${h.replace(':','')}`);
-                if(btn) btn.addEventListener('click', function() { document.querySelectorAll('.btn-hora').forEach(b => b.classList.remove('selected')); this.classList.add('selected'); horaSelecionada = h; });
+                    const card = document.createElement('div');
+                    card.className = "bg-white rounded-2xl overflow-hidden shadow-delicate hover:shadow-delicate-hover transition-all duration-300 cursor-pointer flex flex-col group translate-y-0 hover:-translate-y-1";
+                    card.onclick = () => openModal(service);
+                    
+                    card.innerHTML = `
+                        <div class="relative w-full h-52 overflow-hidden bg-yod-bg">
+                            <img src="${service.img}" alt="${service.title}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                            <div class="absolute top-3 right-3 bg-white/90 backdrop-blur px-3 py-1 text-xs font-semibold text-yod-gold rounded-full shadow-sm">
+                                ${service.category}
+                            </div>
+                        </div>
+                        <div class="p-6 flex flex-col flex-grow">
+                            <h3 class="font-serif text-xl text-yod-text mb-2">${service.title}</h3>
+                            <p class="text-yod-text/70 text-sm font-light mb-4 flex-grow">${service.shortDesc}</p>
+                            <div class="flex items-center justify-between mt-auto pt-4 border-t border-yod-secondary/30">
+                                <span class="text-yod-primary font-bold">${service.price}</span>
+                                <span class="w-8 h-8 rounded-full bg-yod-secondary/50 flex items-center justify-center text-yod-primary group-hover:bg-yod-primary group-hover:text-white transition-colors">
+                                    <i class="fas fa-arrow-right text-sm"></i>
+                                </span>
+                            </div>
+                        </div>
+                    `;
+                    servicesGrid.appendChild(card);
+                });
+            } catch (error) {
+                servicesGrid.innerHTML = '<p class="col-span-full text-center text-red-500 py-10">Erro ao carregar serviços. Verifique a conexão com o Firebase.</p>';
+                console.error("Erro Firebase:", error);
             }
-            if(criados === 0) { box.style.display = 'none'; aviso.innerText = "Não há horários disponíveis para este dia."; }
         }
 
-        async function submeterAgendamento() {
-            const pVal = document.getElementById('servico').value, dVal = document.getElementById('data').value;
-            if(!pVal || !dVal || !horaSelecionada) return alert("Preencha todas as etapas.");
+        // Modal Logic
+        function openModal(item) {
+            document.getElementById('modalTitle').innerText = item.title;
+            document.getElementById('modalCategory').innerText = item.category;
+            document.getElementById('modalPrice').innerText = item.price;
+            document.getElementById('modalDesc').innerText = item.fullDesc;
             
-            const uSnap = await getDoc(doc(db, "usuarios", pacienteLogado.uid));
-            let nomeReal = pacienteLogado.displayName || "Paciente Web";
-            let wpp = "";
+            const mainImg = document.getElementById('modalMainImg');
+            mainImg.src = item.img;
             
-            if(uSnap.exists()) { nomeReal = uSnap.data().nome || nomeReal; wpp = uSnap.data().whatsapp || ""; }
+            const gallery = document.getElementById('modalGallery');
+            gallery.innerHTML = '';
+            
+            if (item.gallery && item.gallery.length > 0) {
+                item.gallery.forEach(imgSrc => {
+                    const imgDiv = document.createElement('div');
+                    imgDiv.className = "w-full aspect-square rounded-xl overflow-hidden cursor-pointer border-2 border-transparent hover:border-yod-primary transition-colors opacity-80 hover:opacity-100";
+                    imgDiv.innerHTML = `<img src="${imgSrc}" class="w-full h-full object-cover" alt="Galeria">`;
+                    imgDiv.onclick = () => {
+                        const temp = mainImg.src;
+                        mainImg.src = imgSrc;
+                        imgDiv.querySelector('img').src = temp;
+                    };
+                    gallery.appendChild(imgDiv);
+                });
+            }
 
-            await addDoc(collection(db, "agendamentos"), {
-                pacienteNome: nomeReal, pacienteEmail: pacienteLogado.email, pacienteWhatsapp: wpp,
-                servico: pVal.split('|')[0], valor: parseFloat(pVal.split('|')[1]), data: dVal.split('-').reverse().join('/'), hora: horaSelecionada,
-                status: "ativo", ts: Date.now()
-            });
-            alert("Agendamento computado com sucesso!"); mudarTela('t-dashboard');
+            const message = `Olá, vim pelo catálogo online. Gostaria de saber mais ou agendar o procedimento: *${item.title}* (${item.price}).`;
+            const waUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+            document.getElementById('modalWhatsAppBtn').href = waUrl;
+
+            serviceModal.classList.remove('hidden');
+            setTimeout(() => {
+                serviceModal.classList.remove('opacity-0');
+                serviceModal.classList.add('opacity-100');
+            }, 10);
+            document.body.style.overflow = 'hidden'; 
         }
+
+        function closeModal() {
+            serviceModal.classList.remove('opacity-100');
+            serviceModal.classList.add('opacity-0');
+            setTimeout(() => {
+                serviceModal.classList.add('hidden');
+                document.body.style.overflow = '';
+            }, 300);
+        }
+
+        modalCloseBtns.forEach(btn => btn.addEventListener('click', closeModal));
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && !serviceModal.classList.contains('hidden')) {
+                closeModal();
+            }
+        });
+
+        // Carousel Auto-scroll and Controls Logic
+        let autoScrollInterval;
+        
+        function scrollCarousel(direction) {
+            const scrollAmount = 280; 
+            if (direction === 'next') {
+                promoCarousel.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+                if (promoCarousel.scrollLeft + promoCarousel.clientWidth >= promoCarousel.scrollWidth - 10) {
+                     setTimeout(() => promoCarousel.scrollTo({ left: 0, behavior: 'smooth' }), 500);
+                }
+            } else {
+                promoCarousel.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+            }
+            resetAutoScroll();
+        }
+
+        function startAutoScroll() {
+            autoScrollInterval = setInterval(() => {
+                scrollCarousel('next');
+            }, 4000);
+        }
+
+        function resetAutoScroll() {
+            clearInterval(autoScrollInterval);
+            startAutoScroll();
+        }
+
+        document.getElementById('nextPromo').addEventListener('click', () => scrollCarousel('next'));
+        document.getElementById('prevPromo').addEventListener('click', () => scrollCarousel('prev'));
+
+        promoCarousel.addEventListener('mouseenter', () => clearInterval(autoScrollInterval));
+        promoCarousel.addEventListener('mouseleave', startAutoScroll);
+        promoCarousel.addEventListener('touchstart', () => clearInterval(autoScrollInterval));
+        promoCarousel.addEventListener('touchend', startAutoScroll);
+
+        // Initialize
+        window.addEventListener('DOMContentLoaded', () => {
+            renderPromotions();
+            loadAndRenderServices(); 
+            startAutoScroll();
+        });
+
     </script>
 </body>
 </html>
