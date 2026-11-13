@@ -66,7 +66,7 @@
                                 <th class="px-6 py-4 font-medium">Capa</th>
                                 <th class="px-6 py-4 font-medium">Serviço</th>
                                 <th class="px-6 py-4 font-medium">Valor</th>
-                                <th class="px-6 py-4 font-medium">Promocional</th>
+                                <th class="px-6 py-4 font-medium">Destaque Oferta</th>
                                 <th class="px-6 py-4 font-medium text-right">Ações</th>
                             </tr>
                         </thead>
@@ -98,6 +98,13 @@
                                 <div>
                                     <label class="form-label">Descrição Curta</label>
                                     <input type="text" id="shortDesc" class="form-input" required placeholder="Resumo do card" maxlength="100">
+                                </div>
+                                <!-- CHECKBOX DE OFERTA ESPECIAL -->
+                                <div class="flex items-center gap-3 pt-2 bg-pink-50 p-4 rounded-xl border border-pink-100">
+                                    <input type="checkbox" id="isPromo" class="w-5 h-5 text-[#D4A3A3] rounded focus:ring-[#D4A3A3] cursor-pointer">
+                                    <label for="isPromo" class="text-sm font-semibold text-gray-700 cursor-pointer">
+                                        🌟 Destacar nas "Ofertas Especiais" (Carrossel giratório)
+                                    </label>
                                 </div>
                             </div>
                             
@@ -244,6 +251,7 @@
             document.getElementById('formTitle').innerText = isEdit ? 'Editar Serviço' : 'Adicionar Novo Serviço';
             if(!isEdit) {
                 document.getElementById('productForm').reset();
+                document.getElementById('isPromo').checked = false;
                 for(let i=1; i<=5; i++) removeImage(i); 
             }
             window.scrollTo(0,0);
@@ -273,6 +281,7 @@
                 allProducts.forEach(data => {
                     const coverImg = (data.images && data.images.length > 0) ? data.images[0] : 'https://placehold.co/100?text=Sem+Foto';
                     const hasPromo = data.promo_price && parseFloat(data.promo_price) > 0;
+                    const isFeaturedPromo = data.is_promo ? '<span class="bg-pink-100 text-pink-700 text-xs px-2.5 py-1 rounded-full font-bold">Sim</span>' : '<span class="text-gray-400 text-xs">Não</span>';
 
                     const tr = document.createElement('tr');
                     tr.className = 'hover:bg-gray-50 transition-colors border-b border-gray-100';
@@ -280,7 +289,7 @@
                         <td class="px-6 py-4"><img src="${coverImg}" class="w-14 h-14 object-cover rounded-lg shadow-sm"></td>
                         <td class="px-6 py-4 font-medium text-gray-800">${data.name}<br><span class="text-xs text-gray-400 font-normal">${data.short_desc ? data.short_desc.substring(0,40)+'...' : ''}</span></td>
                         <td class="px-6 py-4 text-gray-600 ${hasPromo ? 'line-through text-xs' : 'font-semibold'}">${formatMoney(data.price)}</td>
-                        <td class="px-6 py-4 font-semibold text-green-600">${hasPromo ? formatMoney(data.promo_price) : '-'}</td>
+                        <td class="px-6 py-4">${isFeaturedPromo}</td>
                         <td class="px-6 py-4 text-right">
                             <button type="button" onclick="editProduct('${data.id}')" class="text-indigo-600 hover:text-indigo-900 bg-indigo-50 px-3 py-1.5 rounded-md mr-2"><i class="fas fa-edit"></i></button>
                             <button type="button" onclick="deleteProduct('${data.id}')" class="text-red-600 hover:text-red-900 bg-red-50 px-3 py-1.5 rounded-md"><i class="fas fa-trash"></i></button>
@@ -337,6 +346,7 @@
                     full_desc: document.getElementById('fullDesc').value,
                     price: parseFloat(document.getElementById('price').value) || 0,
                     promo_price: parseFloat(document.getElementById('promoPrice').value) || null,
+                    is_promo: document.getElementById('isPromo').checked, // Salva se é oferta especial
                     images: imagesArray 
                 };
 
@@ -377,6 +387,7 @@
             document.getElementById('fullDesc').value = product.full_desc || '';
             document.getElementById('price').value = product.price;
             document.getElementById('promoPrice').value = product.promo_price || '';
+            document.getElementById('isPromo').checked = product.is_promo || false; // Marca o checkbox se for promoção
 
             for(let i=1; i<=5; i++) {
                 removeImage(i);
@@ -391,7 +402,7 @@
             showForm(true);
         };
 
-        loadProducts();
+    loadProducts();
     </script>
 </body>
 </html>
