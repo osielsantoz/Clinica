@@ -3,172 +3,198 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin - YOD Estética</title>
+    <title>YOD Micropigmentação e Estética | Catálogo</title>
+    
+    <!-- Google Fonts for Elegant Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'yod-bg': '#FCF9F9',        // Very soft nude/pink background
+                        'yod-primary': '#D4A3A3',   // Soft blush pink/rose
+                        'yod-primary-hover': '#C08F8F',
+                        'yod-secondary': '#E8D5D5', // Lighter pink for cards/accents
+                        'yod-text': '#5A4A4A',      // Soft dark brown/gray for text readability
+                        'yod-gold': '#C89F7D',      // Soft rose gold accent
+                    },
+                    fontFamily: {
+                        sans: ['Lato', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    },
+                    boxShadow: {
+                        'delicate': '0 10px 25px -5px rgba(212, 163, 163, 0.15), 0 8px 10px -6px rgba(212, 163, 163, 0.1)',
+                        'delicate-hover': '0 20px 25px -5px rgba(212, 163, 163, 0.25), 0 8px 10px -6px rgba(212, 163, 163, 0.1)',
+                    }
+                }
+            }
+        }
+    </script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap');
-
-        :root {
-            --primary: #D4B5B0;
-            --background: #F4F0EF;
-            --white: #FFFFFF;
-            --text-dark: #333;
-            --border: #DDD;
+        /* Custom Scrollbar for delicacy */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
         }
-
-        body {
-            font-family: 'Lato', sans-serif;
-            background-color: var(--background);
-            color: var(--text-dark);
-            margin: 0;
-            padding: 2rem;
+        ::-webkit-scrollbar-track {
+            background: #FCF9F9;
         }
-
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            background: var(--white);
-            padding: 2rem;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        ::-webkit-scrollbar-thumb {
+            background: #E8D5D5;
+            border-radius: 10px;
         }
-
-        h1, h2 {
-            color: #4A4A4A;
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-            display: flex;
-            flex-direction: column;
-        }
-
-        label {
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-
-        input, textarea {
-            padding: 10px;
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            font-family: inherit;
-        }
-
-        .helper-text {
-            font-size: 0.8rem;
-            color: #888;
-            margin-top: 5px;
-        }
-
-        button {
-            background-color: var(--primary);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 1rem;
-            transition: 0.3s;
-        }
-
-        button:hover {
-            background-color: #C1A29D;
-        }
-
-        .btn-danger {
-            background-color: #FF5A5F;
-        }
-
-        .btn-danger:hover {
-            background-color: #E0484D;
-        }
-
-        .admin-list {
-            margin-top: 3rem;
-            border-top: 2px solid var(--border);
-            padding-top: 2rem;
-        }
-
-        .list-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 15px;
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            margin-bottom: 10px;
-        }
-
-        .list-item img {
-            width: 60px;
-            height: 60px;
-            object-fit: cover;
-            border-radius: 6px;
-            margin-right: 15px;
-        }
-
-        .item-info {
-            flex-grow: 1;
-            display: flex;
-            align-items: center;
+        ::-webkit-scrollbar-thumb:hover {
+            background: #D4A3A3;
         }
         
-        .header-actions {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        /* Hide scrollbar for carousel but keep functionality */
+        .hide-scroll::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scroll {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        
+        /* Smooth transitions */
+        .fade-in {
+            animation: fadeIn 0.4s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.98); }
+            to { opacity: 1; transform: scale(1); }
         }
     </style>
 </head>
-<body>
+<body class="bg-yod-bg text-yod-text font-sans antialiased overflow-x-hidden">
 
-    <div class="container">
-        <div class="header-actions">
-            <h1>Painel Administrativo de Produtos</h1>
-            <button id="btnGenerateTests" style="background-color: #4A4A4A;">Gerar Produtos de Teste</button>
+    <!-- Navigation / Header -->
+    <header class="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-yod-secondary/50 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex flex-col items-center justify-center">
+            <h1 class="font-serif text-3xl md:text-4xl text-yod-primary tracking-wider text-center">
+                YOD
+            </h1>
+            <p class="text-xs md:text-sm tracking-[0.2em] text-yod-gold uppercase mt-1 text-center">
+                Micropigmentação & Estética
+            </p>
         </div>
-        <p>Crie e edite os serviços do catálogo YOD.</p>
+    </header>
 
-        <form id="productForm">
-            <input type="hidden" id="productId">
-            
-            <div class="form-group">
-                <label>Nome do Serviço</label>
-                <input type="text" id="name" required placeholder="Ex: Micropigmentação de Sobrancelhas">
-            </div>
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
 
-            <div class="form-group">
-                <label>Descrição</label>
-                <textarea id="description" rows="4" required placeholder="Detalhes sobre o procedimento..."></textarea>
-            </div>
-
-            <div class="form-group">
-                <label>Valor (R$)</label>
-                <input type="number" step="0.01" id="price" required placeholder="0.00">
-            </div>
-
-            <div class="form-group">
-                <label>Imagens (Até 5 fotos)</label>
-                <textarea id="images" rows="3" required placeholder="Cole as URLs das imagens separadas por vírgula. A primeira será a capa."></textarea>
-                <div class="helper-text">
-                    <strong>Atenção ao tamanho:</strong> Para os banners de capa (primeira foto), o tamanho ideal é <strong>800x600 pixels (formato paisagem)</strong> ou quadrado (1080x1080). Limite de 5 imagens.
+        <!-- Promotions Section (Rotating Square Cards) -->
+        <section class="mb-16">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="font-serif text-2xl md:text-3xl text-yod-text relative inline-block">
+                    Ofertas Especiais
+                    <span class="absolute -bottom-2 left-0 w-12 h-0.5 bg-yod-primary"></span>
+                </h2>
+                <div class="flex gap-2">
+                    <button id="prevPromo" class="w-8 h-8 rounded-full border border-yod-primary text-yod-primary flex items-center justify-center hover:bg-yod-primary hover:text-white transition-colors">
+                        <i class="fas fa-chevron-left text-xs"></i>
+                    </button>
+                    <button id="nextPromo" class="w-8 h-8 rounded-full border border-yod-primary text-yod-primary flex items-center justify-center hover:bg-yod-primary hover:text-white transition-colors">
+                        <i class="fas fa-chevron-right text-xs"></i>
+                    </button>
                 </div>
             </div>
 
-            <button type="submit" id="submitBtn">Salvar Serviço</button>
-            <button type="button" id="cancelBtn" style="display:none; background:#888;">Cancelar Edição</button>
-        </form>
+            <!-- Carousel Container -->
+            <div class="relative w-full overflow-hidden rounded-2xl">
+                <div id="promoCarousel" class="flex gap-4 sm:gap-6 overflow-x-auto hide-scroll snap-x snap-mandatory scroll-smooth pb-4 pt-2 px-2">
+                    <!-- Promo cards injected via JS -->
+                </div>
+            </div>
+        </section>
 
-        <div class="admin-list">
-            <h2>Serviços Cadastrados</h2>
-            <div id="productList">Carregando...</div>
+        <!-- Services & Products Catalog (Rectangular Cards) -->
+        <section>
+            <div class="mb-8">
+                <h2 class="font-serif text-2xl md:text-3xl text-yod-text relative inline-block">
+                    Nossos Serviços e Produtos
+                    <span class="absolute -bottom-2 left-0 w-12 h-0.5 bg-yod-primary"></span>
+                </h2>
+                <p class="mt-4 text-yod-text/80 font-light max-w-2xl">
+                    Descubra nossos tratamentos cuidadosamente elaborados para realçar sua beleza natural com delicadeza e sofisticação.
+                </p>
+            </div>
+
+            <!-- Grid -->
+            <div id="servicesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8">
+                <p class="col-span-full text-center text-yod-text/70 py-10">Carregando serviços...</p>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-white border-t border-yod-secondary/50 py-10 mt-16">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <h2 class="font-serif text-2xl text-yod-primary mb-4">YOD</h2>
+            <p class="text-sm font-light text-yod-text/70 mb-4">Realçando sua essência com delicadeza.</p>
+            <div class="flex justify-center gap-4 text-yod-primary">
+                <a href="#" class="hover:text-yod-primary-hover transition-colors"><i class="fab fa-instagram text-xl"></i></a>
+                <a href="#" class="hover:text-yod-primary-hover transition-colors"><i class="fab fa-whatsapp text-xl"></i></a>
+            </div>
+            <p class="text-xs text-yod-text/50 mt-8">&copy; 2026 YOD Micropigmentação e Estética. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <!-- Service Detail Modal -->
+    <div id="serviceModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 sm:p-6 opacity-0 transition-opacity duration-300">
+        <!-- Backdrop -->
+        <div class="absolute inset-0 bg-yod-text/40 backdrop-blur-sm modal-close"></div>
+        
+        <!-- Modal Content -->
+        <div class="relative bg-white rounded-3xl w-full max-w-4xl max-h-[90vh] overflow-y-auto shadow-2xl flex flex-col md:flex-row fade-in">
+            <!-- Close Button -->
+            <button class="absolute top-4 right-4 z-10 w-8 h-8 bg-white/80 backdrop-blur rounded-full flex items-center justify-center text-yod-text hover:text-yod-primary transition-colors shadow-sm modal-close">
+                <i class="fas fa-times"></i>
+            </button>
+
+            <!-- Images Column -->
+            <div class="w-full md:w-1/2 p-4 sm:p-6 flex flex-col gap-3">
+                <div class="w-full aspect-[4/3] rounded-2xl overflow-hidden bg-yod-bg">
+                    <img id="modalMainImg" src="" alt="Serviço" class="w-full h-full object-cover">
+                </div>
+                <!-- Mini Gallery -->
+                <div id="modalGallery" class="grid grid-cols-3 gap-3">
+                    <!-- Thumbnails injected via JS -->
+                </div>
+            </div>
+
+            <!-- Details Column -->
+            <div class="w-full md:w-1/2 p-6 sm:p-8 flex flex-col justify-center bg-yod-bg/30">
+                <span id="modalCategory" class="text-xs font-bold tracking-widest uppercase text-yod-gold mb-2">Categoria</span>
+                <h3 id="modalTitle" class="font-serif text-2xl md:text-3xl text-yod-text mb-4 leading-tight"></h3>
+                
+                <p id="modalPrice" class="text-xl font-semibold text-yod-primary mb-6"></p>
+                
+                <div class="prose prose-sm text-yod-text/80 font-light mb-8 flex-grow">
+                    <p id="modalDesc" class="leading-relaxed"></p>
+                </div>
+
+                <a id="modalWhatsAppBtn" href="#" target="_blank" rel="noopener noreferrer" class="group relative w-full flex items-center justify-center gap-3 bg-yod-primary text-white py-4 px-6 rounded-xl overflow-hidden transition-transform active:scale-95 shadow-md hover:shadow-lg">
+                    <div class="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out"></div>
+                    <i class="fab fa-whatsapp text-xl relative z-10"></i>
+                    <span class="font-medium tracking-wide relative z-10">Fazer esse procedimento</span>
+                </a>
+            </div>
         </div>
     </div>
 
+    <!-- Application Logic Integrada com Firebase -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
         // CREDENCIAIS DO FIREBASE ATUALIZADAS
         const firebaseConfig = { 
@@ -182,148 +208,223 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
-        
-        const form = document.getElementById('productForm');
-        const listDiv = document.getElementById('productList');
 
-        async function loadAdminProducts() {
-            listDiv.innerHTML = 'Carregando...';
+        // Constants & Data
+        const WHATSAPP_NUMBER = "5599999999999"; // Coloque o número real da clínica
+
+        // Promoções fixas mantidas para o carrossel quadrado
+        const promotions = [
+            {
+                id: 'p1',
+                title: "Combo Sobrancelha + Buço",
+                shortDesc: "Design perfeito e pele lisa.",
+                price: "R$ 65,00",
+                img: "https://placehold.co/400x400/E8D5D5/5A4A4A?text=Combo+Design",
+                gallery: [
+                    "https://placehold.co/400x400/E8D5D5/5A4A4A?text=Foto+1",
+                    "https://placehold.co/400x400/D4A3A3/FFFFFF?text=Foto+2",
+                    "https://placehold.co/400x400/C89F7D/FFFFFF?text=Foto+3"
+                ],
+                category: "Combo Promocional",
+                fullDesc: "Um combo especial para realçar seu olhar e deixar seu rosto impecável. Inclui design de sobrancelhas personalizado e epilação de buço com linha orgânica, garantindo maciez e precisão."
+            },
+            {
+                id: 'p2',
+                title: "Revitalização Labial 20% OFF",
+                shortDesc: "Lábios corados e hidratados.",
+                price: "R$ 320,00",
+                img: "https://placehold.co/400x400/D4A3A3/FFFFFF?text=Lábios",
+                gallery: [
+                    "https://placehold.co/400x400/D4A3A3/FFFFFF?text=Foto+1",
+                    "https://placehold.co/400x400/E8D5D5/5A4A4A?text=Foto+2",
+                    "https://placehold.co/400x400/FCF9F9/5A4A4A?text=Foto+3"
+                ],
+                category: "Oferta",
+                fullDesc: "Procedimento que devolve a cor e o contorno natural dos lábios, proporcionando um aspecto saudável e jovial. Técnica indolor com durabilidade de até 1 ano. Aproveite nosso desconto especial!"
+            }
+        ];
+
+        // DOM Elements
+        const promoCarousel = document.getElementById('promoCarousel');
+        const servicesGrid = document.getElementById('servicesGrid');
+        const serviceModal = document.getElementById('serviceModal');
+        const modalCloseBtns = document.querySelectorAll('.modal-close');
+        
+        // Render Promotions (Square Cards - Fixos)
+        function renderPromotions() {
+            promoCarousel.innerHTML = '';
+            promotions.forEach(promo => {
+                const card = document.createElement('div');
+                card.className = "flex-none w-64 h-64 relative rounded-2xl overflow-hidden cursor-pointer group shadow-delicate hover:shadow-delicate-hover transition-all duration-300 snap-center";
+                card.onclick = () => openModal(promo);
+                
+                card.innerHTML = `
+                    <img src="${promo.img}" alt="${promo.title}" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
+                    <div class="absolute inset-0 p-5 flex flex-col justify-end">
+                        <span class="inline-block px-2 py-1 bg-yod-primary text-white text-[10px] uppercase font-bold tracking-wider rounded-md mb-2 w-max shadow-sm">${promo.category}</span>
+                        <h3 class="text-white font-serif text-lg leading-tight mb-1 group-hover:text-yod-secondary transition-colors">${promo.title}</h3>
+                        <p class="text-white/90 text-sm font-semibold">${promo.price}</p>
+                    </div>
+                `;
+                promoCarousel.appendChild(card);
+            });
+        }
+
+        // Fetch Services from Firebase e renderiza os Retangulares
+        async function loadAndRenderServices() {
             try {
                 const querySnapshot = await getDocs(collection(db, "products"));
-                listDiv.innerHTML = '';
+                servicesGrid.innerHTML = '';
                 
-                if(querySnapshot.empty) {
-                    listDiv.innerHTML = '<p>Nenhum serviço cadastrado.</p>';
+                if (querySnapshot.empty) {
+                    servicesGrid.innerHTML = '<p class="col-span-full text-center text-yod-text/70 py-10">Nenhum serviço cadastrado ainda.</p>';
                     return;
                 }
 
-                querySnapshot.forEach((documento) => {
-                    const data = documento.data();
-                    const id = documento.id;
-                    const coverImg = (data.images && data.images.length > 0) ? data.images[0] : 'https://via.placeholder.com/150';
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    
+                    // Adaptando os dados do banco para o formato do seu design
+                    const service = {
+                        id: doc.id,
+                        title: data.name,
+                        shortDesc: data.description.substring(0, 70) + "...",
+                        fullDesc: data.description,
+                        price: `R$ ${parseFloat(data.price).toFixed(2).replace('.', ',')}`,
+                        img: (data.images && data.images.length > 0) ? data.images[0] : 'https://placehold.co/600x400/E8D5D5/5A4A4A?text=Sem+Imagem',
+                        gallery: data.images || [],
+                        category: "Serviço"
+                    };
 
-                    const item = document.createElement('div');
-                    item.className = 'list-item';
-                    item.innerHTML = `
-                        <div class="item-info">
-                            <img src="${coverImg}" alt="${data.name}">
-                            <div>
-                                <strong>${data.name}</strong><br>
-                                R$ ${parseFloat(data.price).toFixed(2).replace('.', ',')}
+                    const card = document.createElement('div');
+                    card.className = "bg-white rounded-2xl overflow-hidden shadow-delicate hover:shadow-delicate-hover transition-all duration-300 cursor-pointer flex flex-col group translate-y-0 hover:-translate-y-1";
+                    card.onclick = () => openModal(service);
+                    
+                    card.innerHTML = `
+                        <div class="relative w-full h-52 overflow-hidden bg-yod-bg">
+                            <img src="${service.img}" alt="${service.title}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                            <div class="absolute top-3 right-3 bg-white/90 backdrop-blur px-3 py-1 text-xs font-semibold text-yod-gold rounded-full shadow-sm">
+                                ${service.category}
                             </div>
                         </div>
-                        <div>
-                            <button onclick="editProduct('${id}', '${data.name.replace(/'/g, "\\'")}', '${data.description.replace(/'/g, "\\'")}', '${data.price}', '${data.images.join(',')}')">Editar</button>
-                            <button class="btn-danger" onclick="deleteProduct('${id}')">Excluir</button>
+                        <div class="p-6 flex flex-col flex-grow">
+                            <h3 class="font-serif text-xl text-yod-text mb-2">${service.title}</h3>
+                            <p class="text-yod-text/70 text-sm font-light mb-4 flex-grow">${service.shortDesc}</p>
+                            <div class="flex items-center justify-between mt-auto pt-4 border-t border-yod-secondary/30">
+                                <span class="text-yod-primary font-bold">${service.price}</span>
+                                <span class="w-8 h-8 rounded-full bg-yod-secondary/50 flex items-center justify-center text-yod-primary group-hover:bg-yod-primary group-hover:text-white transition-colors">
+                                    <i class="fas fa-arrow-right text-sm"></i>
+                                </span>
+                            </div>
                         </div>
                     `;
-                    listDiv.appendChild(item);
+                    servicesGrid.appendChild(card);
                 });
             } catch (error) {
-                listDiv.innerHTML = '<p style="color:red">Erro ao carregar dados. Verifique a conexão com o Firebase.</p>';
-                console.error(error);
+                servicesGrid.innerHTML = '<p class="col-span-full text-center text-red-500 py-10">Erro ao carregar serviços. Verifique a conexão com o Firebase.</p>';
+                console.error("Erro Firebase:", error);
             }
         }
 
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
+        // Modal Logic
+        function openModal(item) {
+            document.getElementById('modalTitle').innerText = item.title;
+            document.getElementById('modalCategory').innerText = item.category;
+            document.getElementById('modalPrice').innerText = item.price;
+            document.getElementById('modalDesc').innerText = item.fullDesc;
             
-            const id = document.getElementById('productId').value;
-            const name = document.getElementById('name').value;
-            const description = document.getElementById('description').value;
-            const price = parseFloat(document.getElementById('price').value);
+            const mainImg = document.getElementById('modalMainImg');
+            mainImg.src = item.img;
             
-            let imgArray = document.getElementById('images').value.split(',').map(u => u.trim()).filter(u => u);
-            if (imgArray.length > 5) {
-                imgArray = imgArray.slice(0, 5);
-                alert("Aviso: Apenas as 5 primeiras imagens foram salvas.");
+            const gallery = document.getElementById('modalGallery');
+            gallery.innerHTML = '';
+            
+            if (item.gallery && item.gallery.length > 0) {
+                item.gallery.forEach(imgSrc => {
+                    const imgDiv = document.createElement('div');
+                    imgDiv.className = "w-full aspect-square rounded-xl overflow-hidden cursor-pointer border-2 border-transparent hover:border-yod-primary transition-colors opacity-80 hover:opacity-100";
+                    imgDiv.innerHTML = `<img src="${imgSrc}" class="w-full h-full object-cover" alt="Galeria">`;
+                    imgDiv.onclick = () => {
+                        const temp = mainImg.src;
+                        mainImg.src = imgSrc;
+                        imgDiv.querySelector('img').src = temp;
+                    };
+                    gallery.appendChild(imgDiv);
+                });
             }
 
-            const productData = { name, description, price, images: imgArray };
+            const message = `Olá, vim pelo catálogo online. Gostaria de saber mais ou agendar o procedimento: *${item.title}* (${item.price}).`;
+            const waUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+            document.getElementById('modalWhatsAppBtn').href = waUrl;
 
-            try {
-                if(id) {
-                    await updateDoc(doc(db, "products", id), productData);
-                    alert("Serviço atualizado!");
-                } else {
-                    await addDoc(collection(db, "products"), productData);
-                    alert("Serviço criado com sucesso!");
-                }
-                form.reset();
-                document.getElementById('productId').value = '';
-                document.getElementById('cancelBtn').style.display = 'none';
-                document.getElementById('submitBtn').innerText = 'Salvar Serviço';
-                loadAdminProducts();
-            } catch (error) {
-                alert("Erro ao salvar. Verifique o console.");
-                console.error(error);
+            serviceModal.classList.remove('hidden');
+            setTimeout(() => {
+                serviceModal.classList.remove('opacity-0');
+                serviceModal.classList.add('opacity-100');
+            }, 10);
+            document.body.style.overflow = 'hidden'; 
+        }
+
+        function closeModal() {
+            serviceModal.classList.remove('opacity-100');
+            serviceModal.classList.add('opacity-0');
+            setTimeout(() => {
+                serviceModal.classList.add('hidden');
+                document.body.style.overflow = '';
+            }, 300);
+        }
+
+        modalCloseBtns.forEach(btn => btn.addEventListener('click', closeModal));
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && !serviceModal.classList.contains('hidden')) {
+                closeModal();
             }
         });
 
-        window.deleteProduct = async (id) => {
-            if(confirm("Tem certeza que deseja excluir este serviço?")) {
-                await deleteDoc(doc(db, "products", id));
-                loadAdminProducts();
+        // Carousel Auto-scroll and Controls Logic
+        let autoScrollInterval;
+        
+        function scrollCarousel(direction) {
+            const scrollAmount = 280; 
+            if (direction === 'next') {
+                promoCarousel.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+                if (promoCarousel.scrollLeft + promoCarousel.clientWidth >= promoCarousel.scrollWidth - 10) {
+                     setTimeout(() => promoCarousel.scrollTo({ left: 0, behavior: 'smooth' }), 500);
+                }
+            } else {
+                promoCarousel.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
             }
-        };
+            resetAutoScroll();
+        }
 
-        window.editProduct = (id, name, desc, price, imgs) => {
-            document.getElementById('productId').value = id;
-            document.getElementById('name').value = name;
-            document.getElementById('description').value = desc;
-            document.getElementById('price').value = price;
-            document.getElementById('images').value = imgs;
-            
-            document.getElementById('submitBtn').innerText = 'Atualizar Serviço';
-            document.getElementById('cancelBtn').style.display = 'inline-block';
-            window.scrollTo(0, 0);
-        };
+        function startAutoScroll() {
+            autoScrollInterval = setInterval(() => {
+                scrollCarousel('next');
+            }, 4000);
+        }
 
-        document.getElementById('cancelBtn').addEventListener('click', () => {
-            form.reset();
-            document.getElementById('productId').value = '';
-            document.getElementById('submitBtn').innerText = 'Salvar Serviço';
-            document.getElementById('cancelBtn').style.display = 'none';
+        function resetAutoScroll() {
+            clearInterval(autoScrollInterval);
+            startAutoScroll();
+        }
+
+        document.getElementById('nextPromo').addEventListener('click', () => scrollCarousel('next'));
+        document.getElementById('prevPromo').addEventListener('click', () => scrollCarousel('prev'));
+
+        promoCarousel.addEventListener('mouseenter', () => clearInterval(autoScrollInterval));
+        promoCarousel.addEventListener('mouseleave', startAutoScroll);
+        promoCarousel.addEventListener('touchstart', () => clearInterval(autoScrollInterval));
+        promoCarousel.addEventListener('touchend', startAutoScroll);
+
+        // Initialize
+        window.addEventListener('DOMContentLoaded', () => {
+            renderPromotions();
+            loadAndRenderServices(); 
+            startAutoScroll();
         });
 
-        document.getElementById('btnGenerateTests').addEventListener('click', async () => {
-            const testData = [
-                {
-                    name: "Micropigmentação Fio a Fio",
-                    description: "Técnica que desenha fios realistas acompanhando o formato natural da sobrancelha, preenchendo falhas e garantindo um olhar expressivo com naturalidade.",
-                    price: 450.00,
-                    images: ["https://images.unsplash.com/photo-1596704017254-9b121068fb31?w=800", "https://images.unsplash.com/photo-1620052329718-701f41334fcd?w=800"]
-                },
-                {
-                    name: "Limpeza de Pele Profunda",
-                    description: "Procedimento completo para remoção de cravos, miliuns e impurezas. Acompanha máscara de argila rosa para acalmar a pele e revitalizar a derme.",
-                    price: 120.00,
-                    images: ["https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=800"]
-                },
-                {
-                    name: "Revitalização Labial",
-                    description: "Técnica que traz cor e vida aos lábios pálidos ou arroxeados. Efeito natural semelhante a um lip tint permanente.",
-                    price: 350.00,
-                    images: ["https://images.unsplash.com/photo-1617300305885-300eec2614b6?w=800"]
-                }
-            ];
-
-            try {
-                document.getElementById('btnGenerateTests').innerText = 'Gerando...';
-                for (const item of testData) {
-                    await addDoc(collection(db, "products"), item);
-                }
-                alert("Produtos de teste inseridos no banco com sucesso!");
-                document.getElementById('btnGenerateTests').innerText = 'Gerar Produtos de Teste';
-                loadAdminProducts();
-            } catch (error) {
-                alert("Erro ao inserir testes. Verifique as configurações do Firebase.");
-                console.error(error);
-                document.getElementById('btnGenerateTests').innerText = 'Gerar Produtos de Teste';
-            }
-        });
-
-        loadAdminProducts();
     </script>
 </body>
 </html>
