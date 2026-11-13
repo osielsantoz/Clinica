@@ -234,7 +234,7 @@
             }
 
             const priceFinal = item.priceInfo ? (item.priceInfo.promo > 0 ? formatMoney(item.priceInfo.promo) : formatMoney(item.priceInfo.raw)) : '';
-            const msg = `Olá! Tenho interesse no procedimento: *${item.title}* (${priceFinal}). Poderia me passar mais informações?`;
+            const msg = `Tenho interesse no procedimento: *${item.title}* (${priceFinal}). Poderia me passar mais informações?`;
             document.getElementById('modalWhatsAppBtn').href = `${WHATSAPP_LINK}?text=${encodeURIComponent(msg)}`;
 
             serviceModal.classList.remove('hidden');
