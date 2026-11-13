@@ -13,12 +13,19 @@
         .form-input { width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; border-radius: 0.5rem; outline: none; transition: border-color 0.2s; }
         .form-input:focus { border-color: #D4A3A3; box-shadow: 0 0 0 2px rgba(212, 163, 163, 0.2); }
         .form-label { display: block; font-size: 0.875rem; font-weight: 500; color: #374151; margin-bottom: 0.25rem; }
+        
+        /* Estilos do Upload */
+        .upload-box { position: relative; width: 100%; aspect-ratio: 1; border: 2px dashed #d1d5db; border-radius: 0.75rem; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; overflow: hidden; background-color: #f9fafb; transition: 0.2s; }
+        .upload-box:hover { border-color: #D4A3A3; background-color: #fff; }
+        .upload-preview { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: none; }
+        .upload-box.has-image .upload-preview { display: block; }
+        .upload-box.has-image .upload-placeholder { display: none; }
     </style>
 </head>
 <body class="flex h-screen overflow-hidden text-gray-800">
 
     <!-- Sidebar -->
-    <aside class="w-64 bg-gray-900 text-white flex flex-col">
+    <aside class="w-64 bg-gray-900 text-white flex flex-col hidden md:flex">
         <div class="p-6 border-b border-gray-800">
             <h1 class="text-2xl font-serif tracking-wider text-[#D4A3A3]">YOD</h1>
             <p class="text-xs text-gray-400 uppercase tracking-widest mt-1">Painel Gestor</p>
@@ -34,26 +41,26 @@
     <main class="flex-1 flex flex-col h-screen overflow-y-auto bg-gray-50">
         
         <!-- Topbar -->
-        <header class="bg-white shadow-sm px-8 py-4 flex justify-between items-center">
+        <header class="bg-white shadow-sm px-6 py-4 flex justify-between items-center">
             <h2 class="text-xl font-semibold text-gray-700" id="headerTitle">Gerenciar Catálogo</h2>
             <div class="flex items-center gap-3">
-                <span class="text-sm text-gray-500">Logado como Admin</span>
+                <span class="text-sm text-gray-500 hidden sm:block">Logado como Admin</span>
                 <div class="w-8 h-8 rounded-full bg-[#D4A3A3] text-white flex items-center justify-center"><i class="fas fa-user"></i></div>
             </div>
         </header>
 
-        <div class="p-8">
+        <div class="p-4 md:p-8">
             <!-- VIEW: LISTAGEM -->
             <div id="listView" class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden transition-all">
-                <div class="p-6 border-b border-gray-100 flex justify-between items-center">
+                <div class="p-4 md:p-6 border-b border-gray-100 flex flex-col sm:flex-row justify-between items-center gap-4">
                     <h3 class="text-lg font-semibold text-gray-800">Todos os Serviços</h3>
-                    <button onclick="showForm()" class="bg-[#D4A3A3] hover:bg-[#C08F8F] text-white px-5 py-2.5 rounded-lg font-medium transition-colors flex items-center gap-2">
+                    <button onclick="showForm()" class="w-full sm:w-auto bg-[#D4A3A3] hover:bg-[#C08F8F] text-white px-5 py-2.5 rounded-lg font-medium transition-colors flex items-center justify-center gap-2">
                         <i class="fas fa-plus"></i> Adicionar Novo
                     </button>
                 </div>
                 
                 <div class="overflow-x-auto">
-                    <table class="w-full text-left border-collapse">
+                    <table class="w-full text-left border-collapse min-w-[600px]">
                         <thead>
                             <tr class="bg-gray-50 text-gray-500 text-sm uppercase tracking-wider">
                                 <th class="px-6 py-4 font-medium">Capa</th>
@@ -76,70 +83,127 @@
                     <i class="fas fa-arrow-left"></i> Voltar para a lista
                 </button>
 
-                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-8">
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4 md:p-8">
                     <h3 class="text-xl font-semibold mb-6 border-b pb-4" id="formTitle">Adicionar Novo Serviço</h3>
                     
-                    <form id="productForm" class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <form id="productForm" class="flex flex-col gap-8">
                         <input type="hidden" id="productId">
                         
-                        <!-- Coluna 1: Informações de Texto e Valores -->
-                        <div class="space-y-5">
-                            <div>
-                                <label class="form-label">Nome do Serviço</label>
-                                <input type="text" id="name" class="form-input" required placeholder="Ex: Micropigmentação Fio a Fio">
+                        <!-- Linha 1: Informações de Texto e Valores -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="space-y-5">
+                                <div>
+                                    <label class="form-label">Nome do Serviço</label>
+                                    <input type="text" id="name" class="form-input" required placeholder="Ex: Micropigmentação Fio a Fio">
+                                </div>
+                                
+                                <div>
+                                    <label class="form-label">Descrição Curta (Aparece no card pequeno)</label>
+                                    <input type="text" id="shortDesc" class="form-input" required placeholder="Ex: Efeito natural e preenchimento perfeito." maxlength="100">
+                                </div>
                             </div>
                             
-                            <div>
-                                <label class="form-label">Descrição Curta (Aparece no card pequeno)</label>
-                                <input type="text" id="shortDesc" class="form-input" required placeholder="Ex: Efeito natural e preenchimento perfeito." maxlength="100">
-                            </div>
-
-                            <div>
-                                <label class="form-label">Descrição Longa (Aparece ao clicar para ver detalhes)</label>
-                                <textarea id="fullDesc" rows="4" class="form-input" required placeholder="Explique os detalhes, benefícios e como funciona o procedimento..."></textarea>
-                            </div>
-
-                            <div class="grid grid-cols-2 gap-4">
-                                <div>
-                                    <label class="form-label">Valor Padrão (R$)</label>
-                                    <input type="number" step="0.01" id="price" class="form-input" required placeholder="0.00">
+                            <div class="space-y-5">
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="form-label">Valor Padrão (R$)</label>
+                                        <input type="number" step="0.01" id="price" class="form-input" required placeholder="0.00">
+                                    </div>
+                                    <div>
+                                        <label class="form-label text-green-600">Valor Promocional (R$)</label>
+                                        <input type="number" step="0.01" id="promoPrice" class="form-input" placeholder="Opcional">
+                                    </div>
                                 </div>
+
                                 <div>
-                                    <label class="form-label text-green-600">Valor Promocional (R$ - Opcional)</label>
-                                    <input type="number" step="0.01" id="promoPrice" class="form-input" placeholder="0.00">
+                                    <label class="form-label">Descrição Longa (Detalhes completos)</label>
+                                    <textarea id="fullDesc" rows="3" class="form-input" required placeholder="Explique os detalhes e benefícios..."></textarea>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Coluna 2: Imagens -->
-                        <div class="space-y-4 bg-gray-50 p-6 rounded-xl border border-gray-200">
-                            <h4 class="font-medium text-gray-700 mb-2 border-b pb-2">Imagens do Serviço (Cole as URLs)</h4>
+                        <!-- Linha 2: Upload de Imagens -->
+                        <div class="bg-gray-50 p-6 rounded-xl border border-gray-200">
+                            <h4 class="font-medium text-gray-700 mb-4 border-b pb-2">Fotos do Serviço (Clique para enviar do Celular/PC)</h4>
                             
-                            <div>
-                                <label class="form-label text-indigo-600 font-bold"><i class="fas fa-star text-xs"></i> Foto 1 (Capa Principal)</label>
-                                <input type="url" id="img1" class="form-input" required placeholder="https://link-da-foto-capa.jpg">
-                            </div>
-                            <div>
-                                <label class="form-label">Foto 2 (Opcional)</label>
-                                <input type="url" id="img2" class="form-input" placeholder="https://link-da-foto.jpg">
-                            </div>
-                            <div>
-                                <label class="form-label">Foto 3 (Opcional)</label>
-                                <input type="url" id="img3" class="form-input" placeholder="https://link-da-foto.jpg">
-                            </div>
-                            <div>
-                                <label class="form-label">Foto 4 (Opcional)</label>
-                                <input type="url" id="img4" class="form-input" placeholder="https://link-da-foto.jpg">
-                            </div>
-                            <div>
-                                <label class="form-label">Foto 5 (Opcional)</label>
-                                <input type="url" id="img5" class="form-input" placeholder="https://link-da-foto.jpg">
+                            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
+                                <!-- Upload Box 1 (Capa) -->
+                                <div>
+                                    <label class="text-xs font-bold text-[#D4A3A3] block text-center mb-1">FOTO 1 (CAPA)*</label>
+                                    <div class="upload-box" id="box1" onclick="document.getElementById('file1').click()">
+                                        <input type="file" id="file1" accept="image/*" class="hidden" onchange="previewImage(event, 1)">
+                                        <input type="hidden" id="url1"> <!-- Guarda URL existente -->
+                                        <img id="preview1" class="upload-preview">
+                                        <div class="upload-placeholder text-center text-gray-400">
+                                            <i class="fas fa-camera text-2xl mb-1"></i><p class="text-[10px] uppercase">Upload</p>
+                                        </div>
+                                    </div>
+                                    <button type="button" onclick="removeImage(1)" id="btnRemove1" class="hidden w-full text-xs text-red-500 mt-1 hover:underline">Remover</button>
+                                </div>
+
+                                <!-- Upload Box 2 -->
+                                <div>
+                                    <label class="text-xs font-medium text-gray-500 block text-center mb-1">FOTO 2</label>
+                                    <div class="upload-box" id="box2" onclick="document.getElementById('file2').click()">
+                                        <input type="file" id="file2" accept="image/*" class="hidden" onchange="previewImage(event, 2)">
+                                        <input type="hidden" id="url2">
+                                        <img id="preview2" class="upload-preview">
+                                        <div class="upload-placeholder text-center text-gray-400">
+                                            <i class="fas fa-plus text-xl mb-1"></i><p class="text-[10px] uppercase">Opcional</p>
+                                        </div>
+                                    </div>
+                                    <button type="button" onclick="removeImage(2)" id="btnRemove2" class="hidden w-full text-xs text-red-500 mt-1 hover:underline">Remover</button>
+                                </div>
+
+                                <!-- Upload Box 3 -->
+                                <div>
+                                    <label class="text-xs font-medium text-gray-500 block text-center mb-1">FOTO 3</label>
+                                    <div class="upload-box" id="box3" onclick="document.getElementById('file3').click()">
+                                        <input type="file" id="file3" accept="image/*" class="hidden" onchange="previewImage(event, 3)">
+                                        <input type="hidden" id="url3">
+                                        <img id="preview3" class="upload-preview">
+                                        <div class="upload-placeholder text-center text-gray-400">
+                                            <i class="fas fa-plus text-xl mb-1"></i><p class="text-[10px] uppercase">Opcional</p>
+                                        </div>
+                                    </div>
+                                    <button type="button" onclick="removeImage(3)" id="btnRemove3" class="hidden w-full text-xs text-red-500 mt-1 hover:underline">Remover</button>
+                                </div>
+
+                                <!-- Upload Box 4 -->
+                                <div>
+                                    <label class="text-xs font-medium text-gray-500 block text-center mb-1">FOTO 4</label>
+                                    <div class="upload-box" id="box4" onclick="document.getElementById('file4').click()">
+                                        <input type="file" id="file4" accept="image/*" class="hidden" onchange="previewImage(event, 4)">
+                                        <input type="hidden" id="url4">
+                                        <img id="preview4" class="upload-preview">
+                                        <div class="upload-placeholder text-center text-gray-400">
+                                            <i class="fas fa-plus text-xl mb-1"></i><p class="text-[10px] uppercase">Opcional</p>
+                                        </div>
+                                    </div>
+                                    <button type="button" onclick="removeImage(4)" id="btnRemove4" class="hidden w-full text-xs text-red-500 mt-1 hover:underline">Remover</button>
+                                </div>
+
+                                <!-- Upload Box 5 -->
+                                <div>
+                                    <label class="text-xs font-medium text-gray-500 block text-center mb-1">FOTO 5</label>
+                                    <div class="upload-box" id="box5" onclick="document.getElementById('file5').click()">
+                                        <input type="file" id="file5" accept="image/*" class="hidden" onchange="previewImage(event, 5)">
+                                        <input type="hidden" id="url5">
+                                        <img id="preview5" class="upload-preview">
+                                        <div class="upload-placeholder text-center text-gray-400">
+                                            <i class="fas fa-plus text-xl mb-1"></i><p class="text-[10px] uppercase">Opcional</p>
+                                        </div>
+                                    </div>
+                                    <button type="button" onclick="removeImage(5)" id="btnRemove5" class="hidden w-full text-xs text-red-500 mt-1 hover:underline">Remover</button>
+                                </div>
                             </div>
                         </div>
 
-                        <div class="lg:col-span-2 pt-4 flex justify-end gap-3 border-t">
+                        <div class="pt-4 flex justify-end gap-3 border-t">
                             <button type="button" onclick="showList()" class="px-6 py-2.5 rounded-lg font-medium text-gray-600 hover:bg-gray-100 transition-colors">Cancelar</button>
-                            <button type="submit" class="bg-gray-900 hover:bg-black text-white px-8 py-2.5 rounded-lg font-medium transition-colors shadow-lg">Salvar Serviço</button>
+                            <button type="submit" id="submitBtn" class="bg-gray-900 hover:bg-black text-white px-8 py-2.5 rounded-lg font-medium transition-colors shadow-lg flex items-center gap-2">
+                                <i class="fas fa-save"></i> <span>Salvar Serviço</span>
+                            </button>
                         </div>
                     </form>
                 </div>
@@ -151,6 +215,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-storage.js"; // NOVO: IMPORT DO STORAGE
 
         const firebaseConfig = { 
             apiKey: "AIzaSyD4SElQHlfQjbN2NsHC0Z9_1Gobb6WHd8o", 
@@ -163,23 +228,49 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
+        const storage = getStorage(app); // INICIALIZA O STORAGE
         
         let allProducts = [];
+
+        // --- SISTEMA DE PREVIEW E REMOÇÃO DE IMAGEM LOCAL ---
+        window.previewImage = (event, num) => {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    document.getElementById(`preview${num}`).src = e.target.result;
+                    document.getElementById(`box${num}`).classList.add('has-image');
+                    document.getElementById(`btnRemove${num}`).classList.remove('hidden');
+                }
+                reader.readAsDataURL(file);
+            }
+        };
+
+        window.removeImage = (num) => {
+            document.getElementById(`file${num}`).value = ''; // Limpa o arquivo selecionado
+            document.getElementById(`url${num}`).value = '';   // Limpa a URL existente (se edição)
+            document.getElementById(`preview${num}`).src = ''; // Limpa a imagem visual
+            document.getElementById(`box${num}`).classList.remove('has-image'); // Mostra o ícone de upload
+            document.getElementById(`btnRemove${num}`).classList.add('hidden'); // Esconde o botão de remover
+        };
+        // ----------------------------------------------------
 
         // Controle de Views
         window.showForm = (isEdit = false) => {
             document.getElementById('listView').classList.add('hidden-view');
             document.getElementById('formView').classList.remove('hidden-view');
             document.getElementById('formTitle').innerText = isEdit ? 'Editar Serviço' : 'Adicionar Novo Serviço';
-            if(!isEdit) document.getElementById('productForm').reset();
+            
+            if(!isEdit) {
+                document.getElementById('productForm').reset();
+                for(let i=1; i<=5; i++) removeImage(i); // Reseta as imagens
+            }
             window.scrollTo(0,0);
         }
 
         window.showList = () => {
             document.getElementById('formView').classList.add('hidden-view');
             document.getElementById('listView').classList.remove('hidden-view');
-            document.getElementById('productForm').reset();
-            document.getElementById('productId').value = '';
         }
 
         const formatMoney = (val) => val ? `R$ ${parseFloat(val).toFixed(2).replace('.', ',')}` : '-';
@@ -192,7 +283,7 @@
                 allProducts = [];
                 
                 if(querySnapshot.empty) {
-                    listDiv.innerHTML = '<tr><td colspan="5" class="px-6 py-8 text-center text-gray-500">Nenhum serviço cadastrado. Comece adicionando um novo!</td></tr>';
+                    listDiv.innerHTML = '<tr><td colspan="5" class="px-6 py-8 text-center text-gray-500">Nenhum serviço cadastrado.</td></tr>';
                     return;
                 }
 
@@ -201,11 +292,11 @@
                     data.id = documento.id;
                     allProducts.push(data);
 
-                    const coverImg = (data.images && data.images.length > 0) ? data.images[0] : 'https://placehold.co/100';
+                    const coverImg = (data.images && data.images.length > 0) ? data.images[0] : 'https://placehold.co/100?text=Sem+Foto';
                     const hasPromo = data.promoPrice && parseFloat(data.promoPrice) > 0;
 
                     const tr = document.createElement('tr');
-                    tr.className = 'hover:bg-gray-50 transition-colors';
+                    tr.className = 'hover:bg-gray-50 transition-colors border-b border-gray-100';
                     tr.innerHTML = `
                         <td class="px-6 py-4"><img src="${coverImg}" class="w-14 h-14 object-cover rounded-lg shadow-sm"></td>
                         <td class="px-6 py-4 font-medium text-gray-800">${data.name}<br><span class="text-xs text-gray-400 font-normal">${data.shortDesc ? data.shortDesc.substring(0,40)+'...' : ''}</span></td>
@@ -219,51 +310,82 @@
                     listDiv.appendChild(tr);
                 });
             } catch (error) {
-                listDiv.innerHTML = '<tr><td colspan="5" class="px-6 py-8 text-center text-red-500">Erro ao carregar dados do Firebase.</td></tr>';
+                listDiv.innerHTML = '<tr><td colspan="5" class="px-6 py-8 text-center text-red-500">Erro ao carregar dados.</td></tr>';
                 console.error(error);
             }
         }
 
+        // Função auxiliar para fazer o upload da imagem para o Firebase Storage
+        async function processImageUpload(fileInputId, hiddenUrlId) {
+            const fileInput = document.getElementById(fileInputId);
+            const hiddenUrl = document.getElementById(hiddenUrlId).value;
+            const file = fileInput.files[0];
+
+            // Se o usuário selecionou um arquivo novo, faz o upload
+            if (file) {
+                const storageRef = ref(storage, `produtos/${Date.now()}_${file.name}`);
+                await uploadBytes(storageRef, file);
+                const downloadURL = await getDownloadURL(storageRef);
+                return downloadURL;
+            }
+            // Se não tem arquivo novo, mas tem URL salva (edição), mantém a URL antiga
+            return hiddenUrl;
+        }
+
         document.getElementById('productForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const submitBtn = e.target.querySelector('button[type="submit"]');
-            submitBtn.innerText = 'Salvando...';
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> <span>Salvando Fotos...</span>';
             submitBtn.disabled = true;
+            submitBtn.classList.replace('bg-gray-900', 'bg-gray-400');
             
             const id = document.getElementById('productId').value;
             
-            // Coletar e limpar array de imagens
-            const images = [
-                document.getElementById('img1').value.trim(),
-                document.getElementById('img2').value.trim(),
-                document.getElementById('img3').value.trim(),
-                document.getElementById('img4').value.trim(),
-                document.getElementById('img5').value.trim(),
-            ].filter(url => url !== "");
-
-            const productData = { 
-                name: document.getElementById('name').value, 
-                shortDesc: document.getElementById('shortDesc').value,
-                fullDesc: document.getElementById('fullDesc').value,
-                price: parseFloat(document.getElementById('price').value) || 0,
-                promoPrice: parseFloat(document.getElementById('promoPrice').value) || null,
-                images: images 
-            };
-
             try {
+                // 1. Processa o upload de todas as imagens que foram selecionadas
+                const img1 = await processImageUpload('file1', 'url1');
+                const img2 = await processImageUpload('file2', 'url2');
+                const img3 = await processImageUpload('file3', 'url3');
+                const img4 = await processImageUpload('file4', 'url4');
+                const img5 = await processImageUpload('file5', 'url5');
+
+                // 2. Cria o array de imagens só com as que existem de fato
+                const imagesArray = [img1, img2, img3, img4, img5].filter(url => url && url.trim() !== "");
+
+                if(imagesArray.length === 0) {
+                    alert("Por favor, adicione pelo menos a foto de Capa (Foto 1).");
+                    throw new Error("Sem imagens");
+                }
+
+                // 3. Monta o objeto do produto
+                const productData = { 
+                    name: document.getElementById('name').value, 
+                    shortDesc: document.getElementById('shortDesc').value,
+                    fullDesc: document.getElementById('fullDesc').value,
+                    price: parseFloat(document.getElementById('price').value) || 0,
+                    promoPrice: parseFloat(document.getElementById('promoPrice').value) || null,
+                    images: imagesArray 
+                };
+
+                // 4. Salva no Banco de Dados
                 if(id) {
                     await updateDoc(doc(db, "products", id), productData);
                 } else {
                     await addDoc(collection(db, "products"), productData);
                 }
+                
                 showList();
                 loadAdminProducts();
             } catch (error) {
-                alert("Erro ao salvar serviço.");
-                console.error(error);
+                if(error.message !== "Sem imagens") {
+                    alert("Erro ao salvar serviço. Verifique as regras de segurança do seu Firebase Storage.");
+                    console.error(error);
+                }
             } finally {
-                submitBtn.innerText = 'Salvar Serviço';
+                // Restaura o botão
+                submitBtn.innerHTML = '<i class="fas fa-save"></i> <span>Salvar Serviço</span>';
                 submitBtn.disabled = false;
+                submitBtn.classList.replace('bg-gray-400', 'bg-gray-900');
             }
         });
 
@@ -285,11 +407,20 @@
             document.getElementById('price').value = product.price;
             document.getElementById('promoPrice').value = product.promoPrice || '';
 
-            // Preencher campos de imagem
-            const imgInputs = ['img1', 'img2', 'img3', 'img4', 'img5'];
-            imgInputs.forEach((imgId, index) => {
-                document.getElementById(imgId).value = product.images && product.images[index] ? product.images[index] : '';
-            });
+            // Preenche as imagens existentes no formulário visual
+            for(let i=1; i<=5; i++) {
+                const imgUrl = product.images && product.images[i-1] ? product.images[i-1] : '';
+                document.getElementById(`url${i}`).value = imgUrl;
+                document.getElementById(`file${i}`).value = ''; // Reseta input de arquivo
+                
+                if(imgUrl) {
+                    document.getElementById(`preview${i}`).src = imgUrl;
+                    document.getElementById(`box${i}`).classList.add('has-image');
+                    document.getElementById(`btnRemove${i}`).classList.remove('hidden');
+                } else {
+                    removeImage(i); // Reseta a caixa visual se não tiver imagem
+                }
+            }
 
             showForm(true);
         };
