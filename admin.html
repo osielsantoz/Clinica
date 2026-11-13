@@ -3,174 +3,118 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin - YOD Estética</title>
+    <title>YOD Micropigmentação e Estética | Catálogo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'yod-bg': '#FCF9F9', 'yod-primary': '#D4A3A3', 'yod-primary-hover': '#C08F8F',
+                        'yod-secondary': '#E8D5D5', 'yod-text': '#5A4A4A', 'yod-gold': '#C89F7D',
+                    },
+                    fontFamily: { sans: ['Lato', 'sans-serif'], serif: ['Playfair Display', 'serif'], },
+                    boxShadow: {
+                        'delicate': '0 10px 25px -5px rgba(212, 163, 163, 0.15), 0 8px 10px -6px rgba(212, 163, 163, 0.1)',
+                        'delicate-hover': '0 20px 25px -5px rgba(212, 163, 163, 0.25), 0 8px 10px -6px rgba(212, 163, 163, 0.1)',
+                    }
+                }
+            }
+        }
+    </script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap');
-
-        :root {
-            --primary: #D4B5B0;
-            --background: #F4F0EF;
-            --white: #FFFFFF;
-            --text-dark: #333;
-            --border: #DDD;
-        }
-
-        body {
-            font-family: 'Lato', sans-serif;
-            background-color: var(--background);
-            color: var(--text-dark);
-            margin: 0;
-            padding: 2rem;
-        }
-
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            background: var(--white);
-            padding: 2rem;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-        }
-
-        h1, h2 {
-            color: #4A4A4A;
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-            display: flex;
-            flex-direction: column;
-        }
-
-        label {
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-
-        input, textarea {
-            padding: 10px;
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            font-family: inherit;
-        }
-
-        .helper-text {
-            font-size: 0.8rem;
-            color: #888;
-            margin-top: 5px;
-        }
-
-        button {
-            background-color: var(--primary);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 1rem;
-            transition: 0.3s;
-        }
-
-        button:hover {
-            background-color: #C1A29D;
-        }
-
-        .btn-danger {
-            background-color: #FF5A5F;
-        }
-
-        .btn-danger:hover {
-            background-color: #E0484D;
-        }
-
-        .admin-list {
-            margin-top: 3rem;
-            border-top: 2px solid var(--border);
-            padding-top: 2rem;
-        }
-
-        .list-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 15px;
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            margin-bottom: 10px;
-        }
-
-        .list-item img {
-            width: 60px;
-            height: 60px;
-            object-fit: cover;
-            border-radius: 6px;
-            margin-right: 15px;
-        }
-
-        .item-info {
-            flex-grow: 1;
-            display: flex;
-            align-items: center;
-        }
-        
-        .header-actions {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #FCF9F9; }
+        ::-webkit-scrollbar-thumb { background: #E8D5D5; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #D4A3A3; }
+        .hide-scroll::-webkit-scrollbar { display: none; }
+        .hide-scroll { -ms-overflow-style: none; scrollbar-width: none; }
+        .fade-in { animation: fadeIn 0.4s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
     </style>
 </head>
-<body>
+<body class="bg-yod-bg text-yod-text font-sans antialiased overflow-x-hidden">
 
-    <div class="container">
-        <div class="header-actions">
-            <h1>Painel Administrativo de Produtos</h1>
-            <button id="btnGenerateTests" style="background-color: #4A4A4A;">Gerar Produtos de Teste</button>
+    <header class="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-yod-secondary/50 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex flex-col items-center justify-center">
+            <h1 class="font-serif text-3xl md:text-4xl text-yod-primary tracking-wider text-center">YOD</h1>
+            <p class="text-xs md:text-sm tracking-[0.2em] text-yod-gold uppercase mt-1 text-center">Micropigmentação & Estética</p>
         </div>
-        <p>Crie e edite os serviços do catálogo YOD.</p>
+    </header>
 
-        <form id="productForm">
-            <input type="hidden" id="productId">
-            
-            <div class="form-group">
-                <label>Nome do Serviço</label>
-                <input type="text" id="name" required placeholder="Ex: Micropigmentação de Sobrancelhas">
-            </div>
-
-            <div class="form-group">
-                <label>Descrição</label>
-                <textarea id="description" rows="4" required placeholder="Detalhes sobre o procedimento..."></textarea>
-            </div>
-
-            <div class="form-group">
-                <label>Valor (R$)</label>
-                <input type="number" step="0.01" id="price" required placeholder="0.00">
-            </div>
-
-            <div class="form-group">
-                <label>Imagens (Até 5 fotos)</label>
-                <textarea id="images" rows="3" required placeholder="Cole as URLs das imagens separadas por vírgula. A primeira será a capa."></textarea>
-                <div class="helper-text">
-                    <strong>Atenção ao tamanho:</strong> Para os banners de capa (primeira foto), o tamanho ideal é <strong>800x600 pixels (formato paisagem)</strong> ou quadrado (1080x1080). Limite de 5 imagens.
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        <!-- Promoções Fixas -->
+        <section class="mb-16">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="font-serif text-2xl md:text-3xl text-yod-text relative inline-block">Ofertas Especiais<span class="absolute -bottom-2 left-0 w-12 h-0.5 bg-yod-primary"></span></h2>
+                <div class="flex gap-2">
+                    <button id="prevPromo" class="w-8 h-8 rounded-full border border-yod-primary text-yod-primary flex items-center justify-center hover:bg-yod-primary hover:text-white transition-colors"><i class="fas fa-chevron-left text-xs"></i></button>
+                    <button id="nextPromo" class="w-8 h-8 rounded-full border border-yod-primary text-yod-primary flex items-center justify-center hover:bg-yod-primary hover:text-white transition-colors"><i class="fas fa-chevron-right text-xs"></i></button>
                 </div>
             </div>
+            <div class="relative w-full overflow-hidden rounded-2xl">
+                <div id="promoCarousel" class="flex gap-4 sm:gap-6 overflow-x-auto hide-scroll snap-x snap-mandatory scroll-smooth pb-4 pt-2 px-2"></div>
+            </div>
+        </section>
 
-            <button type="submit" id="submitBtn">Salvar Serviço</button>
-            <button type="button" id="cancelBtn" style="display:none; background:#888;">Cancelar Edição</button>
-        </form>
+        <!-- Grid de Serviços do Banco de Dados -->
+        <section>
+            <div class="mb-8">
+                <h2 class="font-serif text-2xl md:text-3xl text-yod-text relative inline-block">Nossos Serviços e Produtos<span class="absolute -bottom-2 left-0 w-12 h-0.5 bg-yod-primary"></span></h2>
+                <p class="mt-4 text-yod-text/80 font-light max-w-2xl">Descubra nossos tratamentos cuidadosamente elaborados para realçar sua beleza natural com delicadeza e sofisticação.</p>
+            </div>
+            <div id="servicesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8">
+                <p class="col-span-full text-center text-yod-text/70 py-10">Carregando serviços...</p>
+            </div>
+        </section>
+    </main>
 
-        <div class="admin-list">
-            <h2>Serviços Cadastrados</h2>
-            <div id="productList">Carregando...</div>
+    <footer class="bg-white border-t border-yod-secondary/50 py-10 mt-16">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <h2 class="font-serif text-2xl text-yod-primary mb-4">YOD</h2>
+            <p class="text-sm font-light text-yod-text/70 mb-4">Realçando sua essência com delicadeza.</p>
+            <div class="flex justify-center gap-4 text-yod-primary">
+                <a href="#" class="hover:text-yod-primary-hover transition-colors"><i class="fab fa-instagram text-xl"></i></a>
+                <a href="#" class="hover:text-yod-primary-hover transition-colors"><i class="fab fa-whatsapp text-xl"></i></a>
+            </div>
+            <p class="text-xs text-yod-text/50 mt-8">&copy; 2026 YOD Micropigmentação e Estética.</p>
+        </div>
+    </footer>
+
+    <!-- Service Detail Modal -->
+    <div id="serviceModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 sm:p-6 opacity-0 transition-opacity duration-300">
+        <div class="absolute inset-0 bg-yod-text/40 backdrop-blur-sm modal-close"></div>
+        <div class="relative bg-white rounded-3xl w-full max-w-4xl max-h-[90vh] overflow-y-auto shadow-2xl flex flex-col md:flex-row fade-in">
+            <button class="absolute top-4 right-4 z-10 w-8 h-8 bg-white/80 backdrop-blur rounded-full flex items-center justify-center text-yod-text hover:text-yod-primary shadow-sm modal-close"><i class="fas fa-times"></i></button>
+            <div class="w-full md:w-1/2 p-4 sm:p-6 flex flex-col gap-3">
+                <div class="w-full aspect-[4/3] rounded-2xl overflow-hidden bg-yod-bg">
+                    <img id="modalMainImg" src="" alt="Serviço" class="w-full h-full object-cover">
+                </div>
+                <div id="modalGallery" class="grid grid-cols-4 gap-2"></div>
+            </div>
+            <div class="w-full md:w-1/2 p-6 sm:p-8 flex flex-col justify-center bg-yod-bg/30">
+                <h3 id="modalTitle" class="font-serif text-2xl md:text-3xl text-yod-text mb-2 leading-tight"></h3>
+                <div id="modalPriceContainer" class="mb-6 flex flex-col"></div>
+                <div class="prose prose-sm text-yod-text/80 font-light mb-8 flex-grow">
+                    <p id="modalDesc" class="leading-relaxed whitespace-pre-wrap"></p>
+                </div>
+                <!-- NOVO BOTÃO WHATSAPP EXATO -->
+                <a id="modalWhatsAppBtn" href="#" target="_blank" class="group relative w-full flex items-center justify-center gap-3 bg-[#25D366] hover:bg-[#1EBE57] text-white py-4 px-6 rounded-xl overflow-hidden transition-colors shadow-md">
+                    <i class="fab fa-whatsapp text-xl"></i>
+                    <span class="font-bold tracking-wide">Fazer esse procedimento</span>
+                </a>
+            </div>
         </div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
-        // CREDENCIAIS DO FIREBASE ATUALIZADAS
         const firebaseConfig = { 
             apiKey: "AIzaSyD4SElQHlfQjbN2NsHC0Z9_1Gobb6WHd8o", 
             authDomain: "clinicabase-a85a7.firebaseapp.com", 
@@ -182,148 +126,173 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
-        
-        const form = document.getElementById('productForm');
-        const listDiv = document.getElementById('productList');
 
-        async function loadAdminProducts() {
-            listDiv.innerHTML = 'Carregando...';
+        // LINK E NÚMERO DO WHATSAPP SOLICITADO
+        const WHATSAPP_LINK = "https://wa.me/+5591986009455"; 
+
+        const promotions = [
+            {
+                title: "Combo Sobrancelha + Buço",
+                shortDesc: "Design perfeito e pele lisa.", price: "R$ 65,00", category: "Combo Promocional",
+                img: "https://placehold.co/400x400/E8D5D5/5A4A4A?text=Combo",
+                gallery: [], fullDesc: "Um combo especial para realçar seu olhar."
+            },
+            {
+                title: "Revitalização Labial 20% OFF",
+                shortDesc: "Lábios corados e hidratados.", price: "R$ 320,00", category: "Oferta",
+                img: "https://placehold.co/400x400/D4A3A3/FFFFFF?text=Lábios",
+                gallery: [], fullDesc: "Procedimento que devolve a cor e contorno natural."
+            }
+        ];
+
+        function renderPromotions() {
+            const promoCarousel = document.getElementById('promoCarousel');
+            promoCarousel.innerHTML = '';
+            promotions.forEach(promo => {
+                const card = document.createElement('div');
+                card.className = "flex-none w-64 h-64 relative rounded-2xl overflow-hidden cursor-pointer group shadow-delicate hover:shadow-delicate-hover transition-all duration-300 snap-center";
+                card.onclick = () => openModal(promo);
+                card.innerHTML = `
+                    <img src="${promo.img}" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
+                    <div class="absolute inset-0 p-5 flex flex-col justify-end">
+                        <span class="inline-block px-2 py-1 bg-yod-primary text-white text-[10px] uppercase font-bold tracking-wider rounded-md mb-2 w-max shadow-sm">${promo.category}</span>
+                        <h3 class="text-white font-serif text-lg leading-tight mb-1">${promo.title}</h3>
+                        <p class="text-white/90 text-sm font-semibold">${promo.price}</p>
+                    </div>
+                `;
+                promoCarousel.appendChild(card);
+            });
+        }
+
+        const formatMoney = (val) => `R$ ${parseFloat(val).toFixed(2).replace('.', ',')}`;
+
+        async function loadAndRenderServices() {
+            const servicesGrid = document.getElementById('servicesGrid');
             try {
                 const querySnapshot = await getDocs(collection(db, "products"));
-                listDiv.innerHTML = '';
+                servicesGrid.innerHTML = '';
                 
-                if(querySnapshot.empty) {
-                    listDiv.innerHTML = '<p>Nenhum serviço cadastrado.</p>';
+                if (querySnapshot.empty) {
+                    servicesGrid.innerHTML = '<p class="col-span-full text-center text-yod-text/70 py-10">Nenhum serviço cadastrado.</p>';
                     return;
                 }
 
-                querySnapshot.forEach((documento) => {
-                    const data = documento.data();
-                    const id = documento.id;
-                    const coverImg = (data.images && data.images.length > 0) ? data.images[0] : 'https://via.placeholder.com/150';
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    
+                    const hasPromo = data.promoPrice && parseFloat(data.promoPrice) > 0;
+                    const finalPriceText = hasPromo ? formatMoney(data.promoPrice) : formatMoney(data.price);
+                    
+                    const service = {
+                        title: data.name,
+                        shortDesc: data.shortDesc || (data.description ? data.description.substring(0, 60) + "..." : ''),
+                        fullDesc: data.fullDesc || data.description || '',
+                        priceInfo: { raw: data.price, promo: data.promoPrice },
+                        img: (data.images && data.images.length > 0) ? data.images[0] : 'https://placehold.co/600x400/E8D5D5/5A4A4A?text=Sem+Imagem',
+                        gallery: data.images || []
+                    };
 
-                    const item = document.createElement('div');
-                    item.className = 'list-item';
-                    item.innerHTML = `
-                        <div class="item-info">
-                            <img src="${coverImg}" alt="${data.name}">
-                            <div>
-                                <strong>${data.name}</strong><br>
-                                R$ ${parseFloat(data.price).toFixed(2).replace('.', ',')}
+                    const card = document.createElement('div');
+                    card.className = "bg-white rounded-2xl overflow-hidden shadow-delicate hover:shadow-delicate-hover transition-all duration-300 cursor-pointer flex flex-col group translate-y-0 hover:-translate-y-1";
+                    card.onclick = () => openModal(service);
+                    
+                    card.innerHTML = `
+                        <div class="relative w-full h-52 overflow-hidden bg-yod-bg">
+                            <img src="${service.img}" alt="${service.title}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                            ${hasPromo ? '<div class="absolute top-3 right-3 bg-green-500 text-white px-3 py-1 text-xs font-bold rounded-full shadow-sm">PROMOÇÃO</div>' : ''}
+                        </div>
+                        <div class="p-6 flex flex-col flex-grow">
+                            <h3 class="font-serif text-xl text-yod-text mb-2">${service.title}</h3>
+                            <p class="text-yod-text/70 text-sm font-light mb-4 flex-grow">${service.shortDesc}</p>
+                            <div class="flex items-center justify-between mt-auto pt-4 border-t border-yod-secondary/30">
+                                <div class="flex flex-col">
+                                    ${hasPromo ? `<span class="text-xs text-gray-400 line-through">${formatMoney(data.price)}</span>` : ''}
+                                    <span class="${hasPromo ? 'text-green-600' : 'text-yod-primary'} font-bold text-lg">${finalPriceText}</span>
+                                </div>
+                                <span class="w-8 h-8 rounded-full bg-yod-secondary/50 flex items-center justify-center text-yod-primary group-hover:bg-yod-primary group-hover:text-white transition-colors">
+                                    <i class="fas fa-arrow-right text-sm"></i>
+                                </span>
                             </div>
                         </div>
-                        <div>
-                            <button onclick="editProduct('${id}', '${data.name.replace(/'/g, "\\'")}', '${data.description.replace(/'/g, "\\'")}', '${data.price}', '${data.images.join(',')}')">Editar</button>
-                            <button class="btn-danger" onclick="deleteProduct('${id}')">Excluir</button>
-                        </div>
                     `;
-                    listDiv.appendChild(item);
+                    servicesGrid.appendChild(card);
                 });
             } catch (error) {
-                listDiv.innerHTML = '<p style="color:red">Erro ao carregar dados. Verifique a conexão com o Firebase.</p>';
-                console.error(error);
+                servicesGrid.innerHTML = '<p class="col-span-full text-center text-red-500 py-10">Erro ao carregar serviços.</p>';
             }
         }
 
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
+        const serviceModal = document.getElementById('serviceModal');
+        
+        function openModal(item) {
+            document.getElementById('modalTitle').innerText = item.title;
+            document.getElementById('modalDesc').innerText = item.fullDesc;
             
-            const id = document.getElementById('productId').value;
-            const name = document.getElementById('name').value;
-            const description = document.getElementById('description').value;
-            const price = parseFloat(document.getElementById('price').value);
-            
-            let imgArray = document.getElementById('images').value.split(',').map(u => u.trim()).filter(u => u);
-            if (imgArray.length > 5) {
-                imgArray = imgArray.slice(0, 5);
-                alert("Aviso: Apenas as 5 primeiras imagens foram salvas.");
-            }
-
-            const productData = { name, description, price, images: imgArray };
-
-            try {
-                if(id) {
-                    await updateDoc(doc(db, "products", id), productData);
-                    alert("Serviço atualizado!");
+            const priceContainer = document.getElementById('modalPriceContainer');
+            if(item.priceInfo) {
+                const hasPromo = item.priceInfo.promo && parseFloat(item.priceInfo.promo) > 0;
+                if(hasPromo) {
+                    priceContainer.innerHTML = `<span class="text-sm text-gray-400 line-through">${formatMoney(item.priceInfo.raw)}</span>
+                                                <span class="text-2xl font-bold text-green-600">${formatMoney(item.priceInfo.promo)}</span>`;
                 } else {
-                    await addDoc(collection(db, "products"), productData);
-                    alert("Serviço criado com sucesso!");
+                    priceContainer.innerHTML = `<span class="text-2xl font-bold text-yod-primary">${formatMoney(item.priceInfo.raw)}</span>`;
                 }
-                form.reset();
-                document.getElementById('productId').value = '';
-                document.getElementById('cancelBtn').style.display = 'none';
-                document.getElementById('submitBtn').innerText = 'Salvar Serviço';
-                loadAdminProducts();
-            } catch (error) {
-                alert("Erro ao salvar. Verifique o console.");
-                console.error(error);
+            } else {
+                priceContainer.innerHTML = `<span class="text-2xl font-bold text-yod-primary">${item.price}</span>`;
             }
-        });
 
-        window.deleteProduct = async (id) => {
-            if(confirm("Tem certeza que deseja excluir este serviço?")) {
-                await deleteDoc(doc(db, "products", id));
-                loadAdminProducts();
-            }
-        };
-
-        window.editProduct = (id, name, desc, price, imgs) => {
-            document.getElementById('productId').value = id;
-            document.getElementById('name').value = name;
-            document.getElementById('description').value = desc;
-            document.getElementById('price').value = price;
-            document.getElementById('images').value = imgs;
+            const mainImg = document.getElementById('modalMainImg');
+            mainImg.src = item.img;
             
-            document.getElementById('submitBtn').innerText = 'Atualizar Serviço';
-            document.getElementById('cancelBtn').style.display = 'inline-block';
-            window.scrollTo(0, 0);
-        };
-
-        document.getElementById('cancelBtn').addEventListener('click', () => {
-            form.reset();
-            document.getElementById('productId').value = '';
-            document.getElementById('submitBtn').innerText = 'Salvar Serviço';
-            document.getElementById('cancelBtn').style.display = 'none';
-        });
-
-        document.getElementById('btnGenerateTests').addEventListener('click', async () => {
-            const testData = [
-                {
-                    name: "Micropigmentação Fio a Fio",
-                    description: "Técnica que desenha fios realistas acompanhando o formato natural da sobrancelha, preenchendo falhas e garantindo um olhar expressivo com naturalidade.",
-                    price: 450.00,
-                    images: ["https://images.unsplash.com/photo-1596704017254-9b121068fb31?w=800", "https://images.unsplash.com/photo-1620052329718-701f41334fcd?w=800"]
-                },
-                {
-                    name: "Limpeza de Pele Profunda",
-                    description: "Procedimento completo para remoção de cravos, miliuns e impurezas. Acompanha máscara de argila rosa para acalmar a pele e revitalizar a derme.",
-                    price: 120.00,
-                    images: ["https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=800"]
-                },
-                {
-                    name: "Revitalização Labial",
-                    description: "Técnica que traz cor e vida aos lábios pálidos ou arroxeados. Efeito natural semelhante a um lip tint permanente.",
-                    price: 350.00,
-                    images: ["https://images.unsplash.com/photo-1617300305885-300eec2614b6?w=800"]
-                }
-            ];
-
-            try {
-                document.getElementById('btnGenerateTests').innerText = 'Gerando...';
-                for (const item of testData) {
-                    await addDoc(collection(db, "products"), item);
-                }
-                alert("Produtos de teste inseridos no banco com sucesso!");
-                document.getElementById('btnGenerateTests').innerText = 'Gerar Produtos de Teste';
-                loadAdminProducts();
-            } catch (error) {
-                alert("Erro ao inserir testes. Verifique as configurações do Firebase.");
-                console.error(error);
-                document.getElementById('btnGenerateTests').innerText = 'Gerar Produtos de Teste';
+            const gallery = document.getElementById('modalGallery');
+            gallery.innerHTML = '';
+            
+            if (item.gallery && item.gallery.length > 0) {
+                item.gallery.forEach(imgSrc => {
+                    const imgDiv = document.createElement('div');
+                    imgDiv.className = "w-full aspect-square rounded-lg overflow-hidden cursor-pointer border-2 border-transparent hover:border-yod-primary opacity-80 hover:opacity-100 transition-all";
+                    imgDiv.innerHTML = `<img src="${imgSrc}" class="w-full h-full object-cover">`;
+                    imgDiv.onclick = () => { mainImg.src = imgSrc; };
+                    gallery.appendChild(imgDiv);
+                });
             }
-        });
 
-        loadAdminProducts();
+            // LINK DO WHATSAPP + MENSAGEM DO PROCEDIMENTO
+            const priceFinal = item.priceInfo ? (item.priceInfo.promo > 0 ? formatMoney(item.priceInfo.promo) : formatMoney(item.priceInfo.raw)) : item.price;
+            const msg = `Olá! Tenho interesse no procedimento: *${item.title}* (${priceFinal}). Poderia me passar mais informações?`;
+            document.getElementById('modalWhatsAppBtn').href = `${WHATSAPP_LINK}?text=${encodeURIComponent(msg)}`;
+
+            serviceModal.classList.remove('hidden');
+            setTimeout(() => {
+                serviceModal.classList.remove('opacity-0');
+                serviceModal.classList.add('opacity-100');
+            }, 10);
+            document.body.style.overflow = 'hidden'; 
+        }
+
+        document.querySelectorAll('.modal-close').forEach(btn => btn.addEventListener('click', () => {
+            serviceModal.classList.remove('opacity-100');
+            serviceModal.classList.add('opacity-0');
+            setTimeout(() => { serviceModal.classList.add('hidden'); document.body.style.overflow = ''; }, 300);
+        }));
+
+        // Carousel Scroll Logic
+        let autoScroll;
+        const promoCarousel = document.getElementById('promoCarousel');
+        const doScroll = (dir) => { 
+            promoCarousel.scrollBy({ left: dir === 'next' ? 280 : -280, behavior: 'smooth' }); 
+            if(dir === 'next' && promoCarousel.scrollLeft + promoCarousel.clientWidth >= promoCarousel.scrollWidth - 10) 
+                setTimeout(() => promoCarousel.scrollTo({ left: 0, behavior: 'smooth' }), 500);
+        };
+        document.getElementById('nextPromo').onclick = () => { doScroll('next'); clearInterval(autoScroll); autoScroll = setInterval(()=>doScroll('next'), 4000); };
+        document.getElementById('prevPromo').onclick = () => { doScroll('prev'); clearInterval(autoScroll); autoScroll = setInterval(()=>doScroll('next'), 4000); };
+
+        window.addEventListener('DOMContentLoaded', () => {
+            renderPromotions();
+            loadAndRenderServices(); 
+            autoScroll = setInterval(()=>doScroll('next'), 4000);
+        });
     </script>
 </body>
 </html>
