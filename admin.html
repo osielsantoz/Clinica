@@ -3,117 +3,154 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YOD Micropigmentação e Estética | Catálogo</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Painel Admin - YOD Estética</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        'yod-bg': '#FCF9F9', 'yod-primary': '#D4A3A3', 'yod-primary-hover': '#C08F8F',
-                        'yod-secondary': '#E8D5D5', 'yod-text': '#5A4A4A', 'yod-gold': '#C89F7D',
-                    },
-                    fontFamily: { sans: ['Lato', 'sans-serif'], serif: ['Playfair Display', 'serif'], },
-                    boxShadow: {
-                        'delicate': '0 10px 25px -5px rgba(212, 163, 163, 0.15), 0 8px 10px -6px rgba(212, 163, 163, 0.1)',
-                        'delicate-hover': '0 20px 25px -5px rgba(212, 163, 163, 0.25), 0 8px 10px -6px rgba(212, 163, 163, 0.1)',
-                    }
-                }
-            }
-        }
-    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: #FCF9F9; }
-        ::-webkit-scrollbar-thumb { background: #E8D5D5; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: #D4A3A3; }
-        .hide-scroll::-webkit-scrollbar { display: none; }
-        .hide-scroll { -ms-overflow-style: none; scrollbar-width: none; }
-        .fade-in { animation: fadeIn 0.4s ease-in-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; }
+        .hidden-view { display: none !important; }
+        .form-input { width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; border-radius: 0.5rem; outline: none; transition: border-color 0.2s; }
+        .form-input:focus { border-color: #D4A3A3; box-shadow: 0 0 0 2px rgba(212, 163, 163, 0.2); }
+        .form-label { display: block; font-size: 0.875rem; font-weight: 500; color: #374151; margin-bottom: 0.25rem; }
     </style>
 </head>
-<body class="bg-yod-bg text-yod-text font-sans antialiased overflow-x-hidden">
+<body class="flex h-screen overflow-hidden text-gray-800">
 
-    <header class="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-yod-secondary/50 shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex flex-col items-center justify-center">
-            <h1 class="font-serif text-3xl md:text-4xl text-yod-primary tracking-wider text-center">YOD</h1>
-            <p class="text-xs md:text-sm tracking-[0.2em] text-yod-gold uppercase mt-1 text-center">Micropigmentação & Estética</p>
+    <!-- Sidebar -->
+    <aside class="w-64 bg-gray-900 text-white flex flex-col">
+        <div class="p-6 border-b border-gray-800">
+            <h1 class="text-2xl font-serif tracking-wider text-[#D4A3A3]">YOD</h1>
+            <p class="text-xs text-gray-400 uppercase tracking-widest mt-1">Painel Gestor</p>
         </div>
-    </header>
+        <nav class="flex-1 p-4">
+            <a href="#" class="flex items-center gap-3 bg-[#D4A3A3] text-gray-900 px-4 py-3 rounded-lg font-medium">
+                <i class="fas fa-box"></i> Produtos & Serviços
+            </a>
+        </nav>
+    </aside>
 
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-        <!-- Promoções Fixas -->
-        <section class="mb-16">
-            <div class="flex items-center justify-between mb-6">
-                <h2 class="font-serif text-2xl md:text-3xl text-yod-text relative inline-block">Ofertas Especiais<span class="absolute -bottom-2 left-0 w-12 h-0.5 bg-yod-primary"></span></h2>
-                <div class="flex gap-2">
-                    <button id="prevPromo" class="w-8 h-8 rounded-full border border-yod-primary text-yod-primary flex items-center justify-center hover:bg-yod-primary hover:text-white transition-colors"><i class="fas fa-chevron-left text-xs"></i></button>
-                    <button id="nextPromo" class="w-8 h-8 rounded-full border border-yod-primary text-yod-primary flex items-center justify-center hover:bg-yod-primary hover:text-white transition-colors"><i class="fas fa-chevron-right text-xs"></i></button>
+    <!-- Main Content -->
+    <main class="flex-1 flex flex-col h-screen overflow-y-auto bg-gray-50">
+        
+        <!-- Topbar -->
+        <header class="bg-white shadow-sm px-8 py-4 flex justify-between items-center">
+            <h2 class="text-xl font-semibold text-gray-700" id="headerTitle">Gerenciar Catálogo</h2>
+            <div class="flex items-center gap-3">
+                <span class="text-sm text-gray-500">Logado como Admin</span>
+                <div class="w-8 h-8 rounded-full bg-[#D4A3A3] text-white flex items-center justify-center"><i class="fas fa-user"></i></div>
+            </div>
+        </header>
+
+        <div class="p-8">
+            <!-- VIEW: LISTAGEM -->
+            <div id="listView" class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden transition-all">
+                <div class="p-6 border-b border-gray-100 flex justify-between items-center">
+                    <h3 class="text-lg font-semibold text-gray-800">Todos os Serviços</h3>
+                    <button onclick="showForm()" class="bg-[#D4A3A3] hover:bg-[#C08F8F] text-white px-5 py-2.5 rounded-lg font-medium transition-colors flex items-center gap-2">
+                        <i class="fas fa-plus"></i> Adicionar Novo
+                    </button>
+                </div>
+                
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-gray-50 text-gray-500 text-sm uppercase tracking-wider">
+                                <th class="px-6 py-4 font-medium">Capa</th>
+                                <th class="px-6 py-4 font-medium">Serviço</th>
+                                <th class="px-6 py-4 font-medium">Valor</th>
+                                <th class="px-6 py-4 font-medium">Promocional</th>
+                                <th class="px-6 py-4 font-medium text-right">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="productList" class="divide-y divide-gray-100">
+                            <tr><td colspan="5" class="px-6 py-8 text-center text-gray-500">Carregando catálogo...</td></tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
-            <div class="relative w-full overflow-hidden rounded-2xl">
-                <div id="promoCarousel" class="flex gap-4 sm:gap-6 overflow-x-auto hide-scroll snap-x snap-mandatory scroll-smooth pb-4 pt-2 px-2"></div>
-            </div>
-        </section>
 
-        <!-- Grid de Serviços do Banco de Dados -->
-        <section>
-            <div class="mb-8">
-                <h2 class="font-serif text-2xl md:text-3xl text-yod-text relative inline-block">Nossos Serviços e Produtos<span class="absolute -bottom-2 left-0 w-12 h-0.5 bg-yod-primary"></span></h2>
-                <p class="mt-4 text-yod-text/80 font-light max-w-2xl">Descubra nossos tratamentos cuidadosamente elaborados para realçar sua beleza natural com delicadeza e sofisticação.</p>
+            <!-- VIEW: FORMULÁRIO -->
+            <div id="formView" class="hidden-view">
+                <button onclick="showList()" class="mb-6 text-gray-500 hover:text-gray-800 flex items-center gap-2 font-medium transition-colors">
+                    <i class="fas fa-arrow-left"></i> Voltar para a lista
+                </button>
+
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-8">
+                    <h3 class="text-xl font-semibold mb-6 border-b pb-4" id="formTitle">Adicionar Novo Serviço</h3>
+                    
+                    <form id="productForm" class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        <input type="hidden" id="productId">
+                        
+                        <!-- Coluna 1: Informações de Texto e Valores -->
+                        <div class="space-y-5">
+                            <div>
+                                <label class="form-label">Nome do Serviço</label>
+                                <input type="text" id="name" class="form-input" required placeholder="Ex: Micropigmentação Fio a Fio">
+                            </div>
+                            
+                            <div>
+                                <label class="form-label">Descrição Curta (Aparece no card pequeno)</label>
+                                <input type="text" id="shortDesc" class="form-input" required placeholder="Ex: Efeito natural e preenchimento perfeito." maxlength="100">
+                            </div>
+
+                            <div>
+                                <label class="form-label">Descrição Longa (Aparece ao clicar para ver detalhes)</label>
+                                <textarea id="fullDesc" rows="4" class="form-input" required placeholder="Explique os detalhes, benefícios e como funciona o procedimento..."></textarea>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="form-label">Valor Padrão (R$)</label>
+                                    <input type="number" step="0.01" id="price" class="form-input" required placeholder="0.00">
+                                </div>
+                                <div>
+                                    <label class="form-label text-green-600">Valor Promocional (R$ - Opcional)</label>
+                                    <input type="number" step="0.01" id="promoPrice" class="form-input" placeholder="0.00">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Coluna 2: Imagens -->
+                        <div class="space-y-4 bg-gray-50 p-6 rounded-xl border border-gray-200">
+                            <h4 class="font-medium text-gray-700 mb-2 border-b pb-2">Imagens do Serviço (Cole as URLs)</h4>
+                            
+                            <div>
+                                <label class="form-label text-indigo-600 font-bold"><i class="fas fa-star text-xs"></i> Foto 1 (Capa Principal)</label>
+                                <input type="url" id="img1" class="form-input" required placeholder="https://link-da-foto-capa.jpg">
+                            </div>
+                            <div>
+                                <label class="form-label">Foto 2 (Opcional)</label>
+                                <input type="url" id="img2" class="form-input" placeholder="https://link-da-foto.jpg">
+                            </div>
+                            <div>
+                                <label class="form-label">Foto 3 (Opcional)</label>
+                                <input type="url" id="img3" class="form-input" placeholder="https://link-da-foto.jpg">
+                            </div>
+                            <div>
+                                <label class="form-label">Foto 4 (Opcional)</label>
+                                <input type="url" id="img4" class="form-input" placeholder="https://link-da-foto.jpg">
+                            </div>
+                            <div>
+                                <label class="form-label">Foto 5 (Opcional)</label>
+                                <input type="url" id="img5" class="form-input" placeholder="https://link-da-foto.jpg">
+                            </div>
+                        </div>
+
+                        <div class="lg:col-span-2 pt-4 flex justify-end gap-3 border-t">
+                            <button type="button" onclick="showList()" class="px-6 py-2.5 rounded-lg font-medium text-gray-600 hover:bg-gray-100 transition-colors">Cancelar</button>
+                            <button type="submit" class="bg-gray-900 hover:bg-black text-white px-8 py-2.5 rounded-lg font-medium transition-colors shadow-lg">Salvar Serviço</button>
+                        </div>
+                    </form>
+                </div>
             </div>
-            <div id="servicesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8">
-                <p class="col-span-full text-center text-yod-text/70 py-10">Carregando serviços...</p>
-            </div>
-        </section>
+
+        </div>
     </main>
-
-    <footer class="bg-white border-t border-yod-secondary/50 py-10 mt-16">
-        <div class="max-w-7xl mx-auto px-4 text-center">
-            <h2 class="font-serif text-2xl text-yod-primary mb-4">YOD</h2>
-            <p class="text-sm font-light text-yod-text/70 mb-4">Realçando sua essência com delicadeza.</p>
-            <div class="flex justify-center gap-4 text-yod-primary">
-                <a href="#" class="hover:text-yod-primary-hover transition-colors"><i class="fab fa-instagram text-xl"></i></a>
-                <a href="#" class="hover:text-yod-primary-hover transition-colors"><i class="fab fa-whatsapp text-xl"></i></a>
-            </div>
-            <p class="text-xs text-yod-text/50 mt-8">&copy; 2026 YOD Micropigmentação e Estética.</p>
-        </div>
-    </footer>
-
-    <!-- Service Detail Modal -->
-    <div id="serviceModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 sm:p-6 opacity-0 transition-opacity duration-300">
-        <div class="absolute inset-0 bg-yod-text/40 backdrop-blur-sm modal-close"></div>
-        <div class="relative bg-white rounded-3xl w-full max-w-4xl max-h-[90vh] overflow-y-auto shadow-2xl flex flex-col md:flex-row fade-in">
-            <button class="absolute top-4 right-4 z-10 w-8 h-8 bg-white/80 backdrop-blur rounded-full flex items-center justify-center text-yod-text hover:text-yod-primary shadow-sm modal-close"><i class="fas fa-times"></i></button>
-            <div class="w-full md:w-1/2 p-4 sm:p-6 flex flex-col gap-3">
-                <div class="w-full aspect-[4/3] rounded-2xl overflow-hidden bg-yod-bg">
-                    <img id="modalMainImg" src="" alt="Serviço" class="w-full h-full object-cover">
-                </div>
-                <div id="modalGallery" class="grid grid-cols-4 gap-2"></div>
-            </div>
-            <div class="w-full md:w-1/2 p-6 sm:p-8 flex flex-col justify-center bg-yod-bg/30">
-                <h3 id="modalTitle" class="font-serif text-2xl md:text-3xl text-yod-text mb-2 leading-tight"></h3>
-                <div id="modalPriceContainer" class="mb-6 flex flex-col"></div>
-                <div class="prose prose-sm text-yod-text/80 font-light mb-8 flex-grow">
-                    <p id="modalDesc" class="leading-relaxed whitespace-pre-wrap"></p>
-                </div>
-                <!-- NOVO BOTÃO WHATSAPP EXATO -->
-                <a id="modalWhatsAppBtn" href="#" target="_blank" class="group relative w-full flex items-center justify-center gap-3 bg-[#25D366] hover:bg-[#1EBE57] text-white py-4 px-6 rounded-xl overflow-hidden transition-colors shadow-md">
-                    <i class="fab fa-whatsapp text-xl"></i>
-                    <span class="font-bold tracking-wide">Fazer esse procedimento</span>
-                </a>
-            </div>
-        </div>
-    </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
         const firebaseConfig = { 
             apiKey: "AIzaSyD4SElQHlfQjbN2NsHC0Z9_1Gobb6WHd8o", 
@@ -126,173 +163,138 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
+        
+        let allProducts = [];
 
-        // LINK E NÚMERO DO WHATSAPP SOLICITADO
-        const WHATSAPP_LINK = "https://wa.me/+5591986009455"; 
-
-        const promotions = [
-            {
-                title: "Combo Sobrancelha + Buço",
-                shortDesc: "Design perfeito e pele lisa.", price: "R$ 65,00", category: "Combo Promocional",
-                img: "https://placehold.co/400x400/E8D5D5/5A4A4A?text=Combo",
-                gallery: [], fullDesc: "Um combo especial para realçar seu olhar."
-            },
-            {
-                title: "Revitalização Labial 20% OFF",
-                shortDesc: "Lábios corados e hidratados.", price: "R$ 320,00", category: "Oferta",
-                img: "https://placehold.co/400x400/D4A3A3/FFFFFF?text=Lábios",
-                gallery: [], fullDesc: "Procedimento que devolve a cor e contorno natural."
-            }
-        ];
-
-        function renderPromotions() {
-            const promoCarousel = document.getElementById('promoCarousel');
-            promoCarousel.innerHTML = '';
-            promotions.forEach(promo => {
-                const card = document.createElement('div');
-                card.className = "flex-none w-64 h-64 relative rounded-2xl overflow-hidden cursor-pointer group shadow-delicate hover:shadow-delicate-hover transition-all duration-300 snap-center";
-                card.onclick = () => openModal(promo);
-                card.innerHTML = `
-                    <img src="${promo.img}" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
-                    <div class="absolute inset-0 p-5 flex flex-col justify-end">
-                        <span class="inline-block px-2 py-1 bg-yod-primary text-white text-[10px] uppercase font-bold tracking-wider rounded-md mb-2 w-max shadow-sm">${promo.category}</span>
-                        <h3 class="text-white font-serif text-lg leading-tight mb-1">${promo.title}</h3>
-                        <p class="text-white/90 text-sm font-semibold">${promo.price}</p>
-                    </div>
-                `;
-                promoCarousel.appendChild(card);
-            });
+        // Controle de Views
+        window.showForm = (isEdit = false) => {
+            document.getElementById('listView').classList.add('hidden-view');
+            document.getElementById('formView').classList.remove('hidden-view');
+            document.getElementById('formTitle').innerText = isEdit ? 'Editar Serviço' : 'Adicionar Novo Serviço';
+            if(!isEdit) document.getElementById('productForm').reset();
+            window.scrollTo(0,0);
         }
 
-        const formatMoney = (val) => `R$ ${parseFloat(val).toFixed(2).replace('.', ',')}`;
+        window.showList = () => {
+            document.getElementById('formView').classList.add('hidden-view');
+            document.getElementById('listView').classList.remove('hidden-view');
+            document.getElementById('productForm').reset();
+            document.getElementById('productId').value = '';
+        }
 
-        async function loadAndRenderServices() {
-            const servicesGrid = document.getElementById('servicesGrid');
+        const formatMoney = (val) => val ? `R$ ${parseFloat(val).toFixed(2).replace('.', ',')}` : '-';
+
+        async function loadAdminProducts() {
+            const listDiv = document.getElementById('productList');
             try {
                 const querySnapshot = await getDocs(collection(db, "products"));
-                servicesGrid.innerHTML = '';
+                listDiv.innerHTML = '';
+                allProducts = [];
                 
-                if (querySnapshot.empty) {
-                    servicesGrid.innerHTML = '<p class="col-span-full text-center text-yod-text/70 py-10">Nenhum serviço cadastrado.</p>';
+                if(querySnapshot.empty) {
+                    listDiv.innerHTML = '<tr><td colspan="5" class="px-6 py-8 text-center text-gray-500">Nenhum serviço cadastrado. Comece adicionando um novo!</td></tr>';
                     return;
                 }
 
-                querySnapshot.forEach((doc) => {
-                    const data = doc.data();
-                    
-                    const hasPromo = data.promoPrice && parseFloat(data.promoPrice) > 0;
-                    const finalPriceText = hasPromo ? formatMoney(data.promoPrice) : formatMoney(data.price);
-                    
-                    const service = {
-                        title: data.name,
-                        shortDesc: data.shortDesc || (data.description ? data.description.substring(0, 60) + "..." : ''),
-                        fullDesc: data.fullDesc || data.description || '',
-                        priceInfo: { raw: data.price, promo: data.promoPrice },
-                        img: (data.images && data.images.length > 0) ? data.images[0] : 'https://placehold.co/600x400/E8D5D5/5A4A4A?text=Sem+Imagem',
-                        gallery: data.images || []
-                    };
+                querySnapshot.forEach((documento) => {
+                    const data = documento.data();
+                    data.id = documento.id;
+                    allProducts.push(data);
 
-                    const card = document.createElement('div');
-                    card.className = "bg-white rounded-2xl overflow-hidden shadow-delicate hover:shadow-delicate-hover transition-all duration-300 cursor-pointer flex flex-col group translate-y-0 hover:-translate-y-1";
-                    card.onclick = () => openModal(service);
-                    
-                    card.innerHTML = `
-                        <div class="relative w-full h-52 overflow-hidden bg-yod-bg">
-                            <img src="${service.img}" alt="${service.title}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
-                            ${hasPromo ? '<div class="absolute top-3 right-3 bg-green-500 text-white px-3 py-1 text-xs font-bold rounded-full shadow-sm">PROMOÇÃO</div>' : ''}
-                        </div>
-                        <div class="p-6 flex flex-col flex-grow">
-                            <h3 class="font-serif text-xl text-yod-text mb-2">${service.title}</h3>
-                            <p class="text-yod-text/70 text-sm font-light mb-4 flex-grow">${service.shortDesc}</p>
-                            <div class="flex items-center justify-between mt-auto pt-4 border-t border-yod-secondary/30">
-                                <div class="flex flex-col">
-                                    ${hasPromo ? `<span class="text-xs text-gray-400 line-through">${formatMoney(data.price)}</span>` : ''}
-                                    <span class="${hasPromo ? 'text-green-600' : 'text-yod-primary'} font-bold text-lg">${finalPriceText}</span>
-                                </div>
-                                <span class="w-8 h-8 rounded-full bg-yod-secondary/50 flex items-center justify-center text-yod-primary group-hover:bg-yod-primary group-hover:text-white transition-colors">
-                                    <i class="fas fa-arrow-right text-sm"></i>
-                                </span>
-                            </div>
-                        </div>
+                    const coverImg = (data.images && data.images.length > 0) ? data.images[0] : 'https://placehold.co/100';
+                    const hasPromo = data.promoPrice && parseFloat(data.promoPrice) > 0;
+
+                    const tr = document.createElement('tr');
+                    tr.className = 'hover:bg-gray-50 transition-colors';
+                    tr.innerHTML = `
+                        <td class="px-6 py-4"><img src="${coverImg}" class="w-14 h-14 object-cover rounded-lg shadow-sm"></td>
+                        <td class="px-6 py-4 font-medium text-gray-800">${data.name}<br><span class="text-xs text-gray-400 font-normal">${data.shortDesc ? data.shortDesc.substring(0,40)+'...' : ''}</span></td>
+                        <td class="px-6 py-4 text-gray-600 ${hasPromo ? 'line-through text-xs' : 'font-semibold'}">${formatMoney(data.price)}</td>
+                        <td class="px-6 py-4 font-semibold text-green-600">${hasPromo ? formatMoney(data.promoPrice) : '-'}</td>
+                        <td class="px-6 py-4 text-right">
+                            <button onclick="editProduct('${data.id}')" class="text-indigo-600 hover:text-indigo-900 bg-indigo-50 px-3 py-1.5 rounded-md mr-2 transition-colors"><i class="fas fa-edit"></i></button>
+                            <button onclick="deleteProduct('${data.id}')" class="text-red-600 hover:text-red-900 bg-red-50 px-3 py-1.5 rounded-md transition-colors"><i class="fas fa-trash"></i></button>
+                        </td>
                     `;
-                    servicesGrid.appendChild(card);
+                    listDiv.appendChild(tr);
                 });
             } catch (error) {
-                servicesGrid.innerHTML = '<p class="col-span-full text-center text-red-500 py-10">Erro ao carregar serviços.</p>';
+                listDiv.innerHTML = '<tr><td colspan="5" class="px-6 py-8 text-center text-red-500">Erro ao carregar dados do Firebase.</td></tr>';
+                console.error(error);
             }
         }
 
-        const serviceModal = document.getElementById('serviceModal');
-        
-        function openModal(item) {
-            document.getElementById('modalTitle').innerText = item.title;
-            document.getElementById('modalDesc').innerText = item.fullDesc;
+        document.getElementById('productForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            submitBtn.innerText = 'Salvando...';
+            submitBtn.disabled = true;
             
-            const priceContainer = document.getElementById('modalPriceContainer');
-            if(item.priceInfo) {
-                const hasPromo = item.priceInfo.promo && parseFloat(item.priceInfo.promo) > 0;
-                if(hasPromo) {
-                    priceContainer.innerHTML = `<span class="text-sm text-gray-400 line-through">${formatMoney(item.priceInfo.raw)}</span>
-                                                <span class="text-2xl font-bold text-green-600">${formatMoney(item.priceInfo.promo)}</span>`;
+            const id = document.getElementById('productId').value;
+            
+            // Coletar e limpar array de imagens
+            const images = [
+                document.getElementById('img1').value.trim(),
+                document.getElementById('img2').value.trim(),
+                document.getElementById('img3').value.trim(),
+                document.getElementById('img4').value.trim(),
+                document.getElementById('img5').value.trim(),
+            ].filter(url => url !== "");
+
+            const productData = { 
+                name: document.getElementById('name').value, 
+                shortDesc: document.getElementById('shortDesc').value,
+                fullDesc: document.getElementById('fullDesc').value,
+                price: parseFloat(document.getElementById('price').value) || 0,
+                promoPrice: parseFloat(document.getElementById('promoPrice').value) || null,
+                images: images 
+            };
+
+            try {
+                if(id) {
+                    await updateDoc(doc(db, "products", id), productData);
                 } else {
-                    priceContainer.innerHTML = `<span class="text-2xl font-bold text-yod-primary">${formatMoney(item.priceInfo.raw)}</span>`;
+                    await addDoc(collection(db, "products"), productData);
                 }
-            } else {
-                priceContainer.innerHTML = `<span class="text-2xl font-bold text-yod-primary">${item.price}</span>`;
+                showList();
+                loadAdminProducts();
+            } catch (error) {
+                alert("Erro ao salvar serviço.");
+                console.error(error);
+            } finally {
+                submitBtn.innerText = 'Salvar Serviço';
+                submitBtn.disabled = false;
             }
-
-            const mainImg = document.getElementById('modalMainImg');
-            mainImg.src = item.img;
-            
-            const gallery = document.getElementById('modalGallery');
-            gallery.innerHTML = '';
-            
-            if (item.gallery && item.gallery.length > 0) {
-                item.gallery.forEach(imgSrc => {
-                    const imgDiv = document.createElement('div');
-                    imgDiv.className = "w-full aspect-square rounded-lg overflow-hidden cursor-pointer border-2 border-transparent hover:border-yod-primary opacity-80 hover:opacity-100 transition-all";
-                    imgDiv.innerHTML = `<img src="${imgSrc}" class="w-full h-full object-cover">`;
-                    imgDiv.onclick = () => { mainImg.src = imgSrc; };
-                    gallery.appendChild(imgDiv);
-                });
-            }
-
-            // LINK DO WHATSAPP + MENSAGEM DO PROCEDIMENTO
-            const priceFinal = item.priceInfo ? (item.priceInfo.promo > 0 ? formatMoney(item.priceInfo.promo) : formatMoney(item.priceInfo.raw)) : item.price;
-            const msg = `Olá! Tenho interesse no procedimento: *${item.title}* (${priceFinal}). Poderia me passar mais informações?`;
-            document.getElementById('modalWhatsAppBtn').href = `${WHATSAPP_LINK}?text=${encodeURIComponent(msg)}`;
-
-            serviceModal.classList.remove('hidden');
-            setTimeout(() => {
-                serviceModal.classList.remove('opacity-0');
-                serviceModal.classList.add('opacity-100');
-            }, 10);
-            document.body.style.overflow = 'hidden'; 
-        }
-
-        document.querySelectorAll('.modal-close').forEach(btn => btn.addEventListener('click', () => {
-            serviceModal.classList.remove('opacity-100');
-            serviceModal.classList.add('opacity-0');
-            setTimeout(() => { serviceModal.classList.add('hidden'); document.body.style.overflow = ''; }, 300);
-        }));
-
-        // Carousel Scroll Logic
-        let autoScroll;
-        const promoCarousel = document.getElementById('promoCarousel');
-        const doScroll = (dir) => { 
-            promoCarousel.scrollBy({ left: dir === 'next' ? 280 : -280, behavior: 'smooth' }); 
-            if(dir === 'next' && promoCarousel.scrollLeft + promoCarousel.clientWidth >= promoCarousel.scrollWidth - 10) 
-                setTimeout(() => promoCarousel.scrollTo({ left: 0, behavior: 'smooth' }), 500);
-        };
-        document.getElementById('nextPromo').onclick = () => { doScroll('next'); clearInterval(autoScroll); autoScroll = setInterval(()=>doScroll('next'), 4000); };
-        document.getElementById('prevPromo').onclick = () => { doScroll('prev'); clearInterval(autoScroll); autoScroll = setInterval(()=>doScroll('next'), 4000); };
-
-        window.addEventListener('DOMContentLoaded', () => {
-            renderPromotions();
-            loadAndRenderServices(); 
-            autoScroll = setInterval(()=>doScroll('next'), 4000);
         });
+
+        window.deleteProduct = async (id) => {
+            if(confirm("Excluir permanentemente este serviço?")) {
+                await deleteDoc(doc(db, "products", id));
+                loadAdminProducts();
+            }
+        };
+
+        window.editProduct = (id) => {
+            const product = allProducts.find(p => p.id === id);
+            if(!product) return;
+
+            document.getElementById('productId').value = product.id;
+            document.getElementById('name').value = product.name;
+            document.getElementById('shortDesc').value = product.shortDesc || '';
+            document.getElementById('fullDesc').value = product.fullDesc || product.description || '';
+            document.getElementById('price').value = product.price;
+            document.getElementById('promoPrice').value = product.promoPrice || '';
+
+            // Preencher campos de imagem
+            const imgInputs = ['img1', 'img2', 'img3', 'img4', 'img5'];
+            imgInputs.forEach((imgId, index) => {
+                document.getElementById(imgId).value = product.images && product.images[index] ? product.images[index] : '';
+            });
+
+            showForm(true);
+        };
+
+        loadAdminProducts();
     </script>
 </body>
 </html>
