@@ -29,7 +29,6 @@
 <body class="flex h-screen overflow-hidden text-gray-800 relative">
 
     <script type="module">
-        // PROTEÇÃO DE ROTA: Verifica se está logado (localStorage ou sessionStorage)
         if (localStorage.getItem('yod_logged') !== 'true' && sessionStorage.getItem('yod_logged') !== 'true') {
             window.location.href = 'login.html';
         }
@@ -39,7 +38,7 @@
         <div class="p-6 border-b border-gray-800 flex justify-between items-center">
             <div>
                 <h1 class="text-2xl font-serif tracking-wider text-[#D4A3A3]">YOD</h1>
-                <p class="text-xs text-gray-400 uppercase tracking-widest mt-1">Painel de Gestão</p>
+                <p class="text-xs text-gray-400 uppercase tracking-widest mt-1">Supabase Gestor</p>
             </div>
         </div>
         <nav class="flex-1 p-4">
@@ -67,25 +66,29 @@
             <!-- Listagem -->
             <div id="listView" class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden transition-all">
                 <div class="p-4 md:p-6 border-b border-gray-100 flex flex-col sm:flex-row justify-between items-center gap-4">
-                    <h3 class="text-lg font-semibold text-gray-800">Todos os Serviços</h3>
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-800">Todos os Serviços</h3>
+                        <p class="text-xs text-gray-400 mt-0.5">Use as setas 🔼🔽 para ordenar como aparecem no site.</p>
+                    </div>
                     <button onclick="showForm()" class="w-full sm:w-auto bg-[#D4A3A3] hover:bg-[#C08F8F] text-white px-5 py-2.5 rounded-lg font-medium transition-colors flex items-center justify-center gap-2">
                         <i class="fas fa-plus"></i> Adicionar Novo
                     </button>
                 </div>
                 
                 <div class="overflow-x-auto">
-                    <table class="w-full text-left border-collapse min-w-[600px]">
+                    <table class="w-full text-left border-collapse min-w-[700px]">
                         <thead>
                             <tr class="bg-gray-50 text-gray-500 text-sm uppercase tracking-wider">
+                                <th class="px-4 py-4 font-medium text-center">Ordem</th>
                                 <th class="px-6 py-4 font-medium">Capa</th>
                                 <th class="px-6 py-4 font-medium">Serviço</th>
                                 <th class="px-6 py-4 font-medium">Valor</th>
-                                <th class="px-6 py-4 font-medium">Destaque Oferta</th>
+                                <th class="px-6 py-4 font-medium">Status / Destaque</th>
                                 <th class="px-6 py-4 font-medium text-right">Ações</th>
                             </tr>
                         </thead>
                         <tbody id="productList" class="divide-y divide-gray-100">
-                            <tr><td colspan="5" class="px-6 py-8 text-center text-gray-500">Carregando catálogo...</td></tr>
+                            <tr><td colspan="6" class="px-6 py-8 text-center text-gray-500">Carregando catálogo...</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -113,11 +116,20 @@
                                     <label class="form-label">Descrição Curta</label>
                                     <input type="text" id="shortDesc" class="form-input" required placeholder="Resumo do card" maxlength="100">
                                 </div>
-                                <div class="flex items-center gap-3 pt-2 bg-pink-50 p-4 rounded-xl border border-pink-100">
-                                    <input type="checkbox" id="isPromo" class="w-5 h-5 text-[#D4A3A3] rounded focus:ring-[#D4A3A3] cursor-pointer">
-                                    <label for="isPromo" class="text-sm font-semibold text-gray-700 cursor-pointer">
-                                        🌟 Destacar nas "Ofertas Especiais" (Carrossel giratório)
-                                    </label>
+                                
+                                <div class="p-4 bg-gray-50 rounded-xl border border-gray-200 space-y-3">
+                                    <div class="flex items-center gap-3">
+                                        <input type="checkbox" id="isActive" checked class="w-5 h-5 text-green-600 rounded focus:ring-green-500 cursor-pointer">
+                                        <label for="isActive" class="text-sm font-semibold text-gray-700 cursor-pointer">
+                                            🟢 Serviço Ativo (Visível no site principal)
+                                        </label>
+                                    </div>
+                                    <div class="flex items-center gap-3 pt-2 border-t border-gray-200">
+                                        <input type="checkbox" id="isPromo" class="w-5 h-5 text-[#D4A3A3] rounded focus:ring-[#D4A3A3] cursor-pointer">
+                                        <label for="isPromo" class="text-sm font-semibold text-gray-700 cursor-pointer">
+                                            🌟 Destacar nas "Ofertas Especiais"
+                                        </label>
+                                    </div>
                                 </div>
                             </div>
                             
@@ -210,7 +222,6 @@
         let currentCropBox = null;
         let finalBlobs = { 1: null, 2: null, 3: null, 4: null, 5: null };
 
-        // Função de Logout (limpa sessionStorage e localStorage)
         window.logout = () => {
             sessionStorage.removeItem('yod_logged');
             localStorage.removeItem('yod_logged');
@@ -271,6 +282,7 @@
             document.getElementById('formTitle').innerText = isEdit ? 'Editar Serviço' : 'Adicionar Novo Serviço';
             if(!isEdit) {
                 document.getElementById('productForm').reset();
+                document.getElementById('isActive').checked = true;
                 document.getElementById('isPromo').checked = false;
                 for(let i=1; i<=5; i++) removeImage(i); 
             }
@@ -287,41 +299,88 @@
         async function loadProducts() {
             const listDiv = document.getElementById('productList');
             try {
-                const { data: products, error } = await supabase.from('products').select('*');
+                const { data: products, error } = await supabase
+                    .from('products')
+                    .select('*')
+                    .order('display_order', { ascending: true });
+
                 if (error) throw error;
 
                 listDiv.innerHTML = '';
                 allProducts = products || [];
                 
                 if(allProducts.length === 0) {
-                    listDiv.innerHTML = '<tr><td colspan="5" class="px-6 py-8 text-center text-gray-500">Nenhum serviço cadastrado.</td></tr>';
+                    listDiv.innerHTML = '<tr><td colspan="6" class="px-6 py-8 text-center text-gray-500">Nenhum serviço cadastrado.</td></tr>';
                     return;
                 }
 
-                allProducts.forEach(data => {
+                allProducts.forEach((data, index) => {
                     const coverImg = (data.images && data.images.length > 0) ? data.images[0] : 'https://placehold.co/100?text=Sem+Foto';
                     const hasPromo = data.promo_price && parseFloat(data.promo_price) > 0;
-                    const isFeaturedPromo = data.is_promo ? '<span class="bg-pink-100 text-pink-700 text-xs px-2.5 py-1 rounded-full font-bold">Sim</span>' : '<span class="text-gray-400 text-xs">Não</span>';
+                    
+                    const isActive = data.is_active !== false;
+                    const statusBadge = isActive 
+                        ? '<span class="bg-green-100 text-green-700 text-xs px-2.5 py-1 rounded-full font-bold">Ativo</span>' 
+                        : '<span class="bg-amber-100 text-amber-700 text-xs px-2.5 py-1 rounded-full font-bold">Pausado</span>';
+                    
+                    const promoBadge = data.is_promo ? '<span class="bg-pink-100 text-pink-700 text-xs px-2.5 py-1 rounded-full font-bold ml-1">Oferta</span>' : '';
 
                     const tr = document.createElement('tr');
                     tr.className = 'hover:bg-gray-50 transition-colors border-b border-gray-100';
                     tr.innerHTML = `
+                        <td class="px-4 py-4 text-center">
+                            <div class="flex flex-col items-center gap-1">
+                                <button onclick="moveOrder('${data.id}', 'up')" class="text-gray-400 hover:text-gray-700 p-1" title="Mover para cima"><i class="fas fa-chevron-up text-xs"></i></button>
+                                <span class="text-xs font-bold text-gray-500">${data.display_order || index}</span>
+                                <button onclick="moveOrder('${data.id}', 'down')" class="text-gray-400 hover:text-gray-700 p-1" title="Mover para baixo"><i class="fas fa-chevron-down text-xs"></i></button>
+                            </div>
+                        </td>
                         <td class="px-6 py-4"><img src="${coverImg}" class="w-14 h-14 object-cover rounded-lg shadow-sm"></td>
                         <td class="px-6 py-4 font-medium text-gray-800">${data.name}<br><span class="text-xs text-gray-400 font-normal">${data.short_desc ? data.short_desc.substring(0,40)+'...' : ''}</span></td>
                         <td class="px-6 py-4 text-gray-600 ${hasPromo ? 'line-through text-xs' : 'font-semibold'}">${formatMoney(data.price)}</td>
-                        <td class="px-6 py-4">${isFeaturedPromo}</td>
+                        <td class="px-6 py-4">${statusBadge} ${promoBadge}</td>
                         <td class="px-6 py-4 text-right">
-                            <button type="button" onclick="editProduct('${data.id}')" class="text-indigo-600 hover:text-indigo-900 bg-indigo-50 px-3 py-1.5 rounded-md mr-2"><i class="fas fa-edit"></i></button>
+                            <button type="button" onclick="editProduct('${data.id}')" class="text-indigo-600 hover:text-indigo-900 bg-indigo-50 px-3 py-1.5 rounded-md mr-1"><i class="fas fa-edit"></i></button>
                             <button type="button" onclick="deleteProduct('${data.id}')" class="text-red-600 hover:text-red-900 bg-red-50 px-3 py-1.5 rounded-md"><i class="fas fa-trash"></i></button>
                         </td>
                     `;
                     listDiv.appendChild(tr);
                 });
             } catch (err) {
-                listDiv.innerHTML = '<tr><td colspan="5" class="px-6 py-8 text-center text-red-500">Erro ao carregar dados.</td></tr>';
+                listDiv.innerHTML = '<tr><td colspan="6" class="px-6 py-8 text-center text-red-500">Erro ao carregar dados.</td></tr>';
                 console.error(err);
             }
         }
+
+        // Função para reordenar os itens com as setas
+        window.moveOrder = async (id, direction) => {
+            const index = allProducts.findIndex(p => p.id === id);
+            if (index === -1) return;
+
+            const targetIndex = direction === 'up' ? index - 1 : index + 1;
+            if (targetIndex < 0 || targetIndex >= allProducts.length) return;
+
+            const currentItem = allProducts[index];
+            const targetItem = allProducts[targetIndex];
+
+            // Troca os valores de display_order
+            const tempOrder = currentItem.display_order || index;
+            currentItem.display_order = targetItem.display_order || targetIndex;
+            targetItem.display_order = tempOrder;
+
+            // Se por acaso tiverem a mesma ordem, força a inversão numérica
+            if (currentItem.display_order === targetItem.display_order) {
+                currentItem.display_order = direction === 'up' ? targetItem.display_order - 1 : targetItem.display_order + 1;
+            }
+
+            try {
+                await supabase.from('products').update({ display_order: currentItem.display_order }).eq('id', currentItem.id);
+                await supabase.from('products').update({ display_order: targetItem.display_order }).eq('id', targetItem.id);
+                loadProducts();
+            } catch (err) {
+                console.error("Erro ao reordenar:", err);
+            }
+        };
 
         async function uploadImageToSupabase(num) {
             const blob = finalBlobs[num];
@@ -367,6 +426,7 @@
                     price: parseFloat(document.getElementById('price').value) || 0,
                     promo_price: parseFloat(document.getElementById('promoPrice').value) || null,
                     is_promo: document.getElementById('isPromo').checked,
+                    is_active: document.getElementById('isActive').checked, // Salva se está ativo ou pausado
                     images: imagesArray 
                 };
 
@@ -374,6 +434,7 @@
                     const { error } = await supabase.from('products').update(productData).eq('id', id);
                     if (error) throw error;
                 } else {
+                    productData.display_order = allProducts.length; // Novo produto vai para o final
                     const { error } = await supabase.from('products').insert([productData]);
                     if (error) throw error;
                 }
@@ -408,6 +469,7 @@
             document.getElementById('price').value = product.price;
             document.getElementById('promoPrice').value = product.promo_price || '';
             document.getElementById('isPromo').checked = product.is_promo || false;
+            document.getElementById('isActive').checked = product.is_active !== false;
 
             for(let i=1; i<=5; i++) {
                 removeImage(i);
